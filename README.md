@@ -14,7 +14,7 @@ git clone https://USERNAME@bitbucket.org/ecus/PaleoSpec.git
 install the package. On the R command line call
 
 ```
-install("PATH_TO_THE_FIRNR_DIRECTORY/PaleoSpec")
+install("PATH_TO_THE_PALEOSPEC_DIRECTORY/PaleoSpec")
 ```
 now the package is installed and can be loaded with
 ```
@@ -26,14 +26,14 @@ and the help can be accessed
 ```
 # Modification
 
-The source code is in the PATH_TO_THE_FIRNR_DIRECTORY/PaleoSpec/R directory
+The source code is in the PATH_TO_THE_PALEOSPEC_DIRECTORY/PaleoSpec/R directory
 after modification, the documentation in the files also has to be adapted
 (In Emacs-ESS C-c C-o C-o Generate/modify the Roxygen template)
 
 Than compile the documentation again and reinstall the package
 ```
-document("PATH_TO_THE_FIRNR_DIRECTORY/PaleoSpec/")
-install("PATH_TO_THE_FIRNR_DIRECTORY/PaleoSpec/")
+document("PATH_TO_THE_PALEOSPEC_DIRECTORY/PaleoSpec/")
+install("PATH_TO_THE_PALEOSPEC_DIRECTORY/PaleoSpec/")
 ```
 
 when satisified, commit the changes
@@ -50,6 +50,5 @@ and finally push them
 
 
 # Usage
-Please refer to the vignette FirnR.pdf for an overview
-[Click](https://bitbucket.org/ecus/firnr/raw/b32264a09492d13c0f9d1db7c59ebc1dd54b3b7b/FirnR.pdf)
+Please refer to the vignette PaleoSpec.pdf for an overview
 and the examples in the help file
