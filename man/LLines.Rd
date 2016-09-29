@@ -32,7 +32,7 @@ add Logplot + transparent confidence interval for the spectral plotting
 x<-ts(arima.sim(list(ar = 0.9),1000))
 spec<-SpecMTM(x)
 LPlot(spec,col="grey")
-LLines(LogSmooth(spec),lwd=2)
+LLines(LogSmooth(spec),lwd=3)
 }
 \author{
 Thomas Laepple

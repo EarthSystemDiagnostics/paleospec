@@ -14,15 +14,13 @@
 ##' x<-ts(arima.sim(list(ar = 0.9),1000))
 ##' spec<-SpecMTM(x)
 ##' LPlot(spec,col="grey")
-##' LLines(LogSmooth(spec),lwd=2)
+##' LLines(LogSmooth(spec),lwd=3)
 ##' @author Thomas Laepple
 ##' @export
 LLines<-function(x,conf=TRUE,col="black",alpha=0.3,removeFirst=0,removeLast=0,...)
 {
 
-    index<-(removeFirst+1):(length(x$freq)-removeLast)
-   
-    
+    index<-(removeFirst+1):(length(x$freq)-removeLast)  
     x$freq<-x$freq[index]
     x$spec<-x$spec[index]
     x$lim.1<-x$lim.1[index]
@@ -32,3 +30,5 @@ LLines<-function(x,conf=TRUE,col="black",alpha=0.3,removeFirst=0,removeLast=0,..
         rev(x$lim.2)),col=ColTransparent(col,alpha),border=NA)
     lines(x$freq,x$spec,col=col,...)
 }
+
+
