@@ -17,7 +17,7 @@
 ##' @param kf  scaling factor for the lowpass frequency; 1 = Nyquist, 1.2 =
 ##' 1.2xNyquist is a tradeoff between reducing variance loss and keeping
 ##' aliasing small
-##' @return 
+##' @return ts object with the equidistant timeseries
 ##' @author Thomas Laepple 
 MakeEquidistant<-function(t.x,t.y,dt=0.1,time.target=seq(from=t.x[1],to=t.x[length(t.x)],by=dt),dt.hres=NULL,bFilter=TRUE,k=5,kf=1.2)
 {
@@ -67,5 +67,5 @@ than the minimum timestep")
     index<-!is.na(data.hres.filtered)
     data.target<-approx(data.hres$x[index],data.hres.filtered[index],time.target)
 
-     return(pTs(data.target$y,data.target$x, ...))
+     return(ts(data.target$y,data.target$x))
 }

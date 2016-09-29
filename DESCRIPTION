@@ -1,8 +1,8 @@
 Package: PaleoSpec
 Title: Spectral tools for the ECUS group
 Version: 0.0.0.9000
-Authors@R: person(“Thomas”, “Laepple”, email = “tlaepple@awi.de”, role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Authors@R: 
+Description:Spectral tools for the ECUS group
 Depends:
     R (>= 3.3.1)
 License: What license is it under?

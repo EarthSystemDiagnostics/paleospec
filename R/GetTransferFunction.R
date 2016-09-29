@@ -7,7 +7,7 @@
 ##' @param bPlot 
 ##' @param add 
 ##' @param ... 
-##' @return 
+##' @return list(omega,y) containing the transfer function
 ##' @author Thomas Laepple 
 GetTransferFunction<-function(g.u,resolution=100,bPlot=TRUE,add=FALSE, ...)
 {
@@ -19,11 +19,11 @@ GetTransferFunction<-function(g.u,resolution=100,bPlot=TRUE,add=FALSE, ...)
     for (u in (-1*n.side):n.side)
 	yt<-yt+(g.u[u+n.side+1]*exp(-1*1i*omega*u))
 
-    if bPlot)
-{
-    if (!add) plot(omega/2/pi,abs(yt)^2,type="l",xlab="omega",main="Transfer function", ...)
-    else lines(omega/2/pi,abs(yt)^2,col="blue", h...)
-}
+    if (bPlot)
+        {
+            if (!add) plot(omega/2/pi,abs(yt)^2,type="l",xlab="omega",main="Transfer function", ...)
+            else lines(omega/2/pi,abs(yt)^2,col="blue", h...)
+        }
 
-return(list(omega=omega/2/pi,y=abs(yt)^2))
+    return(list(omega=omega/2/pi,y=abs(yt)^2))
 }

@@ -50,6 +50,11 @@ indicates the total length of the data after padding.}
 }
 \value{
 spectra object list(freq,spec,dof)
+examples
+x<-ts(arima.sim(list(ar = 0.9),1000))
+spec<-SpecMTM(x)
+LPlot(spec,col="grey")
+LLines(LogSmooth(spec),lwd=2)
 }
 \description{
 MTM spectral estimator
