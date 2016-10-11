@@ -18,7 +18,8 @@
 ##' 1.2xNyquist is a tradeoff between reducing variance loss and keeping
 ##' aliasing small
 ##' @return ts object with the equidistant timeseries
-##' @author Thomas Laepple 
+##' @author Thomas Laepple
+##' @export
 MakeEquidistant<-function(t.x,t.y,dt=0.1,time.target=seq(from=t.x[1],to=t.x[length(t.x)],by=dt),dt.hres=NULL,bFilter=TRUE,k=5,kf=1.2)
 {
     index<-!is.na(t.x)
@@ -41,7 +42,7 @@ MakeEquidistant<-function(t.x,t.y,dt=0.1,time.target=seq(from=t.x[1],to=t.x[leng
 than the minimum timestep")
 
     index<-(!is.na(t.y))
-    if (is.null(startTime)) startTime<-first(t.x)
+   
 
     time.hres<-seq(from=first(t.x),to=last(t.x),by=dt.hres)
     data.hres<-approx(t.x[index],t.y[index],time.hres)
