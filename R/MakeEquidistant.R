@@ -68,5 +68,5 @@ than the minimum timestep")
     index<-!is.na(data.hres.filtered)
     data.target<-approx(data.hres$x[index],data.hres.filtered[index],time.target)
 
-     return(ts(data.target$y,data.target$x))
+     return(ts(data.target$y,start=first(data.target$x),deltat=diff(data.target$x)[1]))
 }

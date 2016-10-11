@@ -28,16 +28,17 @@
 ##' spec<-SpecMTM(x)
 ##' LPlot(spec,col="grey")
 ##' LLines(LogSmooth(spec),lwd=2)
-##' @author Thomas Laepple 
+##' @author Thomas Laepple
+##' @export
 SpecMTM<-function (timeSeries, k=3, nw=2, nFFT = "default", centre = c("Slepian"),
     dpssIN = NULL, returnZeroFreq = FALSE, Ftest = FALSE, jackknife = FALSE,
     jkCIProb = 0.95, maxAdaptiveIterations = 100, plot = FALSE,
     na.action = na.fail, returnInternals = FALSE,detrend=TRUE,bPad=FALSE, ...)
 {
 
+    if (sum(is.na(timeSeries))>0) stop("missing data")
     if (!bPad) nFFT=length(timeSeries)
     if (detrend) timeSeries[]<-lm(timeSeries~seq(timeSeries))$residuals
-
     result<-multitaper::spec.mtm(timeSeries=timeSeries, k=k, nw=nw, nFFT=nFFT, centre=centre,
     dpssIN=dpssIN, returnZeroFreq=returnZeroFreq, Ftest=Ftest, jackknife=jackknife,
     jkCIProb=jkCIProb,  maxAdaptiveIterations=maxAdaptiveIterations, plot=plot,

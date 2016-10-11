@@ -24,9 +24,9 @@ MeanSpectrum<-function(specList,iRemoveLowest=1,weights=rep(1,length(specList)))
 #Use the longest run for the reference spectrum
     freqRef<-seq(from=min(unlist(lapply(specList,get.fstart.existing))),to=max(unlist(lapply(specList,get.fend.existing))),by=min(unlist(lapply(specList,get.df))))
 
-    speclist<-list()
+    specList.interpolated<-list()
     for (i in 1:length(specList)) specList.interpolated[[i]]<-SpecInterpolate(freqRef,specList[[i]])
-    for (i in 1:length(speclist)) specList.interpolated[[i]]$spec<-specList.interpolated[[i]]$spec*weights[i]
+    for (i in 1:length(specList)) specList.interpolated[[i]]$spec<-specList.interpolated[[i]]$spec*weights[i]
 
 
     NSpectra<-length(specList.interpolated)

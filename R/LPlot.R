@@ -32,6 +32,6 @@ LPlot<-function(x,conf=TRUE,col="black",alpha=0.3,removeFirst=0,removeLast=0,xla
     plot(x$freq,x$spec,type="l",log="xy",col=col,xlab=xlab,ylab=ylab,...)
   
     if (conf) polygon(c(x$freq,rev(x$freq)),c(x$lim.1,
-        rev(x$lim.2)),col=col.transparent(col,alpha),border=NA)
+        rev(x$lim.2)),col=ColTransparent(col,alpha),border=NA)
     lines(x$freq,x$spec,col=col,...)
 }

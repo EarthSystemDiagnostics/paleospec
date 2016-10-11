@@ -2,7 +2,8 @@
 ##' @param freqRef  frequency vector of the target resolution
 ##' @param spec list(spec,freq,dof)
 ##' @return one spectum as list(spec,freq,dof) (spec on the specRef resolution)
-##' @author Thomas Laepple 
+##' @author Thomas Laepple
+##' @export
 SpecInterpolate<-function(freqRef,spec)
 {
     
