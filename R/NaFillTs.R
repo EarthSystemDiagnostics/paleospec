@@ -1,7 +1,8 @@
-##' @title 
+##' @title NaFill
 ##' @param x 
-##' @return 
-##' @author Thomas Laepple 
+##' @return filled x 
+##' @author Thomas Laepple
+##' @export
 NaFillTs<-function(x) {
     if (sum(is.na(x))==0) return(x)
     nonMissing<-!is.na(x)
