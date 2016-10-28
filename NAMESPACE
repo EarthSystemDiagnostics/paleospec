@@ -2,9 +2,11 @@
 
 export(AddConfInterval)
 export(AnPowerlaw)
+export(ApplyFilter)
 export(Bandpass)
 export(ColTransparent)
 export(FirstElement)
+export(GetTransferFunction)
 export(GetVarFromSpectra)
 export(LLines)
 export(LPlot)

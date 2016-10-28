@@ -8,7 +8,8 @@
 ##' @param add 
 ##' @param ... 
 ##' @return list(omega,y) containing the transfer function
-##' @author Thomas Laepple 
+##' @author Thomas Laepple
+##' @export
 GetTransferFunction<-function(g.u,resolution=100,bPlot=TRUE,add=FALSE, ...)
 {
     n<-length(g.u)
