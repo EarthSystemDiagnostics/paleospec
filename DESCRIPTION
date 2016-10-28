@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R: c(person("Thomas", "Laepple", email = "tlaepple@awi.de", role = c("aut", "cre")), person("Thomas", "Muench", email = "tmuench@awi.de", role = c("aut")))
 Description:Spectral tools for the ECUS group
 Depends:
-    R (>= 3.3.1)
+    R (>= 2.3.1)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
