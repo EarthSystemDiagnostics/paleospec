@@ -51,7 +51,7 @@ than the minimum timestep")
     data.hres$x<-data.hres$x[index]
     data.hres$y<-data.hres$y[index]
 
-    filterLength=k*(dt/(2*dt.hres))
+    filterLength=round(k*(dt/(2*dt.hres)))
     if ((filterLength %% 2)==0) filterLength=filterLength+1
 
     if (bFilter)
