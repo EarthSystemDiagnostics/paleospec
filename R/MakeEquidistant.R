@@ -13,20 +13,20 @@
 ##' Should be smaller than the smallest timestep
 ##' @param bFilter (TRUE) low passs filter the data to avoid aliasing, (FALSE) just interpolate
 ##' @param k scaling factor for the Length of the filter (increasing creates
-#a sharper filter, thus less aliasing)
+                                        #a sharper filter, thus less aliasing)
 ##' @param kf  scaling factor for the lowpass frequency; 1 = Nyquist, 1.2 =
 ##' 1.2xNyquist is a tradeoff between reducing variance loss and keeping
 ##' aliasing small
 ##' @return ts object with the equidistant timeseries
 ##' @author Thomas Laepple
 ##' @export
-MakeEquidistant<-function(t.x,t.y,dt=0.1,time.target=seq(from=t.x[1],to=t.x[length(t.x)],by=dt),dt.hres=NULL,bFilter=TRUE,k=5,kf=1.2)
+MakeEquidistant<-function(t.x,t.y,dt=0.1,time.target=seq(from=t.x[1],to=t.x[length(t.x)],by=dt),dt.hres=NULL,bFilter=TRUE,k=5,kf=1.2,method="linear")
 {
     index<-!is.na(t.x)
     t.x<-t.x[index]
     t.y<-t.y[index]
 
-                                       
+    
     if (is.null(dt.hres)) #Choose dt.hres if not supplied
         {
             dt.hres<-dt/10
@@ -42,10 +42,10 @@ MakeEquidistant<-function(t.x,t.y,dt=0.1,time.target=seq(from=t.x[1],to=t.x[leng
 than the minimum timestep")
 
     index<-(!is.na(t.y))
-   
+    
 
     time.hres<-seq(from=first(t.x),to=last(t.x),by=dt.hres)
-    data.hres<-approx(t.x[index],t.y[index],time.hres)
+    data.hres<-approx(t.x[index],t.y[index],time.hres,method="constant")
 
     index<-!is.na(data.hres$y)
     data.hres$x<-data.hres$x[index]
@@ -64,9 +64,9 @@ than the minimum timestep")
                 data.hres.filtered<-data.hres$y
             }
 
-  
+    
     index<-!is.na(data.hres.filtered)
-    data.target<-approx(data.hres$x[index],data.hres.filtered[index],time.target)
+    data.target<-approx(data.hres$x[index],data.hres.filtered[index],time.target,method = method)
 
-     return(ts(data.target$y,start=first(data.target$x),deltat=diff(data.target$x)[1]))
+    return(ts(data.target$y,start=first(data.target$x),deltat=diff(data.target$x)[1]))
 }
