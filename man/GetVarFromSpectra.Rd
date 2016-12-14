@@ -11,7 +11,7 @@ GetVarFromSpectra(spec, f, dfreq = (f[2] - f[1])/100, df.log = 0, bw = 3)
 
 \item{f}{f[1],f[2]: frequency interval to be analysed}
 
-\item{dfreq}{frequency discretisation used in the temporary interpolation}
+\item{dfreq}{frequency discretisation used in the temporary  interpolation}
 
 \item{df.log}{if > 0, smooth the spectra prior to integrating}
 

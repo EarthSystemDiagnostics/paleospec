@@ -3,6 +3,7 @@
 export(AddConfInterval)
 export(AnPowerlaw)
 export(ApplyFilter)
+export(ApproxNearest)
 export(Bandpass)
 export(ColTransparent)
 export(FirstElement)

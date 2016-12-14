@@ -7,7 +7,7 @@
 ##' @param pval Interval from (pval/2 to 1-pval/2) is constructed
 ##' @return spectrum as the input but including lim.1 and lim.2 as new list elements
 ##' @author Thomas Laepple
-##' @example
+##' @examples
 ##' N.R=1000
 ##' N.T=100
 ##' save.spec<-matrix(NA,N.T/2,N.R)
