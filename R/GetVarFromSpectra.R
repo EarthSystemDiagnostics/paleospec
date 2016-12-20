@@ -12,11 +12,13 @@
 ##' @examples
 ##' x<-ts(rnorm(100))
 ##' spec<-SpecMTM(x)
+##' var(x) #Sample variance of the timeseries
 ##' GetVarFromSpectra(spec,c(1/100,0.5))
 ##' GetVarFromSpectra(spec,c(0.25,0.5))
 ##' @export
-GetVarFromSpectra <- function(spec,f,dfreq = (f[2]-f[1])/100,df.log = 0,bw = 3)
+GetVarFromSpectra <- function(spec,f,dfreq=NULL,df.log = 0,bw = 3)
 {
+    if (is.null(dfreq)) dfreq <- min(diff(spec$freq)[1]/5, (f[2]-f[1])/100)
     newFreq <- seq(from = f[1],to = f[2],by = dfreq) # temporary frequency vector
     if (f[1] >= f[2]) stop("f1 must be < f2")
     freqVector <- spec$freq
@@ -43,3 +45,4 @@ GetVarFromSpectra <- function(spec,f,dfreq = (f[2]-f[1])/100,df.log = 0,bw = 3)
 
      return(list(var = vars,dof = dof))
 }
+
