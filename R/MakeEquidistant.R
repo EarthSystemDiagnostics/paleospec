@@ -58,7 +58,7 @@ than the minimum timestep")
         {
             f.lowpass<-lowpass(1/(2*dt)*kf,filterLength,sample=1/dt.hres)
             meanvalue<-mean(data.hres$y)
-            data.hres.filtered<-filter(data.hres$y-meanvalue,f.lowpass,circular=TRUE)+meanvalue
+            data.hres.filtered<-stats::filter(data.hres$y-meanvalue,f.lowpass,circular=TRUE)+meanvalue
         } else
             {
                 data.hres.filtered<-data.hres$y

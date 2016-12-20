@@ -18,7 +18,7 @@ ApplyFilter <- function(data,filter,method=0)
     N<-floor(length(filter)/2)
     if (method == 0)
         {
-            result<-filter(c(data),filter,circular=F)
+            result<-stats::filter(c(data),filter,circular=F)
             return(ts(result,frequency=frequency(data)))
         } else
             {
@@ -45,7 +45,7 @@ ApplyFilter <- function(data,filter,method=0)
 
                     }
 
-                result<-filter(c(before,data,after),filter,circular=F)[(N+1):(N+length(data))]
+                result<-stats::filter(c(before,data,after),filter,circular=F)[(N+1):(N+length(data))]
                 return(ts(result,frequency=frequency(data)))
             }
 }
