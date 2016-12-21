@@ -4,7 +4,7 @@
 \alias{GetVarFromSpectra}
 \title{Variance estimate by integrating a part of the spectrum}
 \usage{
-GetVarFromSpectra(spec, f, dfreq = (f[2] - f[1])/100, df.log = 0, bw = 3)
+GetVarFromSpectra(spec, f, dfreq = NULL, df.log = 0, bw = 3)
 }
 \arguments{
 \item{spec}{spectrum (list of spec,freq,dof) to be analysed}
@@ -26,6 +26,7 @@ Variance estimate by integrating a part of the spectrum
 \examples{
 x<-ts(rnorm(100))
 spec<-SpecMTM(x)
+var(x) #Sample variance of the timeseries
 GetVarFromSpectra(spec,c(1/100,0.5))
 GetVarFromSpectra(spec,c(0.25,0.5))
 }
