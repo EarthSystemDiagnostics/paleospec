@@ -16,8 +16,7 @@
 ##' v2 <- GetVarFromSpectra(spec,f=c(1/length(signal),0.01))
 ##' PS.VarUntilF(0.01,beta,length(signal))/PS.VarUntilF(0.5,beta,length(signal))
 ##' v2$var/v1$var
-##' @author Thomas Laepple
-##' @export
+##' @author Thomas Laepple 
 PS.VarUntilF<-function(f,beta,N)
     {
         if (beta==1) return(log(f)-log(1/N))
