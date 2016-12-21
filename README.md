@@ -6,17 +6,27 @@ PaleoSpec is an R package to assist the analysis of variance and power spectra
 still private in the ECUS group... later  GPL v3
 
 # Installation 
-install the devtools package
-Clone the repository to the target directory
+
+At the terminal, clone the repository to the target directory
+
 ```
 git clone https://USERNAME@bitbucket.org/ecus/PaleoSpec.git
 ```
-install the package. On the R command line call
+
+On the R command line:
+
+If you don't have the devtools package, install it.
 
 ```
-install("PATH_TO_THE_PALEOSPEC_DIRECTORY/PaleoSpec")
+install.packages(devtools)
+```
+
+Install the package. 
+```
+devtools::install("PATH_TO_THE_PALEOSPEC_DIRECTORY/PaleoSpec")
 ```
 now the package is installed and can be loaded with
+
 ```
 library(PaleoSpec)
 ```
