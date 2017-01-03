@@ -21,7 +21,7 @@ correlation of unfiltered, 10point mean and 50 point mean
 \examples{
 temp <- replicate(1000,PSP.CorAfterRollmean(1000,1,0,0.5))
 rowMeans(temp)
-PSP.CorUntilF(c(0.5,0.5/10,0.5/50),1,0,1000,0.5) 
+PSP.CorUntilF(c(0.5,0.5/10,0.5/50),1,0,1000,0.5)
 }
 \author{
 Thomas Laepple
