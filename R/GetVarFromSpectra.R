@@ -18,14 +18,22 @@
 ##' @export
 GetVarFromSpectra <- function(spec,f,dfreq=NULL,df.log = 0,bw = 3)
 {
-    if (is.null(dfreq)) dfreq <- min(diff(spec$freq)[1]/5, (f[2]-f[1])/100)
-    newFreq <- seq(from = f[1],to = f[2],by = dfreq) # temporary frequency vector
+    
     if (f[1] >= f[2]) stop("f1 must be < f2")
     freqVector <- spec$freq
   
      ## Test it both frequencies are included 
-     if (f[1] < FirstElement(freqVector)) return(list(var = NA,dof = NA))
-     if (f[2] > LastElement(freqVector))  return(list(var = NA,dof = NA))
+    if (f[1] < FirstElement(freqVector)) {
+        warning("f[1] is smaller than the lowest frequency in the spectrum, set to the lowest frequency")
+        f[1] <- FirstElement(freqVector)
+        }
+     if (f[2] > LastElement(freqVector))  {
+        warning("f[2] is larger than the highest frequency in the spectrum, set to the highest frequency")
+        f[2] <- LastElement(freqVector)
+     }
+
+    if (is.null(dfreq)) dfreq <- min(diff(spec$freq)[1]/5, (f[2]-f[1])/100)
+    newFreq <- seq(from = f[1],to = f[2],by = dfreq) # temporary frequency vector
 
      dof.original <- mean(SpecInterpolate(newFreq,spec)$dof)
      ## DOF before smoothing
