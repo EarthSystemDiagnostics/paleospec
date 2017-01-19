@@ -27,7 +27,7 @@ this equals the correlation of linearly coupled lowpass filtered powerlaw proces
 \examples{
 temp <- replicate(1000,PSP.CorAfterRollmean(1000,1,0,0.5))
 rowMeans(temp)
-PSP.CorUntilF(f=c(0.5,0.5/10,0.5/50),betaSignal=1,betaNoise=0,N=1000,r=0.5) 
+PSP.CorUntilF(f=c(0.5,0.5/10,0.5/50),betaSignal=1,betaNoise=0,N=1000,r=0.5)
 }
 \author{
 Thomas Laepple
