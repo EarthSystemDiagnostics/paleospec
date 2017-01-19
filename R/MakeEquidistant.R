@@ -20,11 +20,13 @@
 ##' @return ts object with the equidistant timeseries
 ##' @author Thomas Laepple
 ##' @export
-MakeEquidistant<-function(t.x,t.y,dt=0.1,time.target=seq(from=t.x[1],to=t.x[length(t.x)],by=dt),dt.hres=NULL,bFilter=TRUE,k=5,kf=1.2,method="linear")
+MakeEquidistant<-function(t.x,t.y,dt=NULL,time.target=seq(from=t.x[1],to=t.x[length(t.x)],by=dt),dt.hres=NULL,bFilter=TRUE,k=5,kf=1.2,method="linear")
 {
     index<-!is.na(t.x)
     t.x<-t.x[index]
     t.y<-t.y[index]
+
+    if (is.null(dt)) dt <- mean(diff(time.target))
 
     
     if (is.null(dt.hres)) #Choose dt.hres if not supplied

@@ -4,7 +4,7 @@
 \alias{MakeEquidistant}
 \title{Average an irregular timeseries to a regular timeseries}
 \usage{
-MakeEquidistant(t.x, t.y, dt = 0.1, time.target = seq(from = t.x[1], to =
+MakeEquidistant(t.x, t.y, dt = NULL, time.target = seq(from = t.x[1], to =
   t.x[length(t.x)], by = dt), dt.hres = NULL, bFilter = TRUE, k = 5,
   kf = 1.2, method = "linear")
 }
