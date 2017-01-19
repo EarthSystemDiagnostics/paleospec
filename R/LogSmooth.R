@@ -28,7 +28,7 @@ LogSmooth<-function(spectra,df.log=0.05,removeFirst=1e6,removeLast=0,
     result$freq<-spectra$freq[-1*removeFirst]
 
     if (bLog) {
-        temp<-(smoothlog.cutEnd(log(spectra$spec[-1*removeFirst]),result$freq,df.log,dof=spectra$dof[-1*removeFirst],bw=1))
+        temp<-(smoothlog.cutEnd(log(spectra$spec[-1*removeFirst]),result$freq,df.log,dof=spectra$dof[-1*removeFirst]))
         temp$spec<-exp(temp$spec)
     } else
         temp<-smoothlog.cutEnd(spectra$spec[-1*removeFirst],result$freq,df.log,dof=spectra$dof[-1*removeFirst])
