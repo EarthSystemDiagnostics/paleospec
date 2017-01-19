@@ -6,7 +6,7 @@
 ##' @title calculate weights for lowpass filter
 ##' @param omega.c cutoff frequency
 ##' @param n length of the filter, has to be odd
-##' @param sample sampling rate of the timeseries on which the filter will be applied
+##' @param sample sampling rate of the timeseries on which the filter will be applied (1/deltat)
 ##' @param convergence TRUE: smoothed least square lowpass; FALSE = unsmoothed
 ##' @return vector of filter weights
 ##' @author Thomas Laepple
