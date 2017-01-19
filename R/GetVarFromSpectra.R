@@ -35,6 +35,10 @@ GetVarFromSpectra <- function(spec,f,dfreq=NULL,df.log = 0,bw = 3)
     if (is.null(dfreq)) dfreq <- min(diff(spec$freq)[1]/5, (f[2]-f[1])/100)
     newFreq <- seq(from = f[1],to = f[2],by = dfreq) # temporary frequency vector
 
+    ## For spectra fromn the periodogram, the dof are supplied as a scalar named df; for MTN as a vector called DOF
+    if (is.null(spec$dof)) spec$dof <- rep(spec$df,length(spec$freq))
+        
+    
      dof.original <- mean(SpecInterpolate(newFreq,spec)$dof)
      ## DOF before smoothing
     
