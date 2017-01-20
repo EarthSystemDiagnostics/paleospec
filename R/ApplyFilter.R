@@ -6,10 +6,11 @@
 ##' minimum norm constraint (method=1)
 ##' minimum slope constraint (method=2)
 ##' minimum roughness constraint (method=3)
+##' circular filtering (method=4) 
 ##' @title  Apply a filter to a timeseries
 ##' @param data Input timeseries (ts object)
 ##' @param filter vector of filter weights
-##' @param method constraint method choice 1-3
+##' @param method constraint method choice 0-4
 ##' @return filtered timeseries (ts object)
 ##' @author Thomas Laepple
 ##' @export
@@ -18,9 +19,16 @@ ApplyFilter <- function(data,filter,method=0)
     N<-floor(length(filter)/2)
     if (method == 0)
         {
-            result<-stats::filter(c(data),filter,circular=F)
+            result<-stats::filter(c(data),filter,circular=FALSE)
             return(ts(result,frequency=frequency(data)))
-        } else
+        }
+
+        if (method == 4)
+        {
+            result<-stats::filter(c(data),filter,circular=TRUE)
+            return(ts(result,frequency=frequency(data)))
+        } 
+   
             {
                 if (method == 1)  #Minimum Norm
                     {

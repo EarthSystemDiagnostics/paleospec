@@ -11,7 +11,7 @@ ApplyFilter(data, filter, method = 0)
 
 \item{filter}{vector of filter weights}
 
-\item{method}{constraint method choice 1-3}
+\item{method}{constraint method choice 0-4}
 }
 \value{
 filtered timeseries (ts object)
@@ -25,6 +25,7 @@ no constraint (loss at both ends) (method=0)
 minimum norm constraint (method=1)
 minimum slope constraint (method=2)
 minimum roughness constraint (method=3)
+circular filtering (method=4)
 }
 \author{
 Thomas Laepple
