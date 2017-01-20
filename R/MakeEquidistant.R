@@ -17,10 +17,19 @@
 ##' @param kf  scaling factor for the lowpass frequency; 1 = Nyquist, 1.2 =
 ##' 1.2xNyquist is a tradeoff between reducing variance loss and keeping
 ##' aliasing small
+##' @param method.interpolation
+##' "linear" or "constant", see approx
+##' @param method.filter
+##' To avoid loosing data at the ends of the dataset, endpoint constrains are used (see ApplyFilter)
+##' no constraint (loss at both ends) (method=0), only works if t.x covers more time than time.target
+##' minimum norm constraint (method=1)
+##' minimum slope constraint (method=2)
+##' minimum roughness constraint (method=3)
+##' circular filtering (method=4) 
 ##' @return ts object with the equidistant timeseries
 ##' @author Thomas Laepple
 ##' @export
-MakeEquidistant<-function(t.x,t.y,dt=NULL,time.target=seq(from=t.x[1],to=t.x[length(t.x)],by=dt),dt.hres=NULL,bFilter=TRUE,k=5,kf=1.2,method="linear")
+MakeEquidistant<-function(t.x,t.y,dt=NULL,time.target=seq(from=t.x[1],to=t.x[length(t.x)],by=dt),dt.hres=NULL,bFilter=TRUE,k=5,kf=1.2,method.interpolation="linear",method.filter=2)
 {
     index<-!is.na(t.x)
     t.x<-t.x[index]
@@ -47,7 +56,7 @@ than the minimum timestep")
     
 
     time.hres<-seq(from=first(t.x),to=last(t.x),by=dt.hres)
-    data.hres<-approx(t.x[index],t.y[index],time.hres,method="constant")
+    data.hres<-approx(t.x[index],t.y[index],time.hres,method=method.interpolation)
 
     index<-!is.na(data.hres$y)
     data.hres$x<-data.hres$x[index]
@@ -58,9 +67,9 @@ than the minimum timestep")
 
     if (bFilter)
         {
-            f.lowpass<-lowpass(1/(2*dt)*kf,filterLength,sample=1/dt.hres)
+            f.lowpass<-Lowpass(1/(2*dt)*kf,filterLength,sample=1/dt.hres)
             meanvalue<-mean(data.hres$y)
-            data.hres.filtered<-stats::filter(data.hres$y-meanvalue,f.lowpass,circular=TRUE)+meanvalue
+            data.hres.filtered<-ApplyFilter(data.hres$y-meanvalue,f.lowpass,method=method.filter)+meanvalue
         } else
             {
                 data.hres.filtered<-data.hres$y
@@ -68,7 +77,7 @@ than the minimum timestep")
 
     
     index<-!is.na(data.hres.filtered)
-    data.target<-approx(data.hres$x[index],data.hres.filtered[index],time.target,method = method)
+    data.target<-approx(data.hres$x[index],data.hres.filtered[index],time.target,method = method.interpolation)
 
     return(ts(data.target$y,start=first(data.target$x),deltat=diff(data.target$x)[1]))
 }

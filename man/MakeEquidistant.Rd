@@ -6,7 +6,7 @@
 \usage{
 MakeEquidistant(t.x, t.y, dt = NULL, time.target = seq(from = t.x[1], to =
   t.x[length(t.x)], by = dt), dt.hres = NULL, bFilter = TRUE, k = 5,
-  kf = 1.2, method = "linear")
+  kf = 1.2, method.interpolation = "linear", method.filter = 2)
 }
 \arguments{
 \item{t.x}{vector of timepoints}
@@ -28,6 +28,15 @@ Should be smaller than the smallest timestep}
 \item{kf}{scaling factor for the lowpass frequency; 1 = Nyquist, 1.2 =
 1.2xNyquist is a tradeoff between reducing variance loss and keeping
 aliasing small}
+
+\item{method.interpolation}{"linear" or "constant", see approx}
+
+\item{method.filter}{To avoid loosing data at the ends of the dataset, endpoint constrains are used (see ApplyFilter)
+no constraint (loss at both ends) (method=0), only works if t.x covers more time than time.target
+minimum norm constraint (method=1)
+minimum slope constraint (method=2)
+minimum roughness constraint (method=3)
+circular filtering (method=4)}
 }
 \value{
 ts object with the equidistant timeseries
