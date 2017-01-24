@@ -55,7 +55,7 @@ than the minimum timestep")
     index<-(!is.na(t.y))
     
 
-    time.hres<-seq(from=first(t.x),to=last(t.x),by=dt.hres)
+    time.hres<-seq(from=FirstElement(t.x),to=LastElement(t.x),by=dt.hres)
     data.hres<-approx(t.x[index],t.y[index],time.hres,method=method.interpolation)
 
     index<-!is.na(data.hres$y)
@@ -79,5 +79,5 @@ than the minimum timestep")
     index<-!is.na(data.hres.filtered)
     data.target<-approx(data.hres$x[index],data.hres.filtered[index],time.target,method = method.interpolation)
 
-    return(ts(data.target$y,start=first(data.target$x),deltat=diff(data.target$x)[1]))
+    return(ts(data.target$y,start=FirstElement(data.target$x),deltat=diff(data.target$x)[1]))
 }
