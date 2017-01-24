@@ -57,7 +57,7 @@ than the minimum timestep")
     index<-(!is.na(t.y))
     
 
-    time.hres<-seq(from=FirstElement(t.x),to=LastElement(t.x),by=dt.hreins)
+    time.hres<-seq(from=FirstElement(t.x),to=LastElement(t.x),by=dt.hres)
     data.hres<-approx(t.x[index],t.y[index],time.hres,method=method.interpolation)
 
     index<-!is.na(data.hres$y)
