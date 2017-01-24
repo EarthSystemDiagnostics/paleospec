@@ -11,9 +11,9 @@
 ##' @return vector of filter weights
 ##' @author Thomas Laepple
 ##' @export
-Lowpass<-function(omega.c,n=9,sample=1,convergence=T)
+Lowpass<-function(omega.c,n=9,sample=1,convergence=TRUE)
 {
-if ((n %% 2) == 0) stop("N must be odd, this function calculates only symetrical = phase preserving filters")
+if ((n %% 2) == 0) stop("N must be odd, this function calculates only symmetrical = phase preserving filters")
 
 	omega.c<-omega.c/sample
 if (omega.c >= 0.5) stop("frequency higher or equal then Nyquist")

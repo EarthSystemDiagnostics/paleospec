@@ -31,6 +31,8 @@
 ##' @export
 MakeEquidistant<-function(t.x,t.y,dt=NULL,time.target=seq(from=t.x[1],to=t.x[length(t.x)],by=dt),dt.hres=NULL,bFilter=TRUE,k=5,kf=1.2,method.interpolation="linear",method.filter=2)
 {
+## WARNING/ISSUE: dt is a stats function. Should be renamed, e.g. to dt.out (also wherever it occurs) [K]
+## SUGGESTION: use zoo objects instead of t.x and t.y. [K]
     index<-!is.na(t.x)
     t.x<-t.x[index]
     t.y<-t.y[index]
@@ -55,7 +57,7 @@ than the minimum timestep")
     index<-(!is.na(t.y))
     
 
-    time.hres<-seq(from=FirstElement(t.x),to=LastElement(t.x),by=dt.hres)
+    time.hres<-seq(from=FirstElement(t.x),to=LastElement(t.x),by=dt.hreins)
     data.hres<-approx(t.x[index],t.y[index],time.hres,method=method.interpolation)
 
     index<-!is.na(data.hres$y)
