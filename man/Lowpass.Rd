@@ -4,7 +4,7 @@
 \alias{Lowpass}
 \title{calculate weights for lowpass filter}
 \usage{
-Lowpass(omega.c, n = 9, sample = 1, convergence = T)
+Lowpass(omega.c, n = 9, sample = 1, convergence = TRUE)
 }
 \arguments{
 \item{omega.c}{cutoff frequency}

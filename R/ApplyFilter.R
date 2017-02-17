@@ -6,7 +6,7 @@
 ##' minimum norm constraint (method=1)
 ##' minimum slope constraint (method=2)
 ##' minimum roughness constraint (method=3)
-##' circular filtering (method=4) 
+##' circular filtering (method=4)
 ##' @title  Apply a filter to a timeseries
 ##' @param data Input timeseries (ts object)
 ##' @param filter vector of filter weights
@@ -14,46 +14,37 @@
 ##' @return filtered timeseries (ts object)
 ##' @author Thomas Laepple
 ##' @export
-ApplyFilter <- function(data,filter,method=0)
-{
-    N<-floor(length(filter)/2)
-    if (method == 0)
-        {
-            result<-stats::filter(c(data),filter,circular=FALSE)
-            return(ts(result,frequency=frequency(data)))
-        }
+ApplyFilter <- function(data, filter, method = 0) {
+  N <- floor(length(filter)/2)
+  if (method == 0) {
+    result <- stats::filter(c(data), filter, circular = FALSE)
+    return(ts(result, frequency = frequency(data)))
+  }
 
-        if (method == 4)
-        {
-            result<-stats::filter(c(data),filter,circular=TRUE)
-            return(ts(result,frequency=frequency(data)))
-        } 
-   
-            {
-                if (method == 1)  #Minimum Norm
-                    {
-                        before<-rep(mean(data),N)
-                        after<-rep(mean(data),N)
-                    }
-                if (method == 2)
-                    {
-                        before<-c(data)[N:1]
-                        after<- c(data)[length(data):(length(data)-N+1)]
-                    }
-                if (method == 3)
-                    {
-                        before<-c(data)[N:1]
-                        after<- c(data)[length(data):(length(data)-N+1)]
+  if (method == 4) {
+    result <- stats::filter(c(data), filter, circular = TRUE)
+    return(ts(result, frequency = frequency(data)))
+  }
 
-                        before<-c(data)[1]-(before - mean(before))
+  {
+    if (method == 1) # Minimum Norm
+    {
+      before <- rep(mean(data), N)
+      after <- rep(mean(data), N)
+    }
+    if (method == 2) {
+      before <- c(data)[N:1]
+      after <- c(data)[length(data):(length(data) - N + 1)]
+    }
+    if (method == 3) {
+      before <- c(data)[N:1]
+      after <- c(data)[length(data):(length(data) - N + 1)]
 
-                        after<-c(data)[length(data)]-(after - mean(after))
+      before <- c(data)[1] - (before - mean(before))
 
-
-
-                    }
-
-                result<-stats::filter(c(before,data,after),filter,circular=F)[(N+1):(N+length(data))]
-                return(ts(result,frequency=frequency(data)))
-            }
+      after <- c(data)[length(data)] - (after - mean(after))
+    }
+    result <- stats::filter(c(before, data, after), filter, circular = F)[(N + 1):(N + length(data))]
+    return(ts(result, frequency = frequency(data)))
+  }
 }
