@@ -21,45 +21,19 @@ parameter.}
 
 \item{nFFT}{This function pads the data before computing the fft. nFFT
 indicates the total length of the data after padding.}
-
-\item{centre}{}
-
-\item{dpssIN}{}
-
-\item{returnZeroFreq}{}
-
-\item{Ftest}{}
-
-\item{jackknife}{}
-
-\item{jkCIProb}{}
-
-\item{maxAdaptiveIterations}{}
-
-\item{plot}{}
-
-\item{na.action}{}
-
-\item{returnInternals}{}
-
-\item{detrend}{}
-
-\item{bPad}{}
-
-\item{...}{}
 }
 \value{
-spectra object list(freq,spec,dof)
-examples
-x<-ts(arima.sim(list(ar = 0.9),1000))
-spec<-SpecMTM(x)
-LPlot(spec,col="grey")
-LLines(LogSmooth(spec),lwd=2)
+spectra object list(freq, spec, dof)
 }
 \description{
 MTM spectral estimator
-calls spec.mtm from library multitaper
- see spec.mtm from library mulitaper ?spec.mtm
+calls \code{\link[multitaper]{spec.mtm}} from library multitaper
+}
+\examples{
+x <- ts(arima.sim(list(ar = 0.9), 1000))
+spec <- SpecMTM(x)
+LPlot(spec, col='grey')
+LLines(LogSmooth(spec), lwd=2)
 }
 \author{
 Thomas Laepple
