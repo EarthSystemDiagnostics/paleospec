@@ -23,13 +23,14 @@ Should be smaller than the smallest timestep}
 
 \item{bFilter}{(TRUE) low passs filter the data to avoid aliasing, (FALSE) just interpolate}
 
-\item{k}{scaling factor for the Length of the filter (increasing creates}
+\item{k}{scaling factor for the Length of the filter (increasing creates
+a sharper filter, thus less aliasing)}
 
 \item{kf}{scaling factor for the lowpass frequency; 1 = Nyquist, 1.2 =
 1.2xNyquist is a tradeoff between reducing variance loss and keeping
 aliasing small}
 
-\item{method.interpolation}{"linear" or "constant", see approx}
+\item{method.interpolation}{'linear' or 'constant', see approx}
 
 \item{method.filter}{To avoid loosing data at the ends of the dataset, endpoint constrains are used (see ApplyFilter)
 no constraint (loss at both ends) (method=0), only works if t.x covers more time than time.target
