@@ -19,6 +19,6 @@ Highpass<-function(omega.c,n=9,sample=1,convergence=T)
 
 	directtransfer<-rep(0,n)
 	directtransfer[(n+1)/2]<-1
-	return(directtransfer-lowpass(omega.c,n=n,sample=sample,convergence=convergence))
+	return(directtransfer-Lowpass(omega.c,n=n,sample=sample,convergence=convergence))
 }
 
