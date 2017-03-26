@@ -2,9 +2,9 @@
 % Please edit documentation in R/MeanSpectrum.R
 \name{MeanSpectrum}
 \alias{MeanSpectrum}
-\title{average spectra, optionally with weighting and interpolation}
+\title{average spectra with weighting}
 \usage{
-MeanSpectrum(specList, iRemoveLowest = 0, weights = rep(1,
+MeanSpectrum(specList, iRemoveLowest = 1, weights = rep(1,
   length(specList)))
 }
 \arguments{
@@ -18,14 +18,10 @@ MeanSpectrum(specList, iRemoveLowest = 0, weights = rep(1,
 list(spec,nRecords) spec=average spectrum, nRecords = number of records contributing to each spectral estimate
 }
 \description{
-average spectra with weighting, spectra can have different resolution and span a different freq range, in this case, they get linearly interpolate to the same (maximum range and highes resolution) frequency resolution first.
+average spectra with weighting, spectra can have different resolution and span a different freq range
 }
-\examples{
-spec1<-SpecMTM(ts(rnorm(100),deltat=1))
-spec2<-SpecMTM(ts(rnorm(100),deltat=1))
-spec3<-SpecMTM(ts(rnorm(100),deltat=2))
-spec.avg.12<-MeanSpectrum(list(spec1,spec2))
-spec.avg.123<--MeanSpectrum(list(spec1,spec2,spec3)) 
+\details{
+Calculate the weighted mean spectrum of all spectra by interpolating them to the highest resolution
 }
 \author{
 Thomas Laepple

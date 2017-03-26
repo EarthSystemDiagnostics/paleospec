@@ -1,42 +1,32 @@
 
-##' average spectra with weighting, spectra can have different resolution and span a different freq range, in this case, they get linearly interpolate to the same (maximum range and highes resolution) frequency resolution first.
-##' @title average spectra, optionally with weighting and interpolation
+##' average spectra with weighting, spectra can have different resolution and span a different freq range
+##'
+##' Calculate the weighted mean spectrum of all spectra by interpolating them to the highest resolution
+#frequency grid and averaging them;
+##' @title average spectra with weighting
 ##' @param speclist list of spectra
 ##' @param iRemoveLowest number of lowest frequencies to remove (e.g. to remove detrending bias)
 ##' @param weights vector of weights (same length as elements in speclist)
 ##' @return list(spec,nRecords) spec=average spectrum, nRecords = number of records contributing to each spectral estimate
 ##' @author Thomas Laepple
-##' @examples
-##' spec1<-SpecMTM(ts(rnorm(100),deltat=1))
-##' spec2<-SpecMTM(ts(rnorm(100),deltat=1))
-##' spec3<-SpecMTM(ts(rnorm(100),deltat=2))
-##' spec.avg.12<-MeanSpectrum(list(spec1,spec2))
-##' spec.avg.123<--MeanSpectrum(list(spec1,spec2,spec3)) 
 ##' @export
 ##' 
-MeanSpectrum<-function(specList,iRemoveLowest=0,weights=rep(1,length(specList)))
+MeanSpectrum<-function(specList,iRemoveLowest=1,weights=rep(1,length(specList)))
 {
 
 #### Average the  spectra together
     print("Average spectra")
     if (length(weights) != length(specList)) stop("specList and weights have a different number of elements")
-    weights<-weights/sum(weights) #
-    #Remove the lowest/biased frequencies from the spectral estimates
+    weights<-weights/sum(weights)
+     #Remove the lowest/biased frequencies from the spectral estimates
     specList<-lapply(specList,remove.lowestFreq,iRemove=iRemoveLowest)
+    
+#Use the longest run for the reference spectrum
+    freqRef<-seq(from=min(unlist(lapply(specList,get.fstart.existing))),to=max(unlist(lapply(specList,get.fend.existing))),by=min(unlist(lapply(specList,get.df))))
 
-                                        #Check if all the spectra have the same frequency vector
-    df<-sapply(specList,get.df)
-    fStart<-sapply(specList,get.fstart.existing)
-    fEnd<-sapply(specList,get.fend.existing)
-
-    if (all(c(df==mean(df),fStart==mean(fStart),fEnd==mean(fEnd)))) {
-        specList.interpolated=specList
-    } else {       #Use the longest run for the reference spectrum and interpolate
-        freqRef<-seq(from=min(fStart),to=max(fEnd),by=min(df))
-        specList.interpolated<-list()
-        for (i in 1:length(specList)) specList.interpolated[[i]]<-SpecInterpolate(freqRef,specList[[i]])
-        for (i in 1:length(specList)) specList.interpolated[[i]]$spec<-specList.interpolated[[i]]$spec*weights[i]
-    }
+    specList.interpolated<-list()
+    for (i in 1:length(specList)) specList.interpolated[[i]]<-SpecInterpolate(freqRef,specList[[i]])
+    for (i in 1:length(specList)) specList.interpolated[[i]]$spec<-specList.interpolated[[i]]$spec*weights[i]
 
 
     NSpectra<-length(specList.interpolated)
@@ -60,48 +50,40 @@ MeanSpectrum<-function(specList,iRemoveLowest=0,weights=rep(1,length(specList)))
     return(list(spec=AddConfInterval(result),nRecord=nRecord)) 
 }
 
-#spec1<-SpecMTM(ts(rnorm(100),deltat=1))
-#spec2<-SpecMTM(ts(rnorm(100),deltat=1))
-#spec3<-SpecMTM(ts(rnorm(100),deltat=2))
-#spec.avg.12<-MeanSpectrum(list(spec1,spec2))
-#spec.avg.123<-MeanSpectrum(list(spec1,spec2,spec3))
 
-#LPlot(spec.avg.123$spec)
-#plot(spec.avg.123$spec$freq,spec.avg.123$nRecord)
-
-                                        #Helper functions
+#Helper functions
 
 
 remove.lowestFreq<-function(spec,iRemove)
-                                        #Remove lowest frequencies from a spectra (as they are biased by detrending and the MTM estimator)
+    #Remove lowest frequencies from a spectra (as they are biased by detrending and the MTM estimator)
 {
     if (iRemove==0) index=seq(spec$spec) else index<-(-(1:iRemove))
     spec$spec<-spec$spec[index]
     spec$freq<-spec$freq[index]    
-    spec$dof<-spec$dof[index]
-    return(spec)
+     spec$dof<-spec$dof[index]
+     return(spec)
 }
 
-                                        #Helper functions to access the list elements to determine the target frequency discretisation
+#Helper functions to access the list elements to determine the target frequency discretisation
 get.df<-function(x) return(mean(diff(x$freq)))
 get.fend.existing<-function(x) return(max(x$freq[!is.na(x$spec)]))
 get.fstart.existing<-function(x) return(min(x$freq[!is.na(x$spec)]))
 
 
-                                        #f (bNormalize) Normalize to the mean of the common interval
-                                        #
-                                        #   fmin<-min(unlist(lapply(temp,get.fend.existing)))
-                                        #   fmax<-max(unlist(lapply(temp,get.fstart.existing)))
-                                        #   i.min<-closest.element(freqRef,fmin)
-                                        #   i.max<-closest.element(freqRef,fmax)
-                                        #
-                                        #   var.band<-vector()
-                                        #   for (i in 1:length(temp))
-                                        #   {
-                                        #       var.band[i]<-mean(temp[[i]]$spec[i.min:i.max])
-                                        #   }
-                                        #
-                                        #   rescale<-mean(var.band)/var.band
-                                        #   if (!is.null(weights)) rescale=weights
-                                        #   for (i in 1:length(temp)) temp[[i]]$spec<-temp[[i]]$spec*rescale[i]
-                                        #
+#f (bNormalize) Normalize to the mean of the common interval
+#
+#   fmin<-min(unlist(lapply(temp,get.fend.existing)))
+#   fmax<-max(unlist(lapply(temp,get.fstart.existing)))
+#   i.min<-closest.element(freqRef,fmin)
+#   i.max<-closest.element(freqRef,fmax)
+#
+#   var.band<-vector()
+#   for (i in 1:length(temp))
+#   {
+#       var.band[i]<-mean(temp[[i]]$spec[i.min:i.max])
+#   }
+#
+#   rescale<-mean(var.band)/var.band
+#   if (!is.null(weights)) rescale=weights
+#   for (i in 1:length(temp)) temp[[i]]$spec<-temp[[i]]$spec*rescale[i]
+#
