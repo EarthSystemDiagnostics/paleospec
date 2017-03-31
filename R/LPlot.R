@@ -4,7 +4,7 @@
 ##' adds a transparent confidence interval.
 ##' @param x a spectral object resulting from a call to \code{\link{SpecMTM}}.
 ##' @param conf if \code{TRUE} (the default) add a transparent confidence
-##' interval.
+##' interval (suppressed if \code{x} contains no error limits).
 ##' @param bPeriod if \code{TRUE} the x-axis is displayed in units of period
 ##'     (inverse frequency), increasing to the left. Defaults to \code{FALSE}.
 ##' @param col color for the line plot and the confidence interval.
@@ -46,8 +46,9 @@ LPlot <- function(x, conf = TRUE, bPeriod = FALSE, col = "black", alpha = 0.3,
 
     plot(x$freq, x$spec, type = "l", log = "xy", col = col, xlab = xlab,
          ylab = ylab, xlim = xlim, ylim = ylim, ...)
-  
-    if (conf) {
+
+    lim <- !is.null(x$lim.1) & !is.null(x$lim.2)
+    if (conf & lim) {
         polygon(c(x$freq, rev(x$freq)), c(x$lim.1, rev(x$lim.2)),
                 col = ColTransparent(col, alpha), border = NA)
     }

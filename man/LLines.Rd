@@ -11,7 +11,7 @@ LLines(x, conf = TRUE, bPeriod = FALSE, col = "black", alpha = 0.3,
 \item{x}{a spectral object resulting from a call to \code{\link{SpecMTM}}.}
 
 \item{conf}{if \code{TRUE} (the default) add a transparent confidence
-interval.}
+interval (suppressed if \code{x} contains no error limits).}
 
 \item{bPeriod}{if \code{TRUE} treat the x-axis values in units of period
 (inverse frequency). Defaults to \code{FALSE}.}

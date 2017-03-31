@@ -4,7 +4,7 @@
 ##' optionally adds a transparent confidence interval.
 ##' @param x  a spectral object resulting from a call to \code{\link{SpecMTM}}.
 ##' @param conf if \code{TRUE} (the default) add a transparent confidence
-##' interval.
+##' interval (suppressed if \code{x} contains no error limits).
 ##' @param bPeriod if \code{TRUE} treat the x-axis values in units of period
 ##'     (inverse frequency). Defaults to \code{FALSE}.
 ##' @param col color for the line plot and the confidence interval.
@@ -32,7 +32,8 @@ LLines<-function(x, conf = TRUE, bPeriod = FALSE, col = "black", alpha = 0.3,
     x$lim.1 <- x$lim.1[index]
     x$lim.2 <- x$lim.2[index]
 
-    if (conf) {
+    lim <- !is.null(x$lim.1) & !is.null(x$lim.2)
+    if (conf & lim) {
         polygon(c(x$freq, rev(x$freq)), c(x$lim.1, rev(x$lim.2)),
                 col = ColTransparent(col, alpha), border = NA)
     }
