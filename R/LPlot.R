@@ -44,8 +44,8 @@ LPlot <- function(x, conf = TRUE, bPeriod = FALSE, col = "black", alpha = 0.3,
     x$lim.1 <- x$lim.1[index]
     x$lim.2 <- x$lim.2[index]
 
-    plot(x$freq, x$spec, type = "l", log = "xy", col = col, xlab = xlab,
-         ylab = ylab, xlim = xlim, ylim = ylim, ...)
+    plot(x$freq, x$spec, type = "n", log = "xy", xlab = xlab, ylab = ylab,
+         xlim = xlim, ylim = ylim, ...)
 
     lim <- !is.null(x$lim.1) & !is.null(x$lim.2)
     if (conf & lim) {
