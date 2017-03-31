@@ -2,40 +2,40 @@
 % Please edit documentation in R/LLines.R
 \name{LLines}
 \alias{LLines}
-\title{add Logplot + transparent confidence interval for the spectral plotting}
+\title{Add a spectrum to an existing log-log spectral plot.}
 \usage{
 LLines(x, conf = TRUE, bPeriod = FALSE, col = "black", alpha = 0.3,
   removeFirst = 0, removeLast = 0, ...)
 }
 \arguments{
-\item{x}{spectra object}
+\item{x}{a spectral object resulting from a call to \code{\link{SpecMTM}}.}
 
-\item{conf}{TRUE: Plot confidence interval}
+\item{conf}{if \code{TRUE} (the default) add a transparent confidence
+interval.}
 
 \item{bPeriod}{if \code{TRUE} treat the x-axis values in units of period
 (inverse frequency). Defaults to \code{FALSE}.}
 
-\item{col}{color}
+\item{col}{color for the line plot and the confidence interval.}
 
-\item{alpha}{transparency}
+\item{alpha}{transparency level (between 0 and 1) for the confidence
+interval. Defaults to \code{0.3}.}
 
-\item{removeFirst}{omit removeFirst values on the low frequency side}
+\item{removeFirst}{omit \code{removeFirst} values on the low frequency side.}
 
-\item{removeLast}{omit removeFirst values on the high frequency side}
+\item{removeLast}{omit \code{removeLast} values on the high frequency side.}
 
-\item{...}{other parameters to be passed to the line function}
-}
-\value{
-none
+\item{...}{further graphical parameters passed to \code{lines}.}
 }
 \description{
-add Logplot + transparent confidence interval for the spectral plotting
+This function adds a spectrum to an existing double-logarithmic plot and
+optionally adds a transparent confidence interval.
 }
 \examples{
-x<-ts(arima.sim(list(ar = 0.9),1000))
-spec<-SpecMTM(x)
-LPlot(spec,col="grey")
-LLines(LogSmooth(spec),lwd=3)
+x <- ts(arima.sim(list(ar = 0.9), 1000))
+spec <- SpecMTM(x)
+LPlot(spec, col = "grey")
+LLines(LogSmooth(spec), lwd = 2)
 }
 \author{
 Thomas Laepple

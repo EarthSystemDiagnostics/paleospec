@@ -2,52 +2,52 @@
 % Please edit documentation in R/LPlot.R
 \name{LPlot}
 \alias{LPlot}
-\title{add Logplot + transparent confidence interval for the spectral plotting}
+\title{Log-log spectral plot.}
 \usage{
 LPlot(x, conf = TRUE, bPeriod = FALSE, col = "black", alpha = 0.3,
   removeFirst = 0, removeLast = 0, xlab = "f", ylab = "PSD",
   xlim = NULL, ylim = NULL, ...)
 }
 \arguments{
-\item{x}{spectra object}
+\item{x}{a spectral object resulting from a call to \code{\link{SpecMTM}}.}
 
-\item{conf}{TRUE: Plot confidence interval}
+\item{conf}{if \code{TRUE} (the default) add a transparent confidence
+interval.}
 
 \item{bPeriod}{if \code{TRUE} the x-axis is displayed in units of period
 (inverse frequency), increasing to the left. Defaults to \code{FALSE}.}
 
-\item{col}{color}
+\item{col}{color for the line plot and the confidence interval.}
 
-\item{alpha}{transparency}
+\item{alpha}{transparency level (between 0 and 1) for the confidence
+interval. Defaults to \code{0.3}.}
 
-\item{removeFirst}{omit removeFirst values on the low frequency side}
+\item{removeFirst}{omit \code{removeFirst} values on the low frequency side.}
 
-\item{removeLast}{omit removeFirst values on the high frequency side}
+\item{removeLast}{omit \code{removeLast} values on the high frequency side.}
 
-\item{xlab}{label of x-axes}
+\item{xlab}{character string for labelling the x-axis.}
 
-\item{ylab}{label of y-axes}
+\item{ylab}{character string for labelling the y-axis.}
 
 \item{xlim}{range of x-axis values; if \code{NULL} (the default) it is
-calculated internally and automatically reversed for \code{bPeriod =
-TRUE}.}
+calculated internally and automatically reversed for
+\code{bPeriod = TRUE}.}
 
 \item{ylim}{range of y-axis values; if \code{NULL} (the default) it is
 calculated internally.}
 
-\item{...}{other parameters to be passed to the line functio}
-}
-\value{
-none
+\item{...}{further graphical parameters passed to \code{plot}.}
 }
 \description{
-add Logplot + transparent confidence interval for the spectral plotting
+This function plots a spectrum on a double-logarithmic scale and optionally
+adds a transparent confidence interval.
 }
 \examples{
-x<-ts(arima.sim(list(ar = 0.9),1000))
-spec<-SpecMTM(x)
-LPlot(spec,col="grey")
-LLines(LogSmooth(spec),lwd=2)
+x <- ts(arima.sim(list(ar = 0.9), 1000))
+spec <- SpecMTM(x)
+LPlot(spec, col = "grey")
+LLines(LogSmooth(spec), lwd = 2)
 }
 \author{
 Thomas Laepple
