@@ -4,13 +4,16 @@
 \alias{LLines}
 \title{add Logplot + transparent confidence interval for the spectral plotting}
 \usage{
-LLines(x, conf = TRUE, col = "black", alpha = 0.3, removeFirst = 0,
-  removeLast = 0, ...)
+LLines(x, conf = TRUE, bPeriod = FALSE, col = "black", alpha = 0.3,
+  removeFirst = 0, removeLast = 0, ...)
 }
 \arguments{
 \item{x}{spectra object}
 
 \item{conf}{TRUE: Plot confidence interval}
+
+\item{bPeriod}{if \code{TRUE} treat the x-axis values in units of period
+(inverse frequency). Defaults to \code{FALSE}.}
 
 \item{col}{color}
 

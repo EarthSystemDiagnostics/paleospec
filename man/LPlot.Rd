@@ -4,13 +4,17 @@
 \alias{LPlot}
 \title{add Logplot + transparent confidence interval for the spectral plotting}
 \usage{
-LPlot(x, conf = TRUE, col = "black", alpha = 0.3, removeFirst = 0,
-  removeLast = 0, xlab = "f", ylab = "PSD", ...)
+LPlot(x, conf = TRUE, bPeriod = FALSE, col = "black", alpha = 0.3,
+  removeFirst = 0, removeLast = 0, xlab = "f", ylab = "PSD",
+  xlim = NULL, ylim = NULL, ...)
 }
 \arguments{
 \item{x}{spectra object}
 
 \item{conf}{TRUE: Plot confidence interval}
+
+\item{bPeriod}{if \code{TRUE} the x-axis is displayed in units of period
+(inverse frequency), increasing to the left. Defaults to \code{FALSE}.}
 
 \item{col}{color}
 
@@ -23,6 +27,13 @@ LPlot(x, conf = TRUE, col = "black", alpha = 0.3, removeFirst = 0,
 \item{xlab}{label of x-axes}
 
 \item{ylab}{label of y-axes}
+
+\item{xlim}{range of x-axis values; if \code{NULL} (the default) it is
+calculated internally and automatically reversed for \code{bPeriod =
+TRUE}.}
+
+\item{ylim}{range of y-axis values; if \code{NULL} (the default) it is
+calculated internally.}
 
 \item{...}{other parameters to be passed to the line functio}
 }
