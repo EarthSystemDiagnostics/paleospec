@@ -34,7 +34,7 @@ LPlot <- function(x, conf = TRUE, bPeriod = FALSE, col = "black", alpha = 0.3,
     if (bPeriod) {
         x$freq <- 1/x$freq
         if (is.null(xlim)) xlim <- rev(range(x$freq))
-        xlab <- "period"
+        if (xlab == "f") xlab <- "period"
     }
 
     index <- (removeFirst + 1) : (length(x$freq) - removeLast)
