@@ -4,9 +4,9 @@
 \alias{LPlot}
 \title{Log-log spectral plot.}
 \usage{
-LPlot(x, conf = TRUE, bPeriod = FALSE, col = "black", alpha = 0.3,
-  removeFirst = 0, removeLast = 0, xlab = "f", ylab = "PSD",
-  xlim = NULL, ylim = NULL, ...)
+LPlot(x, conf = TRUE, bPeriod = FALSE, bNoPlot = FALSE, axes = TRUE,
+  col = "black", alpha = 0.3, removeFirst = 0, removeLast = 0,
+  xlab = "f", ylab = "PSD", xlim = NULL, ylim = NULL, ...)
 }
 \arguments{
 \item{x}{a spectral object resulting from a call to \code{\link{SpecMTM}}.}
@@ -16,6 +16,12 @@ interval (suppressed if \code{x} contains no error limits).}
 
 \item{bPeriod}{if \code{TRUE} the x-axis is displayed in units of period
 (inverse frequency), increasing to the left. Defaults to \code{FALSE}.}
+
+\item{bNoPlot}{if \code{TRUE} only produce the plot frame (\code{type = "n"}
+behaviour of function \code{\link{plot}}). Defaults to \code{FALSE}.}
+
+\item{axes}{if \code{FALSE} the plotting of the x and y axes is
+suppressed. Defaults to \code{TRUE}.}
 
 \item{col}{color for the line plot and the confidence interval.}
 
