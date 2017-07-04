@@ -27,4 +27,3 @@ mean(replicate(1000,{test <- SimulatePowerlawSignalPair(200,1,1,0.5);cor(test$y1
 \author{
 Thomas Laepple
 }
-

@@ -26,4 +26,3 @@ based on Bloomfield 1976
 \author{
 Thomas Laepple
 }
-

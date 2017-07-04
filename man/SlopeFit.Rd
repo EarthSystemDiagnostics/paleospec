@@ -30,4 +30,3 @@ list(slope=slope,slopesd=slopesd,spec=saveSpec,freq=binFreq,intercept=intercept)
 \author{
 Thomas Laepple
 }
-

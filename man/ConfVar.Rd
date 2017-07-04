@@ -20,4 +20,3 @@ Provide ChiSquared confidence intervals for ratios
 \author{
 Thomas Laepple
 }
-

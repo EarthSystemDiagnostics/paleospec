@@ -26,4 +26,3 @@ Calculate the weighted mean spectrum of all spectra by interpolating them to the
 \author{
 Thomas Laepple
 }
-

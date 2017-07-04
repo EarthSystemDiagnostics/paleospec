@@ -19,4 +19,3 @@ weight vector
 \author{
 Thomas Laepple
 }
-

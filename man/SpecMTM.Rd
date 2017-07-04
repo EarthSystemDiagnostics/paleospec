@@ -38,4 +38,3 @@ LLines(LogSmooth(spec), lwd=2)
 \author{
 Thomas Laepple
 }
-

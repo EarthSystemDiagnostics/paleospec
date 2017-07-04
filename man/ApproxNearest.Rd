@@ -35,4 +35,3 @@ lines(result,col="red")
 \author{
 Thomas Laepple
 }
-

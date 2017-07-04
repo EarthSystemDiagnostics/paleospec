@@ -17,4 +17,3 @@ vector containing the PSD
 \author{
 Thomas Laepple
 }
-

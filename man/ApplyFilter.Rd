@@ -30,4 +30,3 @@ circular filtering (method=4)
 \author{
 Thomas Laepple
 }
-

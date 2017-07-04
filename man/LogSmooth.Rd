@@ -38,4 +38,3 @@ legend("bottomleft",col=c("grey","green","blue","red"),lwd=2,c("raw","smoothed 0
 \author{
 Thomas Laepple
 }
-

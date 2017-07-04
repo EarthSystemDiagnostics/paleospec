@@ -35,4 +35,3 @@ Block Avg","interpolated values"))
 \author{
 Thomas Laepple
 }
-

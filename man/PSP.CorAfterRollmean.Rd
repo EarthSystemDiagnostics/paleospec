@@ -26,4 +26,3 @@ PSP.CorUntilF(c(0.5,0.5/10,0.5/50),1,0,1000,0.5)
 \author{
 Thomas Laepple
 }
-

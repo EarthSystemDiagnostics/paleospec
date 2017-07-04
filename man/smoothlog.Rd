@@ -19,4 +19,3 @@ smoothed x
 \author{
 Thomas Laepple
 }
-

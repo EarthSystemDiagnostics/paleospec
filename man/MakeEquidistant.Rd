@@ -53,4 +53,3 @@ frequency, and subsampling; e.g. as used in Huybers and Laepple, EPSL 2014
 \author{
 Thomas Laepple
 }
-

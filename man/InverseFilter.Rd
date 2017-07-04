@@ -15,4 +15,3 @@ filter weights for the inverse filter
 \author{
 Thomas Laepple
 }
-

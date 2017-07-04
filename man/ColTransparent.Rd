@@ -22,4 +22,3 @@ Modify a color to get brighter and tranparent for the confidence intervals
 \author{
 Thomas Laepple
 }
-

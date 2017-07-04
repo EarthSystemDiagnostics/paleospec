@@ -31,4 +31,3 @@ could be considerably speeded up by using cut ?cut
 \author{
 Thomas Laepple
 }
-

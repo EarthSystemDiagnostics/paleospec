@@ -23,4 +23,3 @@ Method: FFT white noise, rescale, FFT back, the result is scaled to variance 1
 \author{
 Thomas Laepple
 }
-

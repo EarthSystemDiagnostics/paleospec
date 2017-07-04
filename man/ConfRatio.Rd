@@ -25,4 +25,3 @@ based on a ChiSquare Distribution
 \author{
 Thomas Laepple
 }
-

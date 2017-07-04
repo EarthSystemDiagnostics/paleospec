@@ -17,4 +17,3 @@ one spectum as list(spec,freq,dof) (spec on the specRef resolution)
 \author{
 Thomas Laepple
 }
-

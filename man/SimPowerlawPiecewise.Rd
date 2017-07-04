@@ -23,4 +23,3 @@ N random numbers drawn according to the piecewise powerlaw PSD
 \author{
 Thomas Laepple
 }
-

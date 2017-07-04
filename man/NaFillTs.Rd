@@ -15,4 +15,3 @@ filled x
 \author{
 Thomas Laepple
 }
-

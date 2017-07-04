@@ -33,4 +33,3 @@ v2$var/v1$var
 \author{
 Thomas Laepple
 }
-

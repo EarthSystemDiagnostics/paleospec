@@ -29,4 +29,3 @@ Get the transfer function of a symetric filter, page 122 in Bloomfield 1976,
 \author{
 Thomas Laepple
 }
-

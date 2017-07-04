@@ -39,4 +39,3 @@ c("one realization with chisq conf intervals","MC confidence intervals"))
 \author{
 Thomas Laepple
 }
-

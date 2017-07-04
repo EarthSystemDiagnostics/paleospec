@@ -33,4 +33,3 @@ GetVarFromSpectra(spec,c(0.25,0.5))
 \author{
 Thomas Laepple
 }
-

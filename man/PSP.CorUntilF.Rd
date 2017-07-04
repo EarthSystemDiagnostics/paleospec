@@ -32,4 +32,3 @@ PSP.CorUntilF(f=c(0.5,0.5/10,0.5/50),betaSignal=1,betaNoise=0,N=1000,r=0.5)
 \author{
 Thomas Laepple
 }
-
