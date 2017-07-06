@@ -32,7 +32,7 @@ SimPowerlaw <- function(beta, N)
   x   <- scale(rnorm(N2, 1))
   fx  <- fft(x)
   ffx <- fx * Filter
-  result <- scale(Re(fft(ffx, inverse = TRUE)))
-  return(result[1:N])
+  result <- Re(fft(ffx, inverse = TRUE))[1:N]
+  return(scale(result))
 }
 
