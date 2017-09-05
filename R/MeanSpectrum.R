@@ -10,7 +10,7 @@
 ##' @return list(spec,nRecords) spec=average spectrum, nRecords = number of records contributing to each spectral estimate
 ##' @author Thomas Laepple
 ##' @export
-##' 
+##'
 MeanSpectrum<-function(specList,iRemoveLowest=1,weights=rep(1,length(specList)))
 {
 
@@ -20,7 +20,7 @@ MeanSpectrum<-function(specList,iRemoveLowest=1,weights=rep(1,length(specList)))
     weights<-weights/sum(weights)
      #Remove the lowest/biased frequencies from the spectral estimates
     specList<-lapply(specList,remove.lowestFreq,iRemove=iRemoveLowest)
-    
+
 #Use the longest run for the reference spectrum
     freqRef<-seq(from=min(unlist(lapply(specList,get.fstart.existing))),to=max(unlist(lapply(specList,get.fend.existing))),by=min(unlist(lapply(specList,get.df))))
 
@@ -39,15 +39,15 @@ MeanSpectrum<-function(specList,iRemoveLowest=1,weights=rep(1,length(specList)))
         {
             if (sum((result$freq-specList.interpolated[[i]]$freq)^2) > 0.1) stop("Different spectra length or resolutions")
             specMatrix[i,]<-specList.interpolated[[i]]$spec
-            dofMatrix[i,]<-specList.interpolated[[i]]$dof    
+            dofMatrix[i,]<-specList.interpolated[[i]]$dof
         }
 
     result$spec<-colSums(specMatrix,na.rm=TRUE)
     nRecord=colSums(!is.na(specMatrix))
     result$dof<-colSums(dofMatrix,na.rm=TRUE)
     class(result)<-"spec"
-    
-    return(list(spec=AddConfInterval(result),nRecord=nRecord)) 
+
+    return(list(spec=AddConfInterval(result),nRecord=nRecord))
 }
 
 
@@ -59,7 +59,7 @@ remove.lowestFreq<-function(spec,iRemove)
 {
     if (iRemove==0) index=seq(spec$spec) else index<-(-(1:iRemove))
     spec$spec<-spec$spec[index]
-    spec$freq<-spec$freq[index]    
+    spec$freq<-spec$freq[index]
      spec$dof<-spec$dof[index]
      return(spec)
 }
@@ -74,8 +74,8 @@ get.fstart.existing<-function(x) return(min(x$freq[!is.na(x$spec)]))
 #
 #   fmin<-min(unlist(lapply(temp,get.fend.existing)))
 #   fmax<-max(unlist(lapply(temp,get.fstart.existing)))
-#   i.min<-closest.element(freqRef,fmin)
-#   i.max<-closest.element(freqRef,fmax)
+#   i.min<-ClosestElement(freqRef,fmin)
+#   i.max<-ClosestElement(freqRef,fmax)
 #
 #   var.band<-vector()
 #   for (i in 1:length(temp))

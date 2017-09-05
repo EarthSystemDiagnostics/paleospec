@@ -8,8 +8,6 @@ SlopeFit(spec, freq.start = NULL, freq.end = NULL, bDebug = TRUE,
   breaks = NULL, indexRemove = NULL, df.log = 0.05, i.fStart = 4)
 }
 \arguments{
-\item{spec}{}
-
 \item{freq.start}{vector containing the start frequencies of the fitting interval(s)}
 
 \item{freq.end}{vector containing the end frequencies of the fitting interval(s)}

@@ -6,9 +6,6 @@
 \usage{
 FirstElement(x)
 }
-\arguments{
-\item{x}{}
-}
 \value{
 first element of X
 }

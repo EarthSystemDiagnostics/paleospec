@@ -1,5 +1,5 @@
 ##' @title Fit a power-law to the spectrum
-##' @param spec 
+##' @param spec
 ##' @param freq.start  vector containing the start frequencies of the fitting interval(s)
 ##' @param freq.end vector containing the end frequencies of the fitting interval(s)
 ##' @param bDebug (TRUE) plot diagnostics
@@ -12,8 +12,8 @@
 ##' @export
 SlopeFit<-function(spec,freq.start=NULL,freq.end=NULL,bDebug=TRUE,breaks=NULL,indexRemove=NULL,df.log=0.05,i.fStart=4)
 {
-   if (is.null(breaks)) breaks=seq(from=log(spec$freq[i.fStart]),to=log(last(spec$freq)),by=df.log)
-   binSpec<-binAvg(spec$freq,log(spec$spec),N=nBins,bFill=T,breaks=exp(breaks))
+   if (is.null(breaks)) breaks=seq(from=log(spec$freq[i.fStart]),to=log(tail(spec$freq, 1L)),by=df.log)
+   binSpec<-AvgToBin(spec$freq,log(spec$spec),N=nBins,bFill=T,breaks=exp(breaks))
 #Remove missing values (if the breaks extended over the frequency range
     index<-!is.na(binSpec$avg)
     binSpec$avg<-exp(binSpec$avg)
@@ -53,8 +53,8 @@ for (i in 1:length(freq.start))
 {
     index<-rep(TRUE,length(binFreq))
 
-    i.start<-closest.element(binFreq,freq.start[i]) #Remove the low frequency part
-    i.end<-closest.element(binFreq,freq.end[i]) #Remove the high frequency part
+    i.start<-ClosestElement(binFreq,freq.start[i]) #Remove the low frequency part
+    i.end<-ClosestElement(binFreq,freq.end[i]) #Remove the high frequency part
 
     index[binSpec$avg==0]<-FALSE
     index[1:(i.start-1)]<-FALSE

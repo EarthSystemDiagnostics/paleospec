@@ -6,7 +6,7 @@
 ##' @param breakpoint frequency of the breakpoint
 ##' @return N random numbers drawn according to the piecewise powerlaw PSD
 ##' @export
-##' @author Thomas Laepple 
+##' @author Thomas Laepple
 SimPowerlawPiecewise<-function(beta1,beta2,N,deltat=1,breakpoint=1/50)
 {
 #Simulate a timeseries with length N which has a spectra consisting of two powerlaws
@@ -17,7 +17,7 @@ SimPowerlawPiecewise<-function(beta1,beta2,N,deltat=1,breakpoint=1/50)
     N<-ceiling(N/2)*2
     df  = 1/(N);
     f=seq(from=df,to=1/(2),by=df)
-    index.breakpoint<-closest.element(f*(1/deltat),breakpoint)
+    index.breakpoint<-ClosestElement(f*(1/deltat),breakpoint)
 
     #Intercept to cross at breakpoint
     a<- (-1*beta1*log(f[index.breakpoint]))-(-1*beta2*log(f[index.breakpoint]))
