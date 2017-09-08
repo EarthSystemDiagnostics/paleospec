@@ -21,12 +21,11 @@ Lowpass <- function(omega.c,
   if (omega.c >= 0.5)
     stop("frequency higher or equal then Nyquist")
   #calculate least square solution for ideal lowpass
-  g.u <- 0
   n.side <- (n - 1) / 2
-  for (u in 1:n.side) {
-    g.u[u + n.side + 1] <- sin(u * omega.c * 2 * pi) / (pi * u)
-  }
-  #g_0
+  g.u <- numeric(length = n)
+
+  u <- 1:n.side
+  g.u[u + n.side + 1] <- sin(u * omega.c * 2 * pi) / (pi * u)
   g.u[n.side + 1] <- omega.c * 2
   #Now flip over
   g.u[1:n.side] <- g.u[n:(n.side + 2)]
@@ -34,10 +33,9 @@ Lowpass <- function(omega.c,
   if (convergence) {
     #Multiply by convergence factors to reduce the ripples
     delta <- 4 * pi / n
-    for (u in c((-1 * n.side):-1, 1:n.side))
-      g.u[u + n.side + 1] <-
-        g.u[u + n.side + 1] * sin(u * delta / 2) / (u * delta / 2)
-    }
+    u <- c((-1 * n.side):-1, 1:n.side)
+    g.u[u + n.side + 1] <- g.u[u + n.side + 1] * sin(u * delta / 2) / (u * delta / 2)
+  }
 
   return(g.u)
 }
