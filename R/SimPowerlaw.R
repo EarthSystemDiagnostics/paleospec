@@ -29,10 +29,9 @@ SimPowerlaw <- function(beta, N)
   f <- seq(from = df, to = 1/2, by = df)
   Filter <- sqrt(1/(f^beta))
   Filter <- c(max(Filter), Filter, rev(Filter))
-  x   <- scale(rnorm(N2, 1))
+  x   <- rnorm(N2, 1)
   fx  <- fft(x)
   ffx <- fx * Filter
   result <- Re(fft(ffx, inverse = TRUE))[1:N]
   return(scale(result)[1:N])
 }
-
