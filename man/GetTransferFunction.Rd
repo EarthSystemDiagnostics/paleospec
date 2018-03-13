@@ -4,27 +4,39 @@
 \alias{GetTransferFunction}
 \title{Derives and plots the transfer function}
 \usage{
-GetTransferFunction(g.u, resolution = 100, bPlot = TRUE, add = FALSE, ...)
+GetTransferFunction(g.u, resolution = 100, freq = NULL,
+  bPlot = is.null(freq) == TRUE, add = FALSE, ...)
 }
 \arguments{
-\item{g.u}{}
+\item{g.u}{a filter, a numeric vector, values should sum to 1}
 
-\item{resolution}{}
+\item{resolution}{the number of frequencies at which to evaluate the
+transfer function}
 
-\item{bPlot}{}
+\item{freq}{the specific frequency(s) at which to evaluate the transfer function
+if NULL, transfer function is evaluated at 1:resolution frequencies}
 
-\item{add}{}
+\item{bPlot}{logical, plot the transfer function, defaults to FALSE if frequencies
+are specified, TRUE otherwise}
 
-\item{...}{}
+\item{add}{logical, add to a previous plot}
+
+\item{...}{other arguments to pass to the plotting function}
 }
 \value{
-list(omega,y) containing the transfer function
+list(freq, y) containing the transfer function
 }
 \description{
 Derives and plots the transfer function (given a filter)
 }
 \details{
 Get the transfer function of a symetric filter, page 122 in Bloomfield 1976,
+page 135 in Bloomfield 2000
+}
+\examples{
+l <- 11
+tf <- GetTransferFunction(rep(1/l, l), resolution = 1000)
+tf <- GetTransferFunction(rep(1/l, l), freq = 1/c(100, 10, 2))
 }
 \author{
 Thomas Laepple
