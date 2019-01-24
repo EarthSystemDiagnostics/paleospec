@@ -9,6 +9,9 @@ FirstElement(x)
 \value{
 first element of X
 }
+\description{
+first element of a vector
+}
 \author{
 Thomas Laepple
 }

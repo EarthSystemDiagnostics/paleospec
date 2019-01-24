@@ -16,6 +16,9 @@ fweights.lin(ftarget, f, df.log)
 \value{
 weight vector
 }
+\description{
+fweights.lin
+}
 \author{
 Thomas Laepple
 }

@@ -14,6 +14,9 @@ SpecInterpolate(freqRef, spec)
 \value{
 one spectum as list(spec,freq,dof) (spec on the specRef resolution)
 }
+\description{
+Interpolates the spectrum spec to the specRef frequency resolution
+}
 \author{
 Thomas Laepple
 }

@@ -18,6 +18,9 @@ PSP.CorAfterRollmean(N, betaSignal, betaNoise, R)
 \value{
 correlation of unfiltered, 10point mean and 50 point mean
 }
+\description{
+Numerical correlation of random timeseries with different filtering (running mean)
+}
 \examples{
 temp <- replicate(1000,PSP.CorAfterRollmean(1000,1,0,0.5))
 rowMeans(temp)
