@@ -1,7 +1,7 @@
-#' Integral of PSD=f^(-beta) from f1=1/N to f2=f
+#' @title Variance of a powerlaw process if integrated from until frequency f
+#' @description Integral of PSD=f^(-beta) from f1=1/N to f2=f
 #' this equals the variance of a lowpass filtered powerlaw process
 #' WARNING: The result is not normalized
-#' @title Variance of a powerlaw process if integrated from until frequency f
 #' @param f frequency until which to integrate
 #' @param beta powerlaw slope
 #' @param N length of the timeseries
@@ -16,8 +16,8 @@
 #' PS.VarUntilF(0.01,beta,length(signal))/PS.VarUntilF(0.5,beta,length(signal))
 #' v2$var/v1$var
 #' @author Thomas Laepple
-PS.VarUntilF<-function(f,beta,N)
-    {
-        if (beta==1) return(log(f)-log(1/N))
-        else return((f^(1-beta)-(1/N)^(1-beta))/(1-beta))
-    }
+PS.VarUntilF <- function(f, beta, N) {
+  if (beta == 1)
+    return(log(f) - log(1/N)) else
+      return((f^(1 - beta) - (1/N)^(1 - beta))/(1 - beta))
+}

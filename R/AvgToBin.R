@@ -1,20 +1,18 @@
-
-
-##'Averages y into bins according to the positon of a in the breaks
-##'Either give N=number of breaks, or N+1 breaks
-##' Breaks are defined as x>breaks[i], and x<=breaks[i+1]
-##' if fill=T, fill empty bins using linear interpolation from the neighbours to the center of the bin
-##' could be considerably speeded up by using cut ?cut
-##' @title Average a vector into bins
-##' @param x vector of x values
-##' @param y vector of y values, same length as x
-##' @param N Number of breaks (or NULL if breaks are supplied)
-##' @param breaks vector of breaks (optional, instead if N)
-##' @param bFill if TRUE  fill empty bins using linear interpolation from the neighbours to the center of the bin
-##' @return list(breaks,centers,avg,nobs)
-##' Returns the breaks, centers, the averaged values and nobs, the number of observations averages
-##' @author Thomas Laepple
-##' @export
+#' @title Average a vector into bins
+#'@description Averages y into bins according to the positon of a in the breaks
+#'  Either give N=number of breaks, or N+1 breaks Breaks are defined as
+#'  x>breaks[i], and x<=breaks[i+1] if fill=T, fill empty bins using linear
+#'  interpolation from the neighbours to the center of the bin could be
+#'  considerably speeded up by using cut ?cut
+#' @param x vector of x values
+#' @param y vector of y values, same length as x
+#' @param N Number of breaks (or NULL if breaks are supplied)
+#' @param breaks vector of breaks (optional, instead if N)
+#' @param bFill if TRUE  fill empty bins using linear interpolation from the neighbours to the center of the bin
+#' @return list(breaks,centers,avg,nobs)
+#' Returns the breaks, centers, the averaged values and nobs, the number of observations averages
+#' @author Thomas Laepple
+#' @export
 AvgToBin<-function(x,y,N=NULL,breaks=pretty(x,N),bFill=FALSE)
 {
     NBIN <- length(breaks) - 1

@@ -23,10 +23,10 @@ Returns the breaks, centers, the averaged values and nobs, the number of observa
 }
 \description{
 Averages y into bins according to the positon of a in the breaks
-Either give N=number of breaks, or N+1 breaks
-Breaks are defined as x>breaks[i], and x<=breaks[i+1]
-if fill=T, fill empty bins using linear interpolation from the neighbours to the center of the bin
-could be considerably speeded up by using cut ?cut
+ Either give N=number of breaks, or N+1 breaks Breaks are defined as
+ x>breaks[i], and x<=breaks[i+1] if fill=T, fill empty bins using linear
+ interpolation from the neighbours to the center of the bin could be
+ considerably speeded up by using cut ?cut
 }
 \author{
 Thomas Laepple

@@ -1,7 +1,8 @@
-#' correlation of two timeseries with powerlaw signal and powerlaw noise evaluated until f
-#' this equals the correlation of linearly coupled lowpass filtered powerlaw process
-#'
 #' @title lowpass filtered expected correlation of powerlaw signal pair
+#' @description Correlation of two timeseries with powerlaw signal and powerlaw
+#' noise evaluated until f
+#' this equals the correlation of linearly coupled lowpass filtered powerlaw
+#' process
 #' @param f frequency until which to integrate
 #' @param betaSignal powerlaw slope of the signal
 #' @param betaNoise powerlaw slope of the noise

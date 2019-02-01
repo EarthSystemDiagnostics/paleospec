@@ -17,15 +17,12 @@ ApplyFilter(data, filter, method = 0)
 filtered timeseries (ts object)
 }
 \description{
-Apply a filter to a timeseries
-the timestep provided by ts is not used!!!!
-Thus for timeseries with a different spacing than 1, the filter has to be adapted
-Using endpoint constrains as describen in  Mann et al., GRL 2003
-no constraint (loss at both ends) (method=0)
-minimum norm constraint (method=1)
-minimum slope constraint (method=2)
-minimum roughness constraint (method=3)
-circular filtering (method=4)
+Apply a filter to a timeseries the timestep provided by ts is
+  not used!!!! Thus for timeseries with a different spacing than 1, the
+  filter has to be adapted Using endpoint constrains as describen in  Mann et
+  al., GRL 2003 no constraint (loss at both ends) (method=0) minimum norm
+  constraint (method=1) minimum slope constraint (method=2) minimum roughness
+  constraint (method=3) circular filtering (method=4)
 }
 \author{
 Thomas Laepple

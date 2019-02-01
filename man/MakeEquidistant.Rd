@@ -44,9 +44,6 @@ circular filtering (method=4)}
 ts object with the equidistant timeseries
 }
 \description{
-Average an irregular timeseries to a regular timeseries
-}
-\details{
 Make an irregular timeseries equidistant by
 interpolating to high resolution, lowpass filtering to the Nyquist
 frequency, and subsampling; e.g. as used in Huybers and Laepple, EPSL 2014

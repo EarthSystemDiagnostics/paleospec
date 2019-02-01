@@ -2,7 +2,7 @@
 % Please edit documentation in R/Lowpass.R
 \name{Lowpass}
 \alias{Lowpass}
-\title{calculate weights for lowpass filter}
+\title{Calculate weights for lowpass filter}
 \usage{
 Lowpass(omega.c, n = 9, sample = 1, convergence = TRUE)
 }
@@ -19,6 +19,9 @@ Lowpass(omega.c, n = 9, sample = 1, convergence = TRUE)
 vector of filter weights
 }
 \description{
+Derive the (smoothed) least square lowpass, given the cutoff
+frequency omega.c and the length of the filter n
+
 based on Bloomfield 1976
 }
 \author{

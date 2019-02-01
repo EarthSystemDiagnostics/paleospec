@@ -1,34 +1,32 @@
-##' Average an irregular timeseries to a regular timeseries
-##'
-##' Make an irregular timeseries equidistant by
-##' interpolating to high resolution, lowpass filtering to the Nyquist
-##' frequency, and subsampling; e.g. as used in Huybers and Laepple, EPSL 2014
-##' @title Average an irregular timeseries to a regular timeseries
-##' @param t.x vector of timepoints
-##' @param t.y vector of corresponding values
-##' @param dt target timestep; can be omitted if time.target is supplied
-##' @param time.target time vector to which timeseries should be averaged/interpolated to
-##' by default the same range as t.x with a timestep dt
-##' @param dt.hres timestep of the intermediate high-resolution interpolation.
-##' Should be smaller than the smallest timestep
-##' @param bFilter (TRUE) low passs filter the data to avoid aliasing, (FALSE) just interpolate
-##' @param k scaling factor for the Length of the filter (increasing creates
-##' a sharper filter, thus less aliasing)
-##' @param kf  scaling factor for the lowpass frequency; 1 = Nyquist, 1.2 =
-##' 1.2xNyquist is a tradeoff between reducing variance loss and keeping
-##' aliasing small
-##' @param method.interpolation
-##' 'linear' or 'constant', see approx
-##' @param method.filter
-##' To avoid loosing data at the ends of the dataset, endpoint constrains are used (see ApplyFilter)
-##' no constraint (loss at both ends) (method=0), only works if t.x covers more time than time.target
-##' minimum norm constraint (method=1)
-##' minimum slope constraint (method=2)
-##' minimum roughness constraint (method=3)
-##' circular filtering (method=4)
-##' @return ts object with the equidistant timeseries
-##' @author Thomas Laepple
-##' @export
+#' @title Average an irregular timeseries to a regular timeseries
+#' @description Make an irregular timeseries equidistant by
+#' interpolating to high resolution, lowpass filtering to the Nyquist
+#' frequency, and subsampling; e.g. as used in Huybers and Laepple, EPSL 2014
+#' @param t.x vector of timepoints
+#' @param t.y vector of corresponding values
+#' @param dt target timestep; can be omitted if time.target is supplied
+#' @param time.target time vector to which timeseries should be averaged/interpolated to
+#' by default the same range as t.x with a timestep dt
+#' @param dt.hres timestep of the intermediate high-resolution interpolation.
+#' Should be smaller than the smallest timestep
+#' @param bFilter (TRUE) low passs filter the data to avoid aliasing, (FALSE) just interpolate
+#' @param k scaling factor for the Length of the filter (increasing creates
+#' a sharper filter, thus less aliasing)
+#' @param kf  scaling factor for the lowpass frequency; 1 = Nyquist, 1.2 =
+#' 1.2xNyquist is a tradeoff between reducing variance loss and keeping
+#' aliasing small
+#' @param method.interpolation
+#' 'linear' or 'constant', see approx
+#' @param method.filter
+#' To avoid loosing data at the ends of the dataset, endpoint constrains are used (see ApplyFilter)
+#' no constraint (loss at both ends) (method=0), only works if t.x covers more time than time.target
+#' minimum norm constraint (method=1)
+#' minimum slope constraint (method=2)
+#' minimum roughness constraint (method=3)
+#' circular filtering (method=4)
+#' @return ts object with the equidistant timeseries
+#' @author Thomas Laepple
+#' @export
 MakeEquidistant <- function(t.x, t.y, dt = NULL,
                             time.target = seq(from = t.x[1], to = t.x[length(t.x)], by = dt),
                             dt.hres = NULL, bFilter = TRUE, k = 5, kf = 1.2,

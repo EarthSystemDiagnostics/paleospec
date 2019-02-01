@@ -21,7 +21,7 @@ Highpass(omega.c, n = 9, sample = 1, convergence = T)
 vector of filter weights
 }
 \description{
-based on Bloomfield 1976
+Derive the (smoothed) least square highpass based on Bloomfield 1976
 }
 \author{
 Thomas Laepple

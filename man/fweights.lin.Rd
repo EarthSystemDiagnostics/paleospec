@@ -6,13 +6,6 @@
 \usage{
 fweights.lin(ftarget, f, df.log)
 }
-\arguments{
-\item{ftarget}{}
-
-\item{f}{}
-
-\item{df.log}{}
-}
 \value{
 weight vector
 }

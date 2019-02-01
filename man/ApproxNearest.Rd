@@ -21,7 +21,7 @@ a list with components 'x' and 'y', containing
 length(xouth) coordinates which interpolate the given data points
 }
 \description{
-extends approx which always takes the right or left neighbour 
+extends approx which always takes the right or left neighbour
 or the weighted mean between both if f>0<1
 }
 \examples{

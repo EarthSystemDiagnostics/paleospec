@@ -47,8 +47,8 @@ calculated internally.}
 \item{...}{further graphical parameters passed to \code{plot}.}
 }
 \description{
-This function plots a spectrum on a double-logarithmic scale and optionally
-adds a transparent confidence interval.
+This function plots a spectrum on a double-logarithmic scale and
+ optionally adds a transparent confidence interval.
 }
 \examples{
 x <- ts(arima.sim(list(ar = 0.9), 1000))

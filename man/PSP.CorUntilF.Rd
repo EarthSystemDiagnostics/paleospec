@@ -21,8 +21,10 @@ PSP.CorUntilF(f, betaSignal, betaNoise, N, r)
 expected correlation of the timeseries
 }
 \description{
-correlation of two timeseries with powerlaw signal and powerlaw noise evaluated until f
-this equals the correlation of linearly coupled lowpass filtered powerlaw process
+Correlation of two timeseries with powerlaw signal and powerlaw
+noise evaluated until f
+this equals the correlation of linearly coupled lowpass filtered powerlaw
+process
 }
 \examples{
 temp <- replicate(1000,PSP.CorAfterRollmean(1000,1,0,0.5))

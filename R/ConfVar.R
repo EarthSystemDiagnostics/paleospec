@@ -1,11 +1,8 @@
-##' Provide ChiSquared confidence intervals for ratios
-##'
-##' 
-##' @title Provide ChiSquared confidence intervals for ratios
-##' @param varlist list(var,dof)
-##' @param pval requested p-value
-##' @return Output: confidence intervals 
-##' @author Thomas Laepple 
+#' @title Provide ChiSquared confidence intervals for ratios
+#' @param varlist list(var,dof)
+#' @param pval requested p-value
+#' @return Output: confidence intervals
+#' @author Thomas Laepple
 ConfVar<-function(varlist,pval=0.05)
 {
 

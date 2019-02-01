@@ -2,7 +2,7 @@
 % Please edit documentation in R/GetTransferFunction.R
 \name{GetTransferFunction}
 \alias{GetTransferFunction}
-\title{Derives and plots the transfer function}
+\title{Derives and plots the transfer function (given a filter)}
 \usage{
 GetTransferFunction(g.u, resolution = 100, freq = NULL,
   bPlot = is.null(freq) == TRUE, add = FALSE, ...)
@@ -27,9 +27,6 @@ are specified, TRUE otherwise}
 list(freq, y) containing the transfer function
 }
 \description{
-Derives and plots the transfer function (given a filter)
-}
-\details{
 Get the transfer function of a symetric filter, page 122 in Bloomfield 1976,
 page 135 in Bloomfield 2000
 }

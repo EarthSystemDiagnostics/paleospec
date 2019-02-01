@@ -18,10 +18,10 @@ MeanSpectrum(specList, iRemoveLowest = 1, weights = rep(1,
 list(spec,nRecords) spec=average spectrum, nRecords = number of records contributing to each spectral estimate
 }
 \description{
-average spectra with weighting, spectra can have different resolution and span a different freq range
-}
-\details{
-Calculate the weighted mean spectrum of all spectra by interpolating them to the highest resolution
+Calculate the weighted mean spectrum of all spectra by interpolating them to
+the highest resolution frequency grid and averaging them.
+
+Spectra can have different resolution and span a different freq range.
 }
 \author{
 Thomas Laepple

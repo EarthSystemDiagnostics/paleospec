@@ -1,13 +1,10 @@
-##' Modify a color to get brighter and tranparent for the confidence intervals
-##'
-##' 
-##' @title Modify a color to get brighter and tranparent for the confidence intervals
-##' @param color color value, e.g. "red"
-##' @param alpha  (0..1) transparency value
-##' @param beta (0..255) to make it brighter, this value gets added on the RGB values
-##' @return  modified color
-##' @author Thomas Laepple
-##' @export
+#' @title Modify a color to get brighter and tranparent for the confidence intervals
+#' @param color color value, e.g. "red"
+#' @param alpha  (0..1) transparency value
+#' @param beta (0..255) to make it brighter, this value gets added on the RGB values
+#' @return  modified color
+#' @author Thomas Laepple
+#' @export
 ColTransparent<-function (color, alpha = 0.8,beta=150)
 {
     x <- col2rgb(color)[, 1]

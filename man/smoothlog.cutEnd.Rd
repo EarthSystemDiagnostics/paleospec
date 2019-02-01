@@ -6,15 +6,6 @@
 \usage{
 smoothlog.cutEnd(x, f, df.log, dof = 1)
 }
-\arguments{
-\item{x}{}
-
-\item{f}{}
-
-\item{df.log}{}
-
-\item{dof}{}
-}
 \value{
 smoothed x
 }

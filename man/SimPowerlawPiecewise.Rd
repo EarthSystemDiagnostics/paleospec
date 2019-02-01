@@ -2,7 +2,7 @@
 % Please edit documentation in R/SimPowerlawPiecewise.R
 \name{SimPowerlawPiecewise}
 \alias{SimPowerlawPiecewise}
-\title{#Simulate a timeseries with length N which has a spectra consisting of two powerlaws}
+\title{Simulate a timeseries with length N which has a spectra consisting of two powerlaws}
 \usage{
 SimPowerlawPiecewise(beta1, beta2, N, deltat = 1, breakpoint = 1/50)
 }
@@ -21,7 +21,7 @@ SimPowerlawPiecewise(beta1, beta2, N, deltat = 1, breakpoint = 1/50)
 N random numbers drawn according to the piecewise powerlaw PSD
 }
 \description{
-#Simulate a timeseries with length N which has a spectra consisting of two powerlaws
+Simulate a timeseries with length N which has a spectra consisting of two powerlaws
 }
 \author{
 Thomas Laepple

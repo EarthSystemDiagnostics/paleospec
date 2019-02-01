@@ -1,19 +1,16 @@
-##' Apply a filter to a timeseries
-##' the timestep provided by ts is not used!!!!
-##' Thus for timeseries with a different spacing than 1, the filter has to be adapted
-##' Using endpoint constrains as describen in  Mann et al., GRL 2003
-##' no constraint (loss at both ends) (method=0)
-##' minimum norm constraint (method=1)
-##' minimum slope constraint (method=2)
-##' minimum roughness constraint (method=3)
-##' circular filtering (method=4)
-##' @title  Apply a filter to a timeseries
-##' @param data Input timeseries (ts object)
-##' @param filter vector of filter weights
-##' @param method constraint method choice 0-4
-##' @return filtered timeseries (ts object)
-##' @author Thomas Laepple
-##' @export
+#' @title  Apply a filter to a timeseries
+#' @description Apply a filter to a timeseries the timestep provided by ts is
+#'   not used!!!! Thus for timeseries with a different spacing than 1, the
+#'   filter has to be adapted Using endpoint constrains as describen in  Mann et
+#'   al., GRL 2003 no constraint (loss at both ends) (method=0) minimum norm
+#'   constraint (method=1) minimum slope constraint (method=2) minimum roughness
+#'   constraint (method=3) circular filtering (method=4)
+#' @param data Input timeseries (ts object)
+#' @param filter vector of filter weights
+#' @param method constraint method choice 0-4
+#' @return filtered timeseries (ts object)
+#' @author Thomas Laepple
+#' @export
 ApplyFilter <- function(data, filter, method = 0) {
   N <- floor(length(filter)/2)
   if (method == 0) {

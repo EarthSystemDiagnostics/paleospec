@@ -1,15 +1,15 @@
-#Derive the (smoothed) least square lowpass, given the cutoff frequency omega.c and the length of the filter n
-##'
-##'
-##'  based on Bloomfield 1976
-##' @title calculate weights for lowpass filter
-##' @param omega.c cutoff frequency
-##' @param n length of the filter, has to be odd
-##' @param sample sampling rate of the timeseries on which the filter will be applied (1/deltat)
-##' @param convergence TRUE: smoothed least square lowpass; FALSE = unsmoothed
-##' @return vector of filter weights
-##' @author Thomas Laepple
-##' @export
+#' @title Calculate weights for lowpass filter
+#' @description Derive the (smoothed) least square lowpass, given the cutoff
+#' frequency omega.c and the length of the filter n
+#'
+#' based on Bloomfield 1976
+#' @param omega.c cutoff frequency
+#' @param n length of the filter, has to be odd
+#' @param sample sampling rate of the timeseries on which the filter will be applied (1/deltat)
+#' @param convergence TRUE: smoothed least square lowpass; FALSE = unsmoothed
+#' @return vector of filter weights
+#' @author Thomas Laepple
+#' @export
 Lowpass <- function(omega.c,
                     n = 9,
                     sample = 1,

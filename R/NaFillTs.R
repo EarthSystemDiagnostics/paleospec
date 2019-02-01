@@ -1,8 +1,8 @@
-##' @title NaFill
-##' @param x 
-##' @return filled x 
-##' @author Thomas Laepple
-##' @export
+#' @title NaFill
+#' @param x 
+#' @return filled x 
+#' @author Thomas Laepple
+#' @export
 NaFillTs <- function(x) {
     if (sum(is.na(x)) == 0) 
         return(x)

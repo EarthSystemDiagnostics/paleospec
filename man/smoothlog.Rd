@@ -6,13 +6,6 @@
 \usage{
 smoothlog(x, f, df.log)
 }
-\arguments{
-\item{x}{}
-
-\item{f}{}
-
-\item{df.log}{}
-}
 \value{
 smoothed x
 }

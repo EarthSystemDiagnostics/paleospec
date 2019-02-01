@@ -21,12 +21,60 @@ parameter.}
 
 \item{nFFT}{This function pads the data before computing the fft. nFFT
 indicates the total length of the data after padding.}
+
+\item{centre}{The time series is centred using one of three methods: expansion
+    onto discrete prolate spheroidal sequences ('Slepian'), arithmetic mean ('arithMean'), 
+    trimmed mean ('trimMean'), or not at all ('none'). }
+
+\item{dpssIN}{Allows the user to enter a dpss object which has already
+    been created. This can save computation time when Slepians with
+ the same bandwidth parameter and same number of tapers are used repeatedly.}
+
+\item{returnZeroFreq}{Boolean variable indicating if the zeroth
+    frequency (DC component) should be returned for all applicable arrays.}
+
+\item{Ftest}{Boolean variable indicating if the Ftest result should be
+ computed and returned.}
+
+\item{jackknife}{Boolean variable indicating if jackknifed confidence
+intervals should be computed and returned.}
+
+\item{jkCIProb}{Decimal value indicating the jackknife probability for
+calculating jackknife confidence intervals. The default returns a
+95\% confidence interval.}
+
+\item{maxAdaptiveIterations}{Maximum number of iterations in the
+adaptive multitaper calculation. Generally convergence is quick, and should
+require less than 100 iterations.}
+
+\item{plot}{Boolean variable indicating if the spectrum should be plotted.}
+
+\item{na.action}{Action to take if NAs exist in the data, the default
+    is to fail.}
+
+\item{returnInternals}{Return the weighted eigencoefficients, complex mean values, 
+    and so on. These are necessary for extensions to the multitaper, including 
+    magnitude-squared coherence (function mtm.coh in this package). Note:
+  The internal ($mtm) variables eigenCoefs and eigenCoefWt correspond to
+the multitaper eigencoefficients. The eigencoefficients correspond to
+equation (3.4) and weights correspond to |d_k(f)|^2 from equation
+ (5.4) in Thomson's 1982 paper. The values sqrt(eigenCoefWt) *
+ eigenCoefs are most commonly used in additional calculations. The
+ values returned in mtm$cmv correspond to the the estimate of the
+ coefficients hat(mu)(f) in equation (13.5) in Thomson (1982), or to the
+ estimate of hat(C)_1 at frequency 1 in equation (499) form Percival and Walden (1993)}
+
+\item{detrend}{logical, detrend timeseries before estimating the spectrum}
+
+\item{bPad}{if FALSE (the default) nFFT is set to the length of the timeseries}
+
+\item{...}{Additional parameters, such as xaxs="i" which are passed to
+    the plotting function. Not all parameters are supported.}
 }
 \value{
 spectra object list(freq, spec, dof)
 }
 \description{
-MTM spectral estimator
 calls \code{\link[multitaper]{spec.mtm}} from library multitaper
 }
 \examples{

@@ -23,7 +23,7 @@ Bandpass(omega.upper, omega.lower, n, sample = 1, convergence = T)
 vector of filter weights
 }
 \description{
-based on Bloomfield 1976
+Derive the (smoothed) least square bandpass based on Bloomfield 1976
 }
 \author{
 Thomas Laepple
