@@ -12,6 +12,9 @@ NaFillTs(x)
 \value{
 filled x
 }
+\description{
+NaFill
+}
 \author{
 Thomas Laepple
 }

@@ -12,6 +12,9 @@ LastElement(x)
 \value{
 last element of X
 }
+\description{
+last element of a vector
+}
 \author{
 Thomas Laepple
 }

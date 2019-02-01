@@ -18,6 +18,9 @@ smoothlog.cutEnd(x, f, df.log, dof = 1)
 \value{
 smoothed x
 }
+\description{
+smoothlog.cutEnd
+}
 \author{
 Thomas Laepple
 }

@@ -16,6 +16,9 @@ smoothlog(x, f, df.log)
 \value{
 smoothed x
 }
+\description{
+smoothlog
+}
 \author{
 Thomas Laepple
 }

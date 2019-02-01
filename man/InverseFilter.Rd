@@ -12,6 +12,9 @@ InverseFilter(filter.weights)
 \value{
 filter weights for the inverse filter
 }
+\description{
+Construct the inverse filter in the time domain
+}
 \author{
 Thomas Laepple
 }

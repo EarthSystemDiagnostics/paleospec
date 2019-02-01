@@ -4,8 +4,8 @@
 \alias{LogSmooth}
 \title{Smoothes the spectrum using a log smoother}
 \usage{
-LogSmooth(spectra, df.log = 0.05, removeFirst = 1e+06, removeLast = 0,
-  bLog = FALSE)
+LogSmooth(spectra, df.log = 0.05, removeFirst = 1e+06,
+  removeLast = 0, bLog = FALSE)
 }
 \arguments{
 \item{spectra}{spectra: list(spec,freq)

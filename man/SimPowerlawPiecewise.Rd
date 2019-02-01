@@ -20,6 +20,9 @@ SimPowerlawPiecewise(beta1, beta2, N, deltat = 1, breakpoint = 1/50)
 \value{
 N random numbers drawn according to the piecewise powerlaw PSD
 }
+\description{
+#Simulate a timeseries with length N which has a spectra consisting of two powerlaws
+}
 \author{
 Thomas Laepple
 }

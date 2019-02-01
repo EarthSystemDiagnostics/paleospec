@@ -14,6 +14,9 @@ AnPowerlaw(beta, freq, return.scaling = FALSE)
 \value{
 vector containing the PSD
 }
+\description{
+A PSD(freq) for a powerlaw with variance 1
+}
 \author{
 Thomas Laepple
 }

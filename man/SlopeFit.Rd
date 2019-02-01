@@ -25,6 +25,9 @@ SlopeFit(spec, freq.start = NULL, freq.end = NULL, bDebug = TRUE,
 \value{
 list(slope=slope,slopesd=slopesd,spec=saveSpec,freq=binFreq,intercept=intercept)
 }
+\description{
+Fit a power-law to the spectrum
+}
 \author{
 Thomas Laepple
 }
