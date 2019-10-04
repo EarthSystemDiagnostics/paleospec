@@ -21,17 +21,24 @@ Adapted from SimPowerlaw
 # Create a piecewise spectrum
 
 ## helper function to generate continuous piecewise spectrum
-new.scl <- function(f, prev.scl, new.slp, prev.slp){
-  prev.scl*f^(prev.slp-new.slp)
+
+PiecewiseLinear <- function(x, val.at.min.x, breaks, slopes){
+
+breaks <- c(-Inf, breaks, Inf)
+slp.vec <- slopes[findInterval(x, breaks)]
+d.x <- diff(x)
+d.y <- c(d.x * tail(slp.vec, -1))
+
+y <- cumsum(c(val.at.min.x, d.y))
+
+data.frame(x, y)
+
 }
-
-emp.spec <- data.frame(freq = seq(1/1e05, 1/2, 1/1e05))
-emp.spec$spec <- with(emp.spec, {
-  0.1 * freq ^ -1 * (freq > 1e-02) +
-    new.scl(1e-02, 0.1,-2,-1) * freq ^ -2 * (freq <= 1e-02 & freq > 1e-03) +
-    new.scl(1e-03, new.scl(1e-02, 0.1,-2,-1),-1,-2) * freq ^ -1 * (freq <= 1e-03)
-
-})
+slps <- c(-1, -2, -1)
+brks <- c(1e-03, 1e-02)
+emp.spec <- PiecewiseLinear(log(seq(1/1e05, 1/2, 1/1e05)), 0, log(brks), slps)
+emp.spec <- exp(emp.spec)
+names(emp.spec) <- c("freq", "spec")
 
 plot(emp.spec, type = "l", log = "xy")
 
@@ -42,7 +49,7 @@ ts1 <- ts(SimFromEmpiricalSpec(emp.spec, 50000))
 spec1 <- SpecMTM(ts1)
 LPlot(spec1)
 lines(emp.spec, col = "Red")
-abline(v = c(1e-02, 1e-03), col = "Green")
+abline(v = brks, col = "Green")
 }
 \author{
 Thomas Laepple and Andrew Dolman
