@@ -100,7 +100,10 @@ SimFromEmpiricalSpec <- function(spec, N)
   # integrate spectrum to 1/N
   t.var <- sqrt(2*sum(spec$spec[spec$freq >= 1/N] * abs(diff(spec$freq)[1])))
 
-  return(scale(result) * t.var)
+  out <- scale(result) * t.var
+  out <- as.vector(out)
+
+  return(out)
 }
 
 
