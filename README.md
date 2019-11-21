@@ -14,7 +14,7 @@ if (!require("devtools")) {
   install.packages("devtools")
 }
 
-devtools::install_github("EarthSystemDiagnostics/sedproxy")
+devtools::install_github("EarthSystemDiagnostics/paleospec")
 ```
 
 
