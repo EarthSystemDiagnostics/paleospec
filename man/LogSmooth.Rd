@@ -33,7 +33,9 @@ LPlot(spec,col='grey')
 LLines(LogSmooth(spec,df.log=0.01),lwd=2,col='green')
 LLines(LogSmooth(spec,df.log=0.05),lwd=2,col='blue')
 LLines(LogSmooth(spec,df.log=0.1),lwd=2,col='red')
-legend('bottomleft',col=c('grey','green','blue','red'),lwd=2,c('raw','smoothed 0.01','smoothed 0.05','smoothed 0.1'),bty='n')
+legend('bottomleft', col=c('grey','green','blue','red'),
+lwd=2,c('raw','smoothed 0.01',
+ 'smoothed 0.05', 'smoothed 0.1'), bty='n')
 }
 \author{
 Thomas Laepple

@@ -14,7 +14,9 @@
 #' LLines(LogSmooth(spec,df.log=0.01),lwd=2,col='green')
 #' LLines(LogSmooth(spec,df.log=0.05),lwd=2,col='blue')
 #' LLines(LogSmooth(spec,df.log=0.1),lwd=2,col='red')
-#' legend('bottomleft',col=c('grey','green','blue','red'),lwd=2,c('raw','smoothed 0.01','smoothed 0.05','smoothed 0.1'),bty='n')
+#' legend('bottomleft', col=c('grey','green','blue','red'),
+#' lwd=2,c('raw','smoothed 0.01',
+#'  'smoothed 0.05', 'smoothed 0.1'), bty='n')
 #' @author Thomas Laepple
 #' @export
 LogSmooth <- function(spectra, df.log = 0.05, removeFirst = 1e+06,
@@ -24,19 +26,25 @@ LogSmooth <- function(spectra, df.log = 0.05, removeFirst = 1e+06,
   result$freq <- spectra$freq[-1 * removeFirst]
 
   if (bLog) {
-    temp <- (smoothlog.cutEnd(log(spectra$spec[-1 * removeFirst]),
-      result$freq, df.log, dof = spectra$dof[-1 * removeFirst]))
+    temp <- smoothlog.cutEnd(log(spectra$spec[-1 * removeFirst]),
+                             result$freq, df.log,
+                             dof = spectra$dof[-1 * removeFirst])
+
     temp$spec <- exp(temp$spec)
-  } else temp <- smoothlog.cutEnd(spectra$spec[-1 * removeFirst],
-    result$freq, df.log, dof = spectra$dof[-1 * removeFirst])
+
+  } else {
+    temp <- smoothlog.cutEnd(spectra$spec[-1 * removeFirst],
+                             result$freq, df.log,
+                             dof = spectra$dof[-1 * removeFirst])
+  }
+
   result$spec <- temp$spec[1:(length(temp$spec) - removeLast)]
   result$freq <- result$freq[1:(length(result$freq) - removeLast)]
   temp$dof <- temp$dof[1:(length(temp$dof) - removeLast)]
-  ### Calculate the confidence intervals
 
+  ### Calculate the confidence intervals
   result$dof <- temp$dof
   result <- AddConfInterval(result)
-
 
   #######
 

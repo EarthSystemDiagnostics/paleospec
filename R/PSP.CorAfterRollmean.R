@@ -4,6 +4,7 @@
 #' @param betaNoise powerlaw slope of the noise
 #' @param R expected correlation of the whole timeseries
 #' @return correlation of unfiltered, 10point mean and 50 point mean
+#' @importFrom zoo rollmean
 #' @export
 #' @examples
 #' temp <- replicate(1000,PSP.CorAfterRollmean(1000,1,0,0.5))
