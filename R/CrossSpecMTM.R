@@ -37,17 +37,17 @@ CrossSpecMTM <- function(x,y=NULL,dt=1,NW=8,k=NULL,dpssIN=NULL,detrend=T) {
       k <- max(c(k-1,1))
     }
     s <- seq(0,1/dt-1/N,1/(N*dt))
-    #v <- 2*NW -1
+    v <- 2*NW -1
     dpssIN <- dpss(n = N,k = k,nw = NW)
   } else {
     k = length(dpssIN$eigen)
+    v=NULL
   }
 
   pls <- seq(2,(N+1)/2+1,1)
   if ( (N %% 2) == 1 ) pls <- pls[-length(pls)]
 
 
-  if ( is.null(dpssIN) ) dpssIN <- dpss(n = N,k = k,nw = NW)
   E <- dpssIN$v
   V <- dpssIN$eigen
   fkx <- mvfft(E[,1:k]*matrix(rep(x,k),ncol=k))
@@ -96,10 +96,13 @@ CrossSpecMTM <- function(x,y=NULL,dt=1,NW=8,k=NULL,dpssIN=NULL,detrend=T) {
   auxiliary <- list(dpss=dpssIN,
                     eigenCoefs=NULL,
                     eigenCoefWt=NULL,
-                    taper="dpss")
+                    taper="dpss",
+                    v=v)
 
   spec.out <- list(crossspec = Cxy[pls],
                    spec = cbind(Fx[pls],Fy[pls]),
+                   coh = c,
+                   ph = ph,
                    freq=resultFreqs[pls],
                    series=cbind(x,y),
                    mtm=auxiliary)
