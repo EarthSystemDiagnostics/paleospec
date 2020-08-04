@@ -4,18 +4,16 @@
 \alias{CrossSpecMTM}
 \title{MTM cross spectral estimator}
 \usage{
-CrossSpecMTM(x, y = NULL, dt = 1, NW = 8, k = NULL, dpssIN = NULL, detrend = T)
+CrossSpecMTM(x, y = NULL, dt = 1, k = NULL, nw = 2, detrend = T)
 }
 \arguments{
 \item{x, y}{input data vectors (or array if y=NULL)}
 
 \item{dt}{time stepping (default = 1)}
 
-\item{NW}{number of slepian taper (default = 8)}
+\item{k}{The number of Slepian tapers used, often (default = NULL). For default NULL (2*nw -1) is used except for the cases 2*nw > N}
 
-\item{k}{order (default = NULL)}
-
-\item{dpssIN}{allows to use an predefined dpss object to reduce computation time when applied multiple times (default=NULL). If specified NW and k are obsolete.}
+\item{nw}{slepian bandwidth parameter, typically something between 2.0 (default) and 8.0}
 
 \item{detrend}{(default=T)}
 }

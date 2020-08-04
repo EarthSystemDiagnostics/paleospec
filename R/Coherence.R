@@ -2,27 +2,30 @@
 #' @description estimates coherence using slepian tapers with adaptive weighting. Function is an adaption of Peter Huybers Matlab coherence function cmtm.m
 #' @param x,y input data vectors (or array if y=NULL)
 #' @param dt time stepping (default = 1)
-#' @param NW number of slepian taper (default = 8)
+#' @param nw number of slepian taper (default = 8)
 #' @param k order (default = NULL)
-#' @param dpssIN allows to use an predefined dpss object to reduce computation time when applied multiple times (default=NULL). If specified NW and k are obsolete.
+#' @param dpssIN allows to use an predefined dpss object to reduce computation time when applied multiple times (default=NULL). If specified nw and k are obsolete.
 #' @param detrend (default=T)
 #' @param qbias bias correction fo coherence estimate (default = 0/no)
 #' @param confn number of interations to use in MC for uncertainty estimation of the phase (default = 0)
 #'
 #' @return spectra object
 #' @export
-Coherence <- function(x,y=NULL,dt=1,NW=8,k=NULL,dpssIN=NULL,detrend=T,qbias=0,confn=0) {
+Coherence <- function(x,y=NULL,dt=1,nw=8,k=NULL,detrend=T,qbias=0,confn=0) {
 
   if ( !is.null(dim(x)[2]) & is.null(y) ) {
     y <- x[,2]
     x <- x[,1]
   }
 
- coh <- PaleoSpec::CrossSpecMTM(x,y,dt=dt,NW=NW,k=k,dpssIN=dpssIN,detrend=detrend)
+ coh <- PaleoSpec::CrossSpecMTM(x,y,dt=dt,nw=nw,k=k,detrend=detrend)
 
  N <- length(x)
  c <- coh$c
+ ph <- coh$ph
  v <- coh$mtm$v
+ s <- seq(0,1/dt-1/N,1/(N*dt))
+
  pls <- seq(2,(N+1)/2+1,1)
 
  if ( qbias > 0 ) {
@@ -44,7 +47,7 @@ Coherence <- function(x,y=NULL,dt=1,NW=8,k=NULL,dpssIN=NULL,detrend=T,qbias=0,co
      ys <- ys+Re(fft(fx*t(cb),inverse=T))
      xs <- Re(fft(fx,inverse=T))
 
-     tmp <- PaleoSpec::CrossSpecMTM(x=xs,y=ys,dt=dt,NW=NW,k=k,dpssIN=dpssIN,detrend=detrend)
+     tmp <- PaleoSpec::CrossSpecMTM(x=xs,y=ys,dt=dt,nw=nw,k=k,detrend=detrend)
      phi[iter,] <- tmp$ph
      ciph[iter,] <- tmp$c
    }
@@ -57,7 +60,14 @@ Coherence <- function(x,y=NULL,dt=1,NW=8,k=NULL,dpssIN=NULL,detrend=T,qbias=0,co
  c <- c[pls]
  s <- s[pls]
  ph <- ph[pls]
- output <- list(freq=s,spec=cbind(Fx[pls],Fy[pls]),c=c,ph=ph)
+
+ output <- list(coh = c, # return ,spec' instead of crossspec to allow further handling e.g. with LogSmooth...
+                  specs = coh$specs, # individual specs....
+                  ph = ph,
+                  freq=s[pls],
+                  series=cbind(x,y),
+                  mtm=coh$mtm)
+
  if ( confn > 0 ) {
    output <- c(output,list(ph.conf=phi))
  }
@@ -72,6 +82,7 @@ Coherence <- function(x,y=NULL,dt=1,NW=8,k=NULL,dpssIN=NULL,detrend=T,qbias=0,co
    output <- c(output,list(c.conf=c(c.conf)))
  }
 
+ return(output)
 
 }
 
