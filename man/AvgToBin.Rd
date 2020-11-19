@@ -44,10 +44,11 @@ Average a vector into bins.
 This function averages the vector \code{y} into bins according to the positon
 of \code{x} within the breaks. You can either specify a desired number N of
 breaks which are used to calculate the actual breaks via \code{pretty(x, N)},
-or directly specify the N + 1 break positions. The averaging bins are defined
-via \code{x > breaks[i]} and \code{x <= breaks[i + 1]}. If \code{bFill =
-TRUE}, empty bins are filled using linear interpolation from the neighbours
-to the center of the bin.
+or directly specify the N + 1 break positions. For \code{right = TRUE} (the
+default) the averaging bins are defined via \code{x > breaks[i]} and \code{x
+<= breaks[i + 1]}, else they are defined via \code{x >= breaks[i]} and
+\code{x < breaks[i + 1]}. If \code{bFill = TRUE}, empty bins are filled using
+linear interpolation from the neighbours to the center of the bin.
 
 Probably the binning could be considerably speeded up by using \code{?cut}.
 }
