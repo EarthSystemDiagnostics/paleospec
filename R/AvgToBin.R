@@ -21,6 +21,9 @@
 #' @param breaks vector of break point positions to define the averagig bins; if
 #'   omitted, break point positions are calculated from the range of \code{x}
 #'   and the desired number of breaks given by \code{N}.
+#' @param right logical; indicate whether the bin intervals should be closed on
+#'   the right and open on the left (\code{TRUE}, the default), or vice versa
+#'   (\code{FALSE}).
 #' @param bFill logical; if \code{TRUE}, fill empty bins using linear
 #'   interpolation from the neighbours to the center of the bin.
 #'
@@ -35,7 +38,8 @@
 #'
 #' @author Thomas Laepple
 #' @export
-AvgToBin <- function(x, y, N = 2, breaks = pretty(x, N), bFill = FALSE) {
+AvgToBin <- function(x, y, N = 2, breaks = pretty(x, N),
+                     right = TRUE, bFill = FALSE) {
 
   if (length(x) != length(y)) {
     stop("'x' and 'y' must have the same length.", call. = FALSE)
@@ -48,7 +52,11 @@ AvgToBin <- function(x, y, N = 2, breaks = pretty(x, N), bFill = FALSE) {
 
   for (i in 1 : nBins) {
 
-    selection <- y[which((x > breaks[i]) & (x <= breaks[i + 1]))]
+    if (right) {
+      selection <- y[which((x > breaks[i]) & (x <= breaks[i + 1]))]
+    } else {
+      selection <- y[which((x >= breaks[i]) & (x < breaks[i + 1]))]
+    }
 
     avg[i]  <- mean(na.omit(selection))
     nObs[i] <- sum(!is.na(selection))

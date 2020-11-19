@@ -42,6 +42,18 @@ test_that("bin averaging works.", {
 
   expect_equal(actual, expected)
 
+  # close the bins on the left side
+  actual <- AvgToBin(x, y, right = FALSE)
+
+  expected <- list(
+    breaks = c(0, 5, 10),
+    centers = c(2.5, 7.5),
+    avg = c(2.5, 7),
+    nobs = c(4, 5)
+  )
+
+  expect_equal(actual, expected)
+
   # expect error
   expect_error(AvgToBin(1, y))
 

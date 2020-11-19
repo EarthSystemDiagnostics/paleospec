@@ -4,7 +4,7 @@
 \alias{AvgToBin}
 \title{Bin averaging}
 \usage{
-AvgToBin(x, y, N = 2, breaks = pretty(x, N), bFill = FALSE)
+AvgToBin(x, y, N = 2, breaks = pretty(x, N), right = TRUE, bFill = FALSE)
 }
 \arguments{
 \item{x}{vector of values on which the data in \code{y} is tabulated;
@@ -19,6 +19,10 @@ directly).}
 \item{breaks}{vector of break point positions to define the averagig bins; if
 omitted, break point positions are calculated from the range of \code{x}
 and the desired number of breaks given by \code{N}.}
+
+\item{right}{logical; indicate whether the bin intervals should be closed on
+the right and open on the left (\code{TRUE}, the default), or vice versa
+(\code{FALSE}).}
 
 \item{bFill}{logical; if \code{TRUE}, fill empty bins using linear
 interpolation from the neighbours to the center of the bin.}
