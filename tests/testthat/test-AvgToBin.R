@@ -38,5 +38,11 @@ test_that("bin averaging works.", {
 
   expect_equal(actual, expected)
 
+  actual <- AvgToBin(x, y)
+
+  expect_equal(actual, expected)
+
+  # expect error
+  expect_error(AvgToBin(1, y))
 
 })
