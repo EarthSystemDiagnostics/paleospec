@@ -4,8 +4,14 @@
 \alias{GetTransferFunction}
 \title{Derives and plots the transfer function (given a filter)}
 \usage{
-GetTransferFunction(g.u, resolution = 100, freq = NULL,
-  bPlot = is.null(freq) == TRUE, add = FALSE, ...)
+GetTransferFunction(
+  g.u,
+  resolution = 100,
+  freq = NULL,
+  bPlot = is.null(freq) == TRUE,
+  add = FALSE,
+  ...
+)
 }
 \arguments{
 \item{g.u}{a filter, a numeric vector, values should sum to 1}

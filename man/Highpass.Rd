@@ -14,8 +14,6 @@ Highpass(omega.c, n = 9, sample = 1, convergence = T)
 \item{sample}{sampling rate of the timeseries on which the filter will be applied (1/deltat)}
 
 \item{convergence}{TRUE: smoothed least square lowpass; FALSE = unsmoothed}
-
-\item{omega.c}{cutoff frequency}
 }
 \value{
 vector of filter weights
