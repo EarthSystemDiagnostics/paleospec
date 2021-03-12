@@ -4,8 +4,7 @@
 \alias{MeanSpectrum}
 \title{average spectra with weighting}
 \usage{
-MeanSpectrum(specList, iRemoveLowest = 1, weights = rep(1,
-  length(specList)))
+MeanSpectrum(specList, iRemoveLowest = 1, weights = rep(1, length(specList)))
 }
 \arguments{
 \item{iRemoveLowest}{number of lowest frequencies to remove (e.g. to remove detrending bias)}
