@@ -4,10 +4,18 @@
 \alias{MakeEquidistant}
 \title{Average an irregular timeseries to a regular timeseries}
 \usage{
-MakeEquidistant(t.x, t.y, dt = NULL, time.target = seq(from = t.x[1],
-  to = t.x[length(t.x)], by = dt), dt.hres = NULL, bFilter = TRUE,
-  k = 5, kf = 1.2, method.interpolation = "linear",
-  method.filter = 2)
+MakeEquidistant(
+  t.x,
+  t.y,
+  dt = NULL,
+  time.target = seq(from = t.x[1], to = t.x[length(t.x)], by = dt),
+  dt.hres = NULL,
+  bFilter = TRUE,
+  k = 5,
+  kf = 1.2,
+  method.interpolation = "linear",
+  method.filter = 2
+)
 }
 \arguments{
 \item{t.x}{vector of timepoints}

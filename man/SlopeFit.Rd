@@ -4,8 +4,16 @@
 \alias{SlopeFit}
 \title{Fit a power-law to the spectrum}
 \usage{
-SlopeFit(spec, freq.start = NULL, freq.end = NULL, bDebug = TRUE,
-  breaks = NULL, indexRemove = NULL, df.log = 0.05, i.fStart = 4)
+SlopeFit(
+  spec,
+  freq.start = NULL,
+  freq.end = NULL,
+  bDebug = TRUE,
+  breaks = NULL,
+  indexRemove = NULL,
+  df.log = 0.05,
+  i.fStart = 4
+)
 }
 \arguments{
 \item{freq.start}{vector containing the start frequencies of the fitting interval(s)}
