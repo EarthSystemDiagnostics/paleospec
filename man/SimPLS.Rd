@@ -55,11 +55,12 @@ var(ts3)
 rep.var <- replicate(100, {
  var(SimPLS(1000, 1, -2))
 })
+
 hist(rep.var)
 abline(v  = 2, col = "Red")
 mean(rep.var)
 }
 \author{
-Torben Kunz
+Torben Kunz, Andrew Dolman
 }
 \concept{SimPLS SimPowerlaw SimFromEmpiricalSpectrum}

@@ -26,6 +26,8 @@ AnPowerlaw<-function(beta,freq,return.scaling=FALSE)
 #' @family SimPowerlaw SimPLS SimFromEmpiricalSpectrum
 SimPowerlaw <- function(beta, N)
 {
+  # Pad the length of the timeseries so that it is highly composite - this speeds
+  # up the FFT operations.
   N2 <- (3^ceiling(log(N, base = 3)))
   df  <- 1 / N2
   f <- seq(from = df, to = 1/2, by = df)
@@ -47,7 +49,7 @@ SimPowerlaw <- function(beta, N)
 #' @param alpha the constant. If alpha > 0 this is the parameter alpha * f^(-beta).
 #'   If alpha < 0, the variance of the returned timeseries is scaled so that its
 #'   expected value is abs(alpha)
-#' @author Torben Kunz
+#' @author Torben Kunz, Andrew Dolman
 #' @return a vector containing the timeseries
 #' @description This function creates a power-law series. It has the problem
 #'   that it effectively produces (fractional) Brownian bridges, that is, the
@@ -86,7 +88,7 @@ SimPowerlaw <- function(beta, N)
 #' rep.var <- replicate(100, {
 #'  var(SimPLS(1000, 1, -2))
 #' })
-
+#'
 #' hist(rep.var)
 #' abline(v  = 2, col = "Red")
 #' mean(rep.var)
@@ -172,6 +174,8 @@ SimPLS <- function(N, beta, alpha = -1){
 #' abline(v = brks, col = "Green")
 SimFromEmpiricalSpec <- function(spec, N)
 {
+  # Pad the length of the timeseries so that it is highly composite - this speeds
+  # up the FFT operations.
   N2 <- (3^ceiling(log(N, base = 3)))
   df  <- 1 / N2
   f <- seq(from = df, to = 1/2, by = df)
@@ -191,7 +195,7 @@ SimFromEmpiricalSpec <- function(spec, N)
   result <- Re(fft(ffx, inverse = TRUE))[1:N]
 
   # scale variance
-  # integrate spectrum to 1/N
+  # integrate spectrum to 1/(2*N)
   t.var <- sqrt(2*sum(spec$spec[spec$freq >= 1/(2*N)] * abs(diff(spec$freq)[1])))
 
   out <- scale(result) * t.var
