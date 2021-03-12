@@ -51,6 +51,11 @@ LPlot(spec1)
 lines(emp.spec, col = "Red")
 abline(v = brks, col = "Green")
 }
+\seealso{
+Other SimPowerlaw SimPLS SimFromEmpiricalSpectrum: 
+\code{\link{SimPowerlaw}()}
+}
 \author{
 Thomas Laepple and Andrew Dolman
 }
+\concept{SimPowerlaw SimPLS SimFromEmpiricalSpectrum}
