@@ -3,3 +3,4 @@
 .RData
 inDevelopment
 /R/#GetVarFromSpectra.R#
+inst/doc
