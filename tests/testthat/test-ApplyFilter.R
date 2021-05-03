@@ -7,6 +7,9 @@ test_that("apply filter function works.", {
   x <- 1 : 10
   filter <- rep(1 / 3, 3)
 
+  # test error check
+  expect_error(ApplyFilter(x, filter, method = 10))
+
   # test various endpoint constraint methods
 
   # method = 0

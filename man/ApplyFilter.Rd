@@ -2,27 +2,51 @@
 % Please edit documentation in R/ApplyFilter.R
 \name{ApplyFilter}
 \alias{ApplyFilter}
-\title{Apply a filter to a timeseries}
+\title{Filter time series}
 \usage{
 ApplyFilter(data, filter, method = 0)
 }
 \arguments{
-\item{data}{Input timeseries (ts object)}
+\item{data}{numeric vector with the input timeseries (standard or ts object).}
 
-\item{filter}{vector of filter weights}
+\item{filter}{numeric vector of filter weights.}
 
-\item{method}{constraint method choice 0-4}
+\item{method}{single integer for choosing an endpoint constraint method;
+available choices are integers 0-4, see details.}
 }
 \value{
-filtered timeseries (ts object)
+filtered timeseries as a ts object.
 }
 \description{
-Apply a filter to a timeseries the timestep provided by ts is
-  not used!!!! Thus for timeseries with a different spacing than 1, the
-  filter has to be adapted Using endpoint constrains as describen in  Mann et
-  al., GRL 2003 no constraint (loss at both ends) (method=0) minimum norm
-  constraint (method=1) minimum slope constraint (method=2) minimum roughness
-  constraint (method=3) circular filtering (method=4)
+Apply a given filter to a time series using different endpoint constraints as
+described below.
+}
+\details{
+Note that when passing objects of class \code{ts}, the time step provided is
+not used; thus, for time series with a time step different from 1, the filter
+has to be adapted accordingly.
+
+The function applies endpoint constrains following Mann et al., GRL, 2003;
+available methods are:
+\itemize{
+  \item method = 0: no constraint (loss at both ends);
+  \item method = 1: minimum norm constraint;
+  \item method = 2: minimum slope constraint;
+  \item method = 3: minimum roughness constraint;
+  \item method = 4: circular filtering.
+}
+}
+\examples{
+# Simple running mean filter across three bins
+
+x <- 1 : 10
+filter <- rep(1 / 3, 3)
+
+# no endpoint constraints lead to loss at both ends
+ApplyFilter(x, filter, method = 0)
+
+# circular filtering avoids end losses, so as the other methods
+ApplyFilter(x, filter, method = 4)
 }
 \author{
 Thomas Laepple
