@@ -3,8 +3,13 @@
 \name{ApplyFilter}
 \alias{ApplyFilter}
 \title{Filter time series}
+\source{
+The endpoint constraint methods are based on the study:\cr
+  Michael E. Mann, On smoothing potentially non‐stationary climate time
+  series, Geophys. Res. Lett., 31, L07214, doi:10.1029/2004GL019569, 2004.
+}
 \usage{
-ApplyFilter(data, filter, method = 0)
+ApplyFilter(data, filter, method = 0, na.rm = FALSE)
 }
 \arguments{
 \item{data}{numeric vector with the input timeseries (standard or ts object).}
@@ -13,20 +18,30 @@ ApplyFilter(data, filter, method = 0)
 
 \item{method}{single integer for choosing an endpoint constraint method;
 available choices are integers 0-4, see details.}
+
+\item{na.rm}{logical; control the handling of internal NA values in
+\code{data}. If set to \code{TRUE}, any internal NA values are removed by
+linear interpolation from the neighbouring values; defaults to
+\code{FALSE}.}
 }
 \value{
-filtered timeseries as a ts object.
+a ts object with the filtered timeseries.
 }
 \description{
-Apply a given filter to a time series using different endpoint constraints as
-described below.
+Apply a given filter to a time series using different endpoint constraints.
 }
 \details{
 Note that when passing objects of class \code{ts}, the time step provided is
 not used; thus, for time series with a time step different from 1, the filter
 has to be adapted accordingly.
 
-The function applies endpoint constrains following Mann et al., GRL, 2003;
+Leading and trailing NA values are automatically stripped from the input
+vector so that they do not spread into the filtered data when applying the
+endpoint constraints, but added in again after filtering so that the output
+vector has the same length as the input. This does not apply to any internal
+NA values, which instead are handled by \code{na.rm}.
+
+The function applies endpoint constrains following Mann et al., GRL, 2004;
 available methods are:
 \itemize{
   \item method = 0: no constraint (loss at both ends);
@@ -47,6 +62,18 @@ ApplyFilter(x, filter, method = 0)
 
 # circular filtering avoids end losses, so as the other methods
 ApplyFilter(x, filter, method = 4)
+
+# leading and trailing NA's are ignored but added in again afterwards
+x <- c(NA, 1 : 10, NA)
+ApplyFilter(x, filter, method = 4)
+
+# ... but not internal NA's
+x <- c(1 : 5, NA, 7 : 10)
+ApplyFilter(x, filter, method = 4)
+
+# if not explicitly removed by linear interpolation
+ApplyFilter(x, filter, method = 4, na.rm = TRUE)
+
 }
 \author{
 Thomas Laepple
