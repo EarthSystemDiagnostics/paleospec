@@ -1,10 +1,10 @@
 Package: PaleoSpec
 Title: Spectral tools for the ECUS group
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: c(person("Thomas", "Laepple", email = "tlaepple@awi.de", role = c("aut", "cre")), person("Thomas", "Muench", email = "tmuench@awi.de", role = c("aut")))
 Description: Spectral tools for the ECUS group
 Depends:
-    R (>= 3.5.1)
+    R (>= 3.6.1)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
