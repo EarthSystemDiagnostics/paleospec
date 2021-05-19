@@ -108,7 +108,7 @@ ApplyFilter <- function(data, filter, method = 0, na.rm = FALSE) {
 
   }
 
-  i <- match(x[1], data) : match(x[n], data)
+  i <- seq(match(x[1], data), by = 1, length.out = n)
   result[i] <- xf
 
   return(ts(result, frequency = frequency(data)))

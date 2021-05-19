@@ -81,4 +81,22 @@ test_that("NA removal works.", {
 
   expect_equal(actual, expected)
 
+  # test output if duplicate input values exist by chance
+  x1 <- c(NA, NA, rep(1 : 3, 3), NA)
+  x2 <- c(NA, NA, 1 : 3, 1, NA, 3, 1 : 3, NA)
+
+  expected <- ts(round(c(NA, NA, 4 / 3, rep(2, 7), 8 / 3, NA), 2))
+
+  actual <- round(ApplyFilter(x1, filter, method = 2), 2)
+  expect_equal(actual, expected)
+
+  actual <- round(ApplyFilter(x2, filter, method = 2, na.rm = TRUE), 2)
+  expect_equal(actual, expected)
+
+  expected <- ts(round(
+    c(NA, NA, 4 / 3, rep(2, 2), rep(NA, 3), rep(2, 2), 8 / 3, NA), 2))
+  actual <- round(ApplyFilter(x2, filter, method = 2), 2)
+
+  expect_equal(actual, expected)
+
 })

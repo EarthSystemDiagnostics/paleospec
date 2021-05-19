@@ -1,3 +1,12 @@
+# PaleoSpec 0.2.2
+
+* Bug fix to `ApplyFilter()` function following up on #3:
+  
+  A bug occurred upon matching the filtered values back on the index positions
+  of the original input time series vector after removing any leading/trailing
+  NA values, which happened only in the case of duplicate values in the input
+  series. This is fixed now by an update to the index matching.
+
 # PaleoSpec 0.2.1
 
 * Filter function `ApplyFilter()` now handles NA values in the input time
