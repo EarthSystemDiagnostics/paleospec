@@ -14,7 +14,7 @@ MeanSpectrum <- function(specList, iRemoveLowest = 1, weights = rep(1,
   length(specList))) {
 
   #### Average the spectra together
-  print("Average spectra")
+
   if (length(weights) != length(specList))
     stop("specList and weights have a different number of elements")
   weights <- weights/sum(weights)
@@ -42,9 +42,6 @@ MeanSpectrum <- function(specList, iRemoveLowest = 1, weights = rep(1,
   dofMatrix <- matrix(NA, NSpectra, length(specList.interpolated[[1]]$spec))
 
   for (i in 1:length(specList.interpolated)) {
-    if (sum((result$freq - specList.interpolated[[i]]$freq)^2) >
-      0.1)
-      stop("Different spectra length or resolutions")
     specMatrix[i, ] <- specList.interpolated[[i]]$spec
     dofMatrix[i, ] <- specList.interpolated[[i]]$dof
   }
