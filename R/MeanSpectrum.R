@@ -47,11 +47,11 @@ MeanSpectrum <- function(specList, iRemoveLowest = 1, weights = rep(1,
   }
 
   result$spec <- colSums(specMatrix, na.rm = TRUE)
-  nRecord = colSums(!is.na(specMatrix))
   result$dof <- colSums(dofMatrix, na.rm = TRUE)
+  result$nRecord <- colSums(!is.na(specMatrix))
   class(result) <- "spec"
 
-  return(list(spec = AddConfInterval(result), nRecord = nRecord))
+  return(AddConfInterval(result))
 }
 
 

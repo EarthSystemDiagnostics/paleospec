@@ -14,16 +14,16 @@ test_that("simple spectrum averaging works.", {
   
   actual <- MeanSpectrum(spectra, iRemoveLowest = 0)
 
-  expect_equal(actual$spec$freq, f1)
-  expect_equal(actual$spec$spec, s1)
+  expect_equal(actual$freq, f1)
+  expect_equal(actual$spec, s1)
   expect_equal(actual$nRecord, rep(2, length(f1)))
 
   spectra <- list(list(freq = f1, spec = s1), list(freq = f2, spec = s2))
 
   actual <- MeanSpectrum(spectra, iRemoveLowest = 0)
 
-  expect_equal(actual$spec$freq, f1)
-  expect_equal(actual$spec$spec, (s1 + s2) / 2)
+  expect_equal(actual$freq, f1)
+  expect_equal(actual$spec, (s1 + s2) / 2)
   expect_equal(actual$nRecord, rep(2, length(f1)))
 
 })
