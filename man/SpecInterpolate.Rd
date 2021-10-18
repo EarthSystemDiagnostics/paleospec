@@ -4,15 +4,15 @@
 \alias{SpecInterpolate}
 \title{Interpolate spectrum}
 \usage{
-SpecInterpolate(freqRef, spec)
+SpecInterpolate(spec, freqRef)
 }
 \arguments{
-\item{freqRef}{numeric vector with the target frequency resolution.}
-
 \item{spec}{a spectral object of class \code{"spec"} or a list with the
 minimum components \code{freq}, \code{spec} and \code{dof} which are
 vectors of the same length giving the original frequency resolution and the
 corresponding spectral estimates and degrees of freedom.}
+
+\item{freqRef}{numeric vector with the target frequency resolution.}
 }
 \value{
 a spectral object of class \code{"spec"} with the spectrum
@@ -29,7 +29,7 @@ freqRef <- seq(0.1, 0.5, 0.1)
 spec <- list(freq = c(0.1, 0.2, 0.4, 0.5), spec = c(1, 2, 4, 5),
              dof = rep(1, 4))
 
-SpecInterpolate(freqRef, spec)
+SpecInterpolate(spec, freqRef)
 }
 \author{
 Thomas Laepple

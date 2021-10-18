@@ -33,8 +33,6 @@ MeanSpectrum <- function(specList, iRemoveLowest = 1, weights = rep(1,
     # the individual frequency axes...
   }
 
-  specList.interpolated <- specList
-
   if (interpolate) {
 
     # use the longest run for the reference spectrum
@@ -42,18 +40,17 @@ MeanSpectrum <- function(specList, iRemoveLowest = 1, weights = rep(1,
                    to = max(unlist(lapply(specList, get.fend.existing))),
                    by = min(unlist(lapply(specList, get.df))))
 
-    for (i in 1:length(specList)) specList.interpolated[[i]] <- SpecInterpolate(freqRef,
-    specList[[i]])
+    specList <- lapply(specList, SpecInterpolate, freqRef = freqRef)
 
   }
 
   # Build matrices from input data
 
-  ns <- length(specList.interpolated)
-  nf <- get.length(specList.interpolated[[1]])
+  ns <- length(specList)
+  nf <- get.length(specList[[1]])
 
-  specMatrix <- sapply(specList.interpolated, function(x) {x$spec})
-  dofMatrix <- sapply(specList.interpolated, function(x) {x$dof})
+  specMatrix <- sapply(specList, function(x) {x$spec})
+  dofMatrix <- sapply(specList, function(x) {x$dof})
 
   # weights at each frequency
   weightMatrix <- matrix(weights, nrow = nf, ncol = ns, byrow = TRUE)
@@ -69,7 +66,7 @@ MeanSpectrum <- function(specList, iRemoveLowest = 1, weights = rep(1,
 
   # mean weighted spectra
   result <- list()
-  result$freq <- specList.interpolated[[1]]$freq
+  result$freq <- specList[[1]]$freq
   result$spec <- rowSums(specMatrix * weightMatrix, na.rm = TRUE)
   result$dof <- rowSums(dofMatrix, na.rm = TRUE)
   result$nRecord <- rowSums(!missingObs)

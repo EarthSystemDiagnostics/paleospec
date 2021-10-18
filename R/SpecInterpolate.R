@@ -4,11 +4,11 @@
 #' includes the spectral estimates themselves as well as their degrees of
 #' freedom.
 #'
-#' @param freqRef numeric vector with the target frequency resolution.
 #' @param spec a spectral object of class \code{"spec"} or a list with the
 #'   minimum components \code{freq}, \code{spec} and \code{dof} which are
 #'   vectors of the same length giving the original frequency resolution and the
 #'   corresponding spectral estimates and degrees of freedom.
+#' @param freqRef numeric vector with the target frequency resolution.
 #' @return a spectral object of class \code{"spec"} with the spectrum
 #'   interpolated to the target resolution.
 #' @author Thomas Laepple
@@ -18,9 +18,9 @@
 #' spec <- list(freq = c(0.1, 0.2, 0.4, 0.5), spec = c(1, 2, 4, 5),
 #'              dof = rep(1, 4))
 #'
-#' SpecInterpolate(freqRef, spec)
+#' SpecInterpolate(spec, freqRef)
 #' @export
-SpecInterpolate <- function(freqRef, spec) {
+SpecInterpolate <- function(spec, freqRef) {
 
   result <- list(
     freq = freqRef,

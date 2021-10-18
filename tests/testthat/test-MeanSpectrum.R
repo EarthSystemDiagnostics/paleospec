@@ -9,7 +9,7 @@ test_that("interpolation function works.", {
   spec <- list(freq = f, spec = s, dof = d)
 
   freqRef <- seq(0.1, 0.5, 0.1)
-  actual  <- SpecInterpolate(freqRef, spec)
+  actual  <- SpecInterpolate(spec, freqRef)
 
   expect_equal(actual$freq, freqRef)
   expect_equal(actual$spec, 1 : 5)
@@ -22,7 +22,7 @@ test_that("interpolation function works.", {
   spec <- list(freq = f, spec = s, dof = d)
 
   freqRef <- seq(0.1, 0.6, 0.1)
-  actual  <- SpecInterpolate(freqRef, spec)
+  actual  <- SpecInterpolate(spec, freqRef)
 
   expect_equal(actual$freq, freqRef)
   expect_equal(actual$spec, c(1 : 5, NA))
