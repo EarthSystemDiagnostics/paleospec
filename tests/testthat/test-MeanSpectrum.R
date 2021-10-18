@@ -1,5 +1,35 @@
 context("Interpolating and averaging spectra")
 
+test_that("interpolation function works.", {
+
+  f <- c(0.1, 0.2, 0.4, 0.5)
+  s <- c(1, 2, 4, 5)
+  d <- rep(1, length(f))
+
+  spec <- list(freq = f, spec = s, dof = d)
+
+  freqRef <- seq(0.1, 0.5, 0.1)
+  actual  <- SpecInterpolate(freqRef, spec)
+
+  expect_equal(actual$freq, freqRef)
+  expect_equal(actual$spec, 1 : 5)
+  expect_equal(actual$dof, rep(1, length(freqRef)))
+
+  f <- c(0.1, 0.2, 0.4, 0.5)
+  s <- c(1, NA, 4, 5)
+  d <- rep(1, length(f))
+
+  spec <- list(freq = f, spec = s, dof = d)
+
+  freqRef <- seq(0.1, 0.6, 0.1)
+  actual  <- SpecInterpolate(freqRef, spec)
+
+  expect_equal(actual$freq, freqRef)
+  expect_equal(actual$spec, c(1 : 5, NA))
+  expect_equal(actual$dof, c(rep(1, 5), NA))
+
+})
+
 test_that("simple spectrum averaging without interpolation works.", {
 
   f1 <- seq(0.1, 0.5, 0.1)
