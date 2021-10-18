@@ -22,17 +22,35 @@ MeanSpectrum <- function(specList, iRemoveLowest = 1, weights = rep(1,
   # estimates
   specList <- lapply(specList, remove.lowestFreq, iRemove = iRemoveLowest)
 
-  # Use the longest run for the reference spectrum
-  freqRef <- seq(from = min(unlist(lapply(specList, get.fstart.existing))),
-    to = max(unlist(lapply(specList, get.fend.existing))),
-    by = min(unlist(lapply(specList, get.df))))
+  # Check if interpolation is needed
 
-  specList.interpolated <- list()
-  for (i in 1:length(specList)) specList.interpolated[[i]] <- SpecInterpolate(freqRef,
+  # interpolate if spectra have different lengths
+  interpolate <- stats::var(sapply(specList, get.length)) > 0
+
+  if (!interpolate) {
+    # equal lengths but check if frequency axes are different
+    freqs <- sapply(specList, function(x) {x$freq})
+    interpolate <- !all(apply(freqs, 1, stats::var) == 0.)
+    # later, one could introduce some tolerance here for the deviation between
+    # the individual frequency axes...
+  }
+
+  specList.interpolated <- specList
+
+  if (interpolate) {
+
+    # use the longest run for the reference spectrum
+    freqRef <- seq(from = min(unlist(lapply(specList, get.fstart.existing))),
+                   to = max(unlist(lapply(specList, get.fend.existing))),
+                   by = min(unlist(lapply(specList, get.df))))
+
+    for (i in 1:length(specList)) specList.interpolated[[i]] <- SpecInterpolate(freqRef,
     specList[[i]])
+
+  }
+
   for (i in 1:length(specList)) specList.interpolated[[i]]$spec <- specList.interpolated[[i]]$spec *
     weights[i]
-
 
   NSpectra <- length(specList.interpolated)
 
@@ -75,6 +93,8 @@ get.df <- function(x) return(mean(diff(x$freq)))
 get.fend.existing <- function(x) return(max(x$freq[!is.na(x$spec)]))
 get.fstart.existing <- function(x) return(min(x$freq[!is.na(x$spec)]))
 
+# helper function to obtain length of frequency axis
+get.length <- function(x) return(length(x$freq))
 
 # f (bNormalize) Normalize to the mean of the common interval
 # fmin<-min(unlist(lapply(temp,get.fend.existing)))
