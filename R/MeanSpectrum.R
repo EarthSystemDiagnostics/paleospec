@@ -13,11 +13,9 @@
 MeanSpectrum <- function(specList, iRemoveLowest = 1, weights = rep(1,
   length(specList))) {
 
-  #### Average the spectra together
-
   if (length(weights) != length(specList))
     stop("specList and weights have a different number of elements")
-  weights <- weights/sum(weights)
+
   # Remove the lowest/biased frequencies from the spectral
   # estimates
   specList <- lapply(specList, remove.lowestFreq, iRemove = iRemoveLowest)
@@ -49,24 +47,32 @@ MeanSpectrum <- function(specList, iRemoveLowest = 1, weights = rep(1,
 
   }
 
-  for (i in 1:length(specList)) specList.interpolated[[i]]$spec <- specList.interpolated[[i]]$spec *
-    weights[i]
+  # Build matrices from input data
 
-  NSpectra <- length(specList.interpolated)
+  ns <- length(specList.interpolated)
+  nf <- get.length(specList.interpolated[[1]])
 
-  result <- list(freq = specList.interpolated[[1]]$freq, spec = rep(0,
-    length(specList.interpolated[[1]]$spec)))
-  specMatrix <- matrix(NA, NSpectra, length(specList.interpolated[[1]]$spec))
-  dofMatrix <- matrix(NA, NSpectra, length(specList.interpolated[[1]]$spec))
+  specMatrix <- sapply(specList.interpolated, function(x) {x$spec})
+  dofMatrix <- sapply(specList.interpolated, function(x) {x$dof})
 
-  for (i in 1:length(specList.interpolated)) {
-    specMatrix[i, ] <- specList.interpolated[[i]]$spec
-    dofMatrix[i, ] <- specList.interpolated[[i]]$dof
-  }
+  # weights at each frequency
+  weightMatrix <- matrix(weights, nrow = nf, ncol = ns, byrow = TRUE)
+  # missing spectral estimates
+  missingObs <- is.na(specMatrix)
 
-  result$spec <- colSums(specMatrix, na.rm = TRUE)
-  result$dof <- colSums(dofMatrix, na.rm = TRUE)
-  result$nRecord <- colSums(!is.na(specMatrix))
+  # put weights to NA at missing estimates
+  weightMatrix[missingObs] <- NA
+
+  # normalise weights across spectra
+  weightMatrix <- t(apply(weightMatrix, 1, function(x) {
+    x / sum(x, na.rm = TRUE)}))
+
+  # mean weighted spectra
+  result <- list()
+  result$freq <- specList.interpolated[[1]]$freq
+  result$spec <- rowSums(specMatrix * weightMatrix, na.rm = TRUE)
+  result$dof <- rowSums(dofMatrix, na.rm = TRUE)
+  result$nRecord <- rowSums(!missingObs)
   class(result) <- "spec"
 
   return(AddConfInterval(result))
