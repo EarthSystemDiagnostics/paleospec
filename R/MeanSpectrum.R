@@ -88,7 +88,8 @@ MeanSpectrum <- function(specList, iRemoveLowest = 1,
                    to = max(sapply(specList, get.fend.existing)),
                    by = min(sapply(specList, get.df)))
 
-    specList <- lapply(specList, SpecInterpolate, freqRef = freqRef)
+    specList <- lapply(specList, SpecInterpolate,
+                       freqRef = freqRef, check = FALSE)
 
   } else {
 
