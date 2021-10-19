@@ -30,6 +30,26 @@ test_that("interpolation function works.", {
 
 })
 
+test_that("error checks of MeanSpec work.", {
+
+  # no list passed
+  expect_error(MeanSpectrum("foo"),
+               "'specList' input needs to be a list.")
+
+  # list element has the wrong structure
+  spectra <- list(list(freq = 1, spec = 1, dof = 1),
+                  list(spec = 1, dof = 1))
+  expect_error(MeanSpectrum(spectra),
+               "Non-spectral objects in input list.")
+
+  # wrong number of weights
+  spectra <- list(list(freq = 1, spec = 1, dof = 1),
+                  list(freq = 1, spec = 1, dof = 1))
+  expect_error(MeanSpectrum(spectra, weights = 1),
+               "Need as many weights as input spectra.")
+
+})
+
 test_that("simple spectrum averaging without interpolation works.", {
 
   f1 <- seq(0.1, 0.5, 0.1)
@@ -42,9 +62,6 @@ test_that("simple spectrum averaging without interpolation works.", {
   spectra <- list(list(freq = f1, spec = s1, dof = dof1),
                   list(freq = f2, spec = s1, dof = dof2))
 
-  # wrong number of weights
-  expect_error(MeanSpectrum(spectra, iRemoveLowest = 0, weights = 1))
-  
   actual <- MeanSpectrum(spectra, iRemoveLowest = 0)
 
   expect_equal(actual$freq, f1)
