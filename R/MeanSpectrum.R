@@ -8,7 +8,8 @@
 #' frequency discretization.
 #'
 #' @param specList list of spectra, i.e. objects of class \code{"spec"} (see
-#'   \code{\link{SpecMTM}} for details).
+#'   \code{\link{SpecMTM}} for details), where each spectrum has to be a list of
+#'   the vectors \code{freq}, \code{spec} and \code{dof} of a common length.
 #' @param iRemoveLowest integer; number of lowest frequencies to remove from
 #'   each individual spectral estimate (e.g. to remove detrending bias) prior to
 #'   the interpolation and averaging.
@@ -224,9 +225,11 @@ get.dofs <- function(x) return(x$dof)
 #'   requirement is not met. If set to \code{TRUE}, all requirements are
 #'   checked, and the function returns \code{TRUE} if they all pass, or
 #'   \code{FALSE} if one or more checks fail.
+#' @param dof logical; per default, \code{x} is also checked for containing a
+#'   \code{dof} vector, which can be turned off here when unnecessary.
 #' @return a logical value for \code{check.only = TRUE}.
 #' @author Thomas Münch
-is.spectrum <- function(x, check.only = FALSE) {
+is.spectrum <- function(x, check.only = FALSE, dof = TRUE) {
 
   isList <- is.list(x)
 
@@ -234,13 +237,14 @@ is.spectrum <- function(x, check.only = FALSE) {
 
     hasFreq <- !is.null(get.freq(x))
     hasSpec <- !is.null(get.spec(x))
-    hasDofs <- !is.null(get.dofs(x))
+    hasDofs <- ifelse(dof, !is.null(get.dofs(x)), TRUE)
 
     hasAll <- all(hasFreq, hasSpec, hasDofs)
 
     if (hasAll) {
-      hasEqualLength <- stats::var(
-        c(get.length(x), length(get.spec(x)), length(get.dofs(x)))) == 0
+      lengths <- c(get.length(x), length(get.spec(x)))
+      if (dof) lengths <- c(lengths, length(get.dofs(x)))
+      hasEqualLength <- stats::var(lengths) == 0
 
     } else {
       hasEqualLength <- FALSE

@@ -4,7 +4,7 @@
 \alias{is.spectrum}
 \title{Check for spectral object}
 \usage{
-is.spectrum(x, check.only = FALSE)
+is.spectrum(x, check.only = FALSE, dof = TRUE)
 }
 \arguments{
 \item{x}{an object to be checked.}
@@ -13,6 +13,9 @@ is.spectrum(x, check.only = FALSE)
 requirement is not met. If set to \code{TRUE}, all requirements are
 checked, and the function returns \code{TRUE} if they all pass, or
 \code{FALSE} if one or more checks fail.}
+
+\item{dof}{logical; per default, \code{x} is also checked for containing a
+\code{dof} vector, which can be turned off here when unnecessary.}
 }
 \value{
 a logical value for \code{check.only = TRUE}.

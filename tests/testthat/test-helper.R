@@ -68,6 +68,8 @@ test_that("object check works.", {
   expect_false(is.spectrum(spec, check.only = TRUE))
   expect_error(is.spectrum(spec),
                "Passed object has no dof vector.")
+  expect_true(is.spectrum(spec, check.only = TRUE, dof = FALSE))
+  expect_error(is.spectrum(spec, dof = FALSE), NA)
 
   spec <- list(freq = 1, dof = 1)
   expect_false(is.spectrum(spec, check.only = TRUE))

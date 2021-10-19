@@ -41,6 +41,10 @@ test_that("error checks of MeanSpec work.", {
                   list(spec = 1, dof = 1))
   expect_error(MeanSpectrum(spectra),
                "Non-spectral objects in input list.")
+  spectra <- list(list(freq = 1, spec = 1, dof = 1),
+                  list(freq = 1, spec = 1))
+  expect_error(MeanSpectrum(spectra),
+               "Non-spectral objects in input list.")
 
   # wrong number of weights
   spectra <- list(list(freq = 1, spec = 1, dof = 1),

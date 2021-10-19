@@ -8,7 +8,8 @@ MeanSpectrum(specList, iRemoveLowest = 1, weights = rep(1, length(specList)))
 }
 \arguments{
 \item{specList}{list of spectra, i.e. objects of class \code{"spec"} (see
-\code{\link{SpecMTM}} for details).}
+\code{\link{SpecMTM}} for details), where each spectrum has to be a list of
+the vectors \code{freq}, \code{spec} and \code{dof} of a common length.}
 
 \item{iRemoveLowest}{integer; number of lowest frequencies to remove from
 each individual spectral estimate (e.g. to remove detrending bias) prior to
