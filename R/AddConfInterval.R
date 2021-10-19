@@ -37,6 +37,8 @@
 #' @export
 AddConfInterval <- function(spec, pval = 0.05, MINVALUE = 1e-10) {
 
+  is.spectrum(spec)
+
   spec$lim.1 <- spec$spec * qchisq(c(1 - pval / 2), spec$dof) / (spec$dof)
   spec$lim.2 <- spec$spec * qchisq(c(pval / 2), spec$dof) / (spec$dof)
   spec$lim.1[spec$lim.1 < MINVALUE] <- MINVALUE

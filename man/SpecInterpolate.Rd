@@ -4,7 +4,7 @@
 \alias{SpecInterpolate}
 \title{Interpolate spectrum}
 \usage{
-SpecInterpolate(spec, freqRef)
+SpecInterpolate(spec, freqRef, check = TRUE)
 }
 \arguments{
 \item{spec}{a spectral object of class \code{"spec"} or a list with the
@@ -13,6 +13,10 @@ vectors of the same length giving the original frequency resolution and the
 corresponding spectral estimates and degrees of freedom.}
 
 \item{freqRef}{numeric vector with the target frequency resolution.}
+
+\item{check}{logical; if \code{TRUE} (the default) \code{spec} is checked for
+being a proper spectral object. This can be turned off in programmatic use
+when the respective check has already been performed.}
 }
 \value{
 a spectral object of class \code{"spec"} with the spectrum

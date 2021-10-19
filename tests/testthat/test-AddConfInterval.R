@@ -4,6 +4,7 @@ test_that("adding the confidence interval is correct.", {
 
   MINVALUE <- 1e-10
 
+  freq <- 1 : 5
   spec <- c(3, 7, 34, 15, 16)
   dof  <- c(3, 5, 8, 4, 3)
 
@@ -14,7 +15,7 @@ test_that("adding the confidence interval is correct.", {
   lim1[lim1 < MINVALUE] <- MINVALUE
   lim2[lim2 < MINVALUE] <- MINVALUE
 
-  actual <- AddConfInterval(list(spec = spec, dof = dof))
+  actual <- AddConfInterval(list(freq = freq, spec = spec, dof = dof))
 
   expect_equal(lim1, actual$lim.1)
   expect_equal(lim2, actual$lim.2)
@@ -27,7 +28,7 @@ test_that("adding the confidence interval is correct.", {
   lim1[lim1 < MINVALUE] <- MINVALUE
   lim2[lim2 < MINVALUE] <- MINVALUE
 
-  actual <- AddConfInterval(list(spec = spec, dof = dof),
+  actual <- AddConfInterval(list(freq = freq, spec = spec, dof = dof),
                             MINVALUE = MINVALUE, pval = pval)
 
   expect_equal(lim1, actual$lim.1)

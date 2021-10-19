@@ -35,24 +35,21 @@ LPlot <- function(x, conf = TRUE, bPeriod = FALSE, bNoPlot = FALSE, axes = TRUE,
                   col = "black", alpha = 0.3, removeFirst = 0, removeLast = 0,
                   xlab = "f", ylab = "PSD", xlim = NULL, ylim = NULL, ...) {
 
+    is.spectrum(x, dof = FALSE)
+
     if (bPeriod) {
         x$freq <- 1/x$freq
         if (is.null(xlim)) xlim <- rev(range(x$freq))
         if (xlab == "f") xlab <- "period"
     }
 
-    index <- (removeFirst + 1) : (length(x$freq) - removeLast)
-
-    x$freq  <- x$freq[index]
-    x$spec  <- x$spec[index]
-    x$lim.1 <- x$lim.1[index]
-    x$lim.2 <- x$lim.2[index]
+    x <- remove.lowestFreq(x, iRemove = removeFirst)
+    x <- remove.highestFreq(x, iRemove = removeLast)
 
     plot(x$freq, x$spec, type = "n", log = "xy", xlab = xlab, ylab = ylab,
          xlim = xlim, ylim = ylim, axes = axes, ...)
 
-    lim <- !is.null(x$lim.1) & !is.null(x$lim.2)
-    if (conf & lim & !bNoPlot) {
+    if (conf & has.limits(x) & !bNoPlot) {
         polygon(c(x$freq, rev(x$freq)), c(x$lim.1, rev(x$lim.2)),
                 col = ColTransparent(col, alpha), border = NA)
     }

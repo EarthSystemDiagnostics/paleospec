@@ -9,6 +9,9 @@
 #'   vectors of the same length giving the original frequency resolution and the
 #'   corresponding spectral estimates and degrees of freedom.
 #' @param freqRef numeric vector with the target frequency resolution.
+#' @param check logical; if \code{TRUE} (the default) \code{spec} is checked for
+#'   being a proper spectral object. This can be turned off in programmatic use
+#'   when the respective check has already been performed.
 #' @return a spectral object of class \code{"spec"} with the spectrum
 #'   interpolated to the target resolution.
 #' @author Thomas Laepple
@@ -20,7 +23,9 @@
 #'
 #' SpecInterpolate(spec, freqRef)
 #' @export
-SpecInterpolate <- function(spec, freqRef) {
+SpecInterpolate <- function(spec, freqRef, check = TRUE) {
+
+  if (check) is.spectrum(spec)
 
   result <- list(
     freq = freqRef,
