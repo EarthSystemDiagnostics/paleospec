@@ -209,25 +209,27 @@ test_that("spectrum averaging with interpolation works.", {
   actual <- MeanSpectrum(spectra, iRemoveLowest = 3)
 
   fout <- seq(4, 10, 1)
+  nr   <- c(1, 2, 3, 3, 3, 2, 1)
   expect_equal(actual$freq, fout)
   expect_equal(actual$spec, rep(1, length(fout)))
-  expect_equal(actual$nRecord, c(1, 2, 3, 3, 3, 2, 1))
-  expect_equal(actual$dof, c(1, 2, 3, 3, 3, 2, 1))
+  expect_equal(actual$nRecord, nr)
+  expect_equal(actual$dof, nr)
 
   # same exercise with non-arithmetic weights
 
   actual <- MeanSpectrum(spectra, iRemoveLowest = 3, weights = 1 : 3)
 
   expect_equal(actual$spec, rep(1, length(fout)))
-  expect_equal(actual$dof, c(1, 2, 3, 3, 3, 2, 1))
+  expect_equal(actual$dof, nr)
 
   # one estimate is different
 
   spectra[[1]]$spec <- rep(2, length(f1))
+  spectra[[1]]$dof  <- rep(2, length(f1))
 
   actual <- MeanSpectrum(spectra, iRemoveLowest = 3, weights = 1 : 3)
 
   expect_equal(actual$spec, c(2, 4/3, 7/6, 7/6, 7/6, 1, 1))
-  expect_equal(actual$dof, c(1, 2, 3, 3, 3, 2, 1))
+  expect_equal(actual$dof, c(2, 4/3, 7/6, 7/6, 7/6, 1, 1) * nr)
 
 })

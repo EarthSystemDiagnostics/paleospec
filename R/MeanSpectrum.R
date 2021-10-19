@@ -106,6 +106,8 @@ MeanSpectrum <- function(specList, iRemoveLowest = 1,
   weightMatrix <- matrix(weights, nrow = nf, ncol = ns, byrow = TRUE)
   # missing spectral estimates
   missingObs <- is.na(specMatrix)
+  # contributing number of records
+  nRecord <- rowSums(!missingObs)
 
   # put weights to NA at missing estimates
   weightMatrix[missingObs] <- NA
@@ -118,8 +120,8 @@ MeanSpectrum <- function(specList, iRemoveLowest = 1,
   result <- list()
   result$freq <- freqRef
   result$spec <- rowSums(specMatrix * weightMatrix, na.rm = TRUE)
-  result$dof <- rowSums(dofMatrix, na.rm = TRUE)
-  result$nRecord <- rowSums(!missingObs)
+  result$dof <- rowSums(dofMatrix * weightMatrix, na.rm = TRUE) * nRecord
+  result$nRecord <- nRecord
   class(result) <- "spec"
 
   return(AddConfInterval(result))
