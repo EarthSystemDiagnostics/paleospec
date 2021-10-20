@@ -91,3 +91,22 @@ test_that("object check works.", {
   expect_error(is.spectrum(spec), NA)
   
 })
+
+test_that("small functions works.", {
+
+  f <- c(0.01, 0.05, 0.1, 0.2, 0.4, 0.5)
+  s <- c(NA, 2, NA, 4, 5, NA)
+  d <- seq(10, -1, length.out = length(f))
+
+  expect_equal(get.df(list(freq = f)), mean(diff(f)))
+
+  expect_equal(get.fend.existing(list(freq = f, spec = s)), f[5])
+  expect_equal(get.fstart.existing(list(freq = f, spec = s)), f[2])
+
+  expect_equal(get.length(list(freq = f, spec = s)), length(f))
+
+  expect_equal(get.freq(list(freq = f, spec = s, dof = d)), f)
+  expect_equal(get.spec(list(freq = f, spec = s, dof = d)), s)
+  expect_equal(get.dofs(list(freq = f, spec = s, dof = d)), d)
+
+})
