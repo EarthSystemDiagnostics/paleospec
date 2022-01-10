@@ -16,7 +16,9 @@ each individual spectral estimate (e.g. to remove detrending bias) prior to
 the interpolation and averaging.}
 
 \item{weights}{numeric vector of weights; its length must match the number of
-elements in \code{specList}.}
+elements in \code{specList}. The default setting of identical weights
+yields the simple arithmetic average of the input spectra; change this
+parameter accordingly to apply non-arithmetic averaging (see example).}
 }
 \value{
 object of class \code{"spec"} with the weighted mean spectrum,
