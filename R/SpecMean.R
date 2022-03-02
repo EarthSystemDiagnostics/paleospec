@@ -2,7 +2,7 @@
 #'
 #' @param speclist list of spectra each containing list(spec, freq, dof)
 #' @param weight weight by the uncertainty
-#' @param dof
+#' @param dof degrees of freedom
 #' @details Returns the mean of the spectra
 #' Inputs:
 #' speclist[[]], each containing

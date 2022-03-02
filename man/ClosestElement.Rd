@@ -11,7 +11,7 @@ ClosestElement(xvector, x, type = "N")
 
 \item{x}{the value to find the closest match to}
 
-\item{type}{}
+\item{type}{methods N, M or L}
 }
 \value{
 

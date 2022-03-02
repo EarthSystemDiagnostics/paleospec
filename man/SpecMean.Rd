@@ -10,6 +10,8 @@ SpecMean(speclist, weight = FALSE, dof = TRUE)
 \item{speclist}{list of spectra each containing list(spec, freq, dof)}
 
 \item{weight}{weight by the uncertainty}
+
+\item{dof}{degrees of freedom}
 }
 \value{
 the mean spectra

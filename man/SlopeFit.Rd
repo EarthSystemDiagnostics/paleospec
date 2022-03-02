@@ -16,6 +16,8 @@ SlopeFit(
 )
 }
 \arguments{
+\item{spec}{power spectrum as list with $freq and $spec}
+
 \item{freq.start}{vector containing the start frequencies of the fitting interval(s)}
 
 \item{freq.end}{vector containing the end frequencies of the fitting interval(s)}
