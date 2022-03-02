@@ -10,7 +10,7 @@
 #' @param detrend logical, detrend timeseries before estimating the spectrum
 #' @param bPad if FALSE (the default) nFFT is set to the length of the timeseries
 #' @inheritParams multitaper::spec.mtm
-#' @param ...
+#' @param ... additional arguments to multitaper::spec.mtm
 #' @return spectra object list(freq, spec, dof)
 #' @importFrom multitaper spec.mtm
 #' @examples

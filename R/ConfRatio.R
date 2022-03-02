@@ -1,9 +1,9 @@
 #' @title Confidence Interval of ratios
 #' @description Confidence Interval of ratios based on a ChiSquare Distribution
-#' @param varratio
+#' @param varratio a variance ratio
 #' @param df.1 degree of freedom of denominator
 #' @param df.2 degree of freedom of numerator
-#' @param pval
+#' @param pval desired significance level, defaults to 0.1
 #' @return lower and upper confidence intervals
 #' @author Thomas Laepple
 ConfRatio<-function(varratio,df.1,df.2,pval=0.1)
