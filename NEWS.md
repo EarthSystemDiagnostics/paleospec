@@ -1,3 +1,7 @@
+# PaleoSpec 0.2.3
+
+* Overhaul of spectral averaging and interpolation functions
+
 # PaleoSpec 0.2.2
 
 * Bug fix to `ApplyFilter()` function following up on #3:
