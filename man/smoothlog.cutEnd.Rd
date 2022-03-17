@@ -15,3 +15,4 @@ smoothlog.cutEnd
 \author{
 Thomas Laepple
 }
+\keyword{internal}
