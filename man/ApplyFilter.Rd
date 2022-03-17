@@ -74,6 +74,76 @@ ApplyFilter(x, filter, method = 4)
 # if not explicitly removed by linear interpolation
 ApplyFilter(x, filter, method = 4, na.rm = TRUE)
 
+
+# Visual comparison of methods ----------
+set.seed(20220302)
+
+x <- PaleoSpec::SimPowerlaw(1, 1e02)
+x <- x + 0.1 * (1:length(x))
+
+filt <- rep(1/30, 30)
+
+plot(x, type = "l")
+
+x0 <- ApplyFilter(x, filt, method = 0)
+lines(x0, col = "Green")
+
+x1 <- ApplyFilter(x, filt, method = 1)
+lines(x1, col = "blue")
+
+x2 <- ApplyFilter(x, filt, method = 2)
+lines(x2, col = "red")
+
+x3 <- ApplyFilter(x, filt, method = 3)
+lines(x3, col = "orange")
+
+x4 <- ApplyFilter(x, filt, method = 4)
+lines(x4, col = "Purple", lty = 2)
+
+lines(x0, col = "Green")
+
+legend(x = "topleft",
+       legend = c("0: no constraint (lose ends)",
+                  "1: min norm (pad with mean)",
+                  "2: min slope (reflect ends)",
+                  "3: min roughness (reflect and invert ends)",
+                  "4: circular"),
+       col = c("Green", "Blue", "Red", "Orange", "Purple"),
+       lwd = 2, lty = c(1,1,1,1,2))
+
+
+# Repeat with linear trend, no noise
+
+x <- 1:100
+filt <- rep(1/30, 30)
+
+plot(x, type = "l")
+
+x0 <- ApplyFilter(x, filt, method = 0)
+lines(x0, col = "Green")
+
+x1 <- ApplyFilter(x, filt, method = 1)
+lines(x1, col = "blue")
+
+x2 <- ApplyFilter(x, filt, method = 2)
+lines(x2, col = "red")
+
+x3 <- ApplyFilter(x, filt, method = 3)
+lines(x3, col = "orange")
+
+x4 <- ApplyFilter(x, filt, method = 4)
+lines(x4, col = "Purple", lty = 2)
+
+lines(x0, col = "Green")
+
+legend(x = "topleft",
+       legend = c("0: no constraint (lose ends)",
+                  "1: min norm (pad with mean)",
+                  "2: min slope (reflect ends)",
+                  "3: min roughness (reflect and invert ends)",
+                  "4: circular"),
+       col = c("Green", "Blue", "Red", "Orange", "Purple"),
+       lwd = 2, lty = c(1,1,1,1,2))
 }
 \author{
 Thomas Laepple
