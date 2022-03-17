@@ -36,13 +36,13 @@ GetVarFromSpectra <- function(spec,f,dfreq=NULL,df.log = 0,bw = 3)
     if (is.null(spec$dof)) spec$dof <- rep(spec$df,length(spec$freq))
 
 
-     dof.original <- mean(SpecInterpolate(newFreq,spec)$dof)
+     dof.original <- mean(SpecInterpolate(spec,newFreq)$dof)
      ## DOF before smoothing
 
     if (df.log > 0) spec <- LogSmooth(spec,removeLast = 0,df.log = df.log)
 
-     vars <- mean(SpecInterpolate(newFreq,spec)$spec)*diff(f)*2
-     dof <- mean(SpecInterpolate(newFreq,spec)$dof)
+     vars <- mean(SpecInterpolate(spec,newFreq)$spec)*diff(f)*2
+     dof <- mean(SpecInterpolate(spec,newFreq)$dof)
 
      ## Estimate the DOF by calculating how many independent
      ## spectral estimates contribute to the calculated mean value

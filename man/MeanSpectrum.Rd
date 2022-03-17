@@ -2,26 +2,67 @@
 % Please edit documentation in R/MeanSpectrum.R
 \name{MeanSpectrum}
 \alias{MeanSpectrum}
-\title{average spectra with weighting}
+\title{Weighted mean spectrum}
 \usage{
 MeanSpectrum(specList, iRemoveLowest = 1, weights = rep(1, length(specList)))
 }
 \arguments{
-\item{iRemoveLowest}{number of lowest frequencies to remove (e.g. to remove detrending bias)}
+\item{specList}{list of spectra, i.e. objects of class \code{"spec"} (see
+\code{\link{SpecMTM}} for details), where each spectrum has to be a list of
+the vectors \code{freq}, \code{spec} and \code{dof} of a common length.}
 
-\item{weights}{vector of weights (same length as elements in speclist)}
+\item{iRemoveLowest}{integer; number of lowest frequencies to remove from
+each individual spectral estimate (e.g. to remove detrending bias) prior to
+the interpolation and averaging.}
 
-\item{speclist}{list of spectra}
+\item{weights}{numeric vector of weights; its length must match the number of
+elements in \code{specList}. The default setting of identical weights
+yields the simple arithmetic average of the input spectra; change this
+parameter accordingly to apply non-arithmetic averaging (see example).}
 }
 \value{
-list(spec,nRecords) spec=average spectrum, nRecords = number of records contributing to each spectral estimate
+object of class \code{"spec"} with the weighted mean spectrum,
+  amended by the element \code{nRecord} which gives the number of records
+  contributing to each mean spectral estimate.
 }
 \description{
-Calculate the weighted mean spectrum of all spectra by interpolating them to
-the highest resolution frequency grid and averaging them.
+Calculate the mean spectrum from a list of individual spectra including
+weighting of the individual spectra and, if needed, interpolation to
+the highest resolution frequency grid. The default weighting produces the
+simple arithmetic mean. Interpolation is only performed when the frequency
+axes of the individual spectra have different lengths and/or differ in
+frequency discretization.
+}
+\examples{
 
-Spectra can have different resolution and span a different freq range.
+# Simple arithmetic average
+f1 <- 1 : 5
+f2 <- f1
+s1 <- rep(1, length(f1))
+s2 <- rep(3, length(f2))
+dof1 <- rep(1, length(f1))
+dof2 <- rep(1, length(f2))
+
+spectra <- list(list(freq = f1, spec = s1, dof = dof1),
+                list(freq = f2, spec = s2, dof = dof2))
+
+MeanSpectrum(spectra, iRemoveLowest = 0)
+
+# Weighted mean with interpolation
+f1 <- 1 : 5
+f2 <- 3 : 8
+s1 <- rep(1, length(f1))
+s2 <- rep(3, length(f2))
+dof1 <- rep(1, length(f1))
+dof2 <- rep(1, length(f2))
+
+spectra <- list(list(freq = f1, spec = s1, dof = dof1),
+                list(freq = f2, spec = s2, dof = dof2))
+
+MeanSpectrum(spectra, iRemoveLowest = 0, weights = c(1, 2))
+# with some detrending bias removal
+MeanSpectrum(spectra, iRemoveLowest = 1, weights = c(1, 2))
 }
 \author{
-Thomas Laepple
+Thomas Laepple and Thomas Münch
 }

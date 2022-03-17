@@ -23,17 +23,14 @@
 LLines<-function(x, conf = TRUE, bPeriod = FALSE, col = "black", alpha = 0.3,
                  removeFirst = 0, removeLast = 0, ...) {
 
+    is.spectrum(x, dof = FALSE)
+
     if (bPeriod) x$freq <- 1/x$freq
 
-    index <- (removeFirst + 1) : (length(x$freq) - removeLast)
+    x <- remove.lowestFreq(x, iRemove = removeFirst)
+    x <- remove.highestFreq(x, iRemove = removeLast)
 
-    x$freq  <- x$freq[index]
-    x$spec  <- x$spec[index]
-    x$lim.1 <- x$lim.1[index]
-    x$lim.2 <- x$lim.2[index]
-
-    lim <- !is.null(x$lim.1) & !is.null(x$lim.2)
-    if (conf & lim) {
+    if (conf & has.limits(x)) {
         polygon(c(x$freq, rev(x$freq)), c(x$lim.1, rev(x$lim.2)),
                 col = ColTransparent(col, alpha), border = NA)
     }
