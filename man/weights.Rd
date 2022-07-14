@@ -6,9 +6,6 @@
 \usage{
 weights(x, sigma)
 }
-\value{
-
-}
 \description{
 weights
 }

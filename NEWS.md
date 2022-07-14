@@ -1,3 +1,7 @@
+# PaleoSpec 0.2.4
+
+* Bug fix to `Bandpass()` was calling lowpass instead of Lowpass
+
 # PaleoSpec 0.2.3
 
 * Overhaul of spectral averaging and interpolation functions
