@@ -20,6 +20,7 @@ knitr::opts_chunk$set(
 
 PaleoSpec is an R package to assist the analysis of variance and power spectra.
 
+
 ## Installation
 
 You can install the development version of PaleoSpec from [GitHub](https://github.com/) with:
@@ -29,3 +30,9 @@ You can install the development version of PaleoSpec from [GitHub](https://githu
 devtools::install_github("EarthSystemDiagnostics/paleospec")
 ```
 
+## Usage
+
+
+Please refer to function references here:
+
+https://earthsystemdiagnostics.github.io/paleospec/reference/index.html

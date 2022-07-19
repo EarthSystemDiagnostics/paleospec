@@ -1,8 +1,13 @@
 Package: PaleoSpec
 Title: Spectral tools for the ECUS group
 Version: 0.2.4
-Authors@R: c(person("Thomas", "Laepple", email = "tlaepple@awi.de", role = c("aut", "cre")), person("Thomas", "Muench", email = "tmuench@awi.de", role = c("aut")))
-Description: Spectral tools for the ECUS group
+Authors@R: c(
+  person("Thomas", "Laepple", email = "tlaepple@awi.de", role = c("aut", "cre")),
+  person("Thomas", "Muench", email = "tmuench@awi.de", role = c("aut")),
+  person("Andrew", "Dolman", email = "adolman@awi.de", role = c("aut")),
+  person("Kira", "Rehfeld", email = "tmuench@awi.de", role = c("ctb"))
+  )
+Description: Tools for power spectral analyis, especially of climate data.
 Depends:
     R (>= 3.6.1)
 License: MIT + file LICENSE

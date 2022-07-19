@@ -18,3 +18,9 @@ You can install the development version of PaleoSpec from
 # install.packages("devtools")
 devtools::install_github("EarthSystemDiagnostics/paleospec")
 ```
+
+## Usage
+
+Please refer to function references here:
+
+<https://earthsystemdiagnostics.github.io/paleospec/reference/index.html>
