@@ -1,5 +1,5 @@
 #' @title first element of a vector
-#' @param x
+#' @param x a vector
 #' @return first element of X
 #' @author Thomas Laepple
 #' @export

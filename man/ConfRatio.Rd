@@ -7,9 +7,13 @@
 ConfRatio(varratio, df.1, df.2, pval = 0.1)
 }
 \arguments{
+\item{varratio}{a variance ratio}
+
 \item{df.1}{degree of freedom of denominator}
 
 \item{df.2}{degree of freedom of numerator}
+
+\item{pval}{desired significance level, defaults to 0.1}
 }
 \value{
 lower and upper confidence intervals

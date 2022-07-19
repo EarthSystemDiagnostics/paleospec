@@ -15,5 +15,6 @@ Bandpass<-function(omega.upper,omega.lower,n,sample=1,convergence=T)
 if ((n %% 2) == 0) stop("N must be odd, this function calculates only symetrical = phase preserving filters")
 
 
-	return(lowpass(omega.upper,n,sample,convergence)-lowpass(omega.lower,n,sample,convergence))
+	return(Lowpass(omega.upper, n, sample, convergence)-Lowpass(omega.lower,n,sample,convergence))
 }
+

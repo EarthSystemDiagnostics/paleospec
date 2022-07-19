@@ -11,10 +11,7 @@ ClosestElement(xvector, x, type = "N")
 
 \item{x}{the value to find the closest match to}
 
-\item{type}{}
-}
-\value{
-
+\item{type}{methods N, M or L}
 }
 \description{
 Get closest element of a vector

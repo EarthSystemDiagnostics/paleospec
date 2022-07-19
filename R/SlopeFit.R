@@ -1,5 +1,5 @@
 #' @title Fit a power-law to the spectrum
-#' @param spec
+#' @param spec power spectrum as list with $freq and $spec
 #' @param freq.start  vector containing the start frequencies of the fitting interval(s)
 #' @param freq.end vector containing the end frequencies of the fitting interval(s)
 #' @param bDebug (TRUE) plot diagnostics

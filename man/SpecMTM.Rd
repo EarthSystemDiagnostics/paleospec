@@ -78,8 +78,7 @@ equation (3.4) and weights, eigenCoefWt, correspond to sqrt(|d_k(f)|^2) from equ
 
 \item{bPad}{if FALSE (the default) nFFT is set to the length of the timeseries}
 
-\item{...}{Additional parameters, such as xaxs="i" which are passed to
-    the plotting function. Not all parameters are supported.}
+\item{...}{additional arguments to multitaper::spec.mtm}
 }
 \value{
 spectra object list(freq, spec, dof)

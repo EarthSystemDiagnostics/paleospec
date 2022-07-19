@@ -2,7 +2,7 @@
 #'
 #' @param xvector a vector of values
 #' @param x the value to find the closest match to
-#' @param type
+#' @param type methods N, M or L
 #'
 #' @return
 #' @export

@@ -1,91 +1,131 @@
-#' @title average spectra with weighting
-#' @description Calculate the weighted mean spectrum of all spectra by interpolating them to
-#' the highest resolution frequency grid and averaging them.
+#' Weighted mean spectrum
 #'
-#' Spectra can have different resolution and span a different freq range.
-#' @param speclist list of spectra
-#' @param iRemoveLowest number of lowest frequencies to remove (e.g. to remove detrending bias)
-#' @param weights vector of weights (same length as elements in speclist)
-#' @return list(spec,nRecords) spec=average spectrum, nRecords = number of records contributing to each spectral estimate
-#' @author Thomas Laepple
+#' Calculate the mean spectrum from a list of individual spectra including
+#' weighting of the individual spectra and, if needed, interpolation to
+#' the highest resolution frequency grid. The default weighting produces the
+#' simple arithmetic mean. Interpolation is only performed when the frequency
+#' axes of the individual spectra have different lengths and/or differ in
+#' frequency discretization.
+#'
+#' @param specList list of spectra, i.e. objects of class \code{"spec"} (see
+#'   \code{\link{SpecMTM}} for details), where each spectrum has to be a list of
+#'   the vectors \code{freq}, \code{spec} and \code{dof} of a common length.
+#' @param iRemoveLowest integer; number of lowest frequencies to remove from
+#'   each individual spectral estimate (e.g. to remove detrending bias) prior to
+#'   the interpolation and averaging.
+#' @param weights numeric vector of weights; its length must match the number of
+#'   elements in \code{specList}. The default setting of identical weights
+#'   yields the simple arithmetic average of the input spectra; change this
+#'   parameter accordingly to apply non-arithmetic averaging (see example).
+#' @return object of class \code{"spec"} with the weighted mean spectrum,
+#'   amended by the element \code{nRecord} which gives the number of records
+#'   contributing to each mean spectral estimate.
+#' @author Thomas Laepple and Thomas Münch
+#' @examples
+#'
+#' # Simple arithmetic average
+#' f1 <- 1 : 5
+#' f2 <- f1
+#' s1 <- rep(1, length(f1))
+#' s2 <- rep(3, length(f2))
+#' dof1 <- rep(1, length(f1))
+#' dof2 <- rep(1, length(f2))
+#'
+#' spectra <- list(list(freq = f1, spec = s1, dof = dof1),
+#'                 list(freq = f2, spec = s2, dof = dof2))
+#'
+#' MeanSpectrum(spectra, iRemoveLowest = 0)
+#'
+#' # Weighted mean with interpolation
+#' f1 <- 1 : 5
+#' f2 <- 3 : 8
+#' s1 <- rep(1, length(f1))
+#' s2 <- rep(3, length(f2))
+#' dof1 <- rep(1, length(f1))
+#' dof2 <- rep(1, length(f2))
+#'
+#' spectra <- list(list(freq = f1, spec = s1, dof = dof1),
+#'                 list(freq = f2, spec = s2, dof = dof2))
+#'
+#' MeanSpectrum(spectra, iRemoveLowest = 0, weights = c(1, 2))
+#' # with some detrending bias removal
+#' MeanSpectrum(spectra, iRemoveLowest = 1, weights = c(1, 2))
 #' @export
 #'
-MeanSpectrum <- function(specList, iRemoveLowest = 1, weights = rep(1,
-  length(specList))) {
+MeanSpectrum <- function(specList, iRemoveLowest = 1,
+                         weights = rep(1, length(specList))) {
 
-  #### Average the spectra together
-  print("Average spectra")
-  if (length(weights) != length(specList))
-    stop("specList and weights have a different number of elements")
-  weights <- weights/sum(weights)
-  # Remove the lowest/biased frequencies from the spectral
-  # estimates
-  specList <- lapply(specList, remove.lowestFreq, iRemove = iRemoveLowest)
-
-  # Use the longest run for the reference spectrum
-  freqRef <- seq(from = min(unlist(lapply(specList, get.fstart.existing))),
-    to = max(unlist(lapply(specList, get.fend.existing))),
-    by = min(unlist(lapply(specList, get.df))))
-
-  specList.interpolated <- list()
-  for (i in 1:length(specList)) specList.interpolated[[i]] <- SpecInterpolate(freqRef,
-    specList[[i]])
-  for (i in 1:length(specList)) specList.interpolated[[i]]$spec <- specList.interpolated[[i]]$spec *
-    weights[i]
-
-
-  NSpectra <- length(specList.interpolated)
-
-  result <- list(freq = specList.interpolated[[1]]$freq, spec = rep(0,
-    length(specList.interpolated[[1]]$spec)))
-  specMatrix <- matrix(NA, NSpectra, length(specList.interpolated[[1]]$spec))
-  dofMatrix <- matrix(NA, NSpectra, length(specList.interpolated[[1]]$spec))
-
-  for (i in 1:length(specList.interpolated)) {
-    if (sum((result$freq - specList.interpolated[[i]]$freq)^2) >
-      0.1)
-      stop("Different spectra length or resolutions")
-    specMatrix[i, ] <- specList.interpolated[[i]]$spec
-    dofMatrix[i, ] <- specList.interpolated[[i]]$dof
+  if (!is.list(specList)) {
+    stop("'specList' input needs to be a list.")
   }
 
-  result$spec <- colSums(specMatrix, na.rm = TRUE)
-  nRecord = colSums(!is.na(specMatrix))
-  result$dof <- colSums(dofMatrix, na.rm = TRUE)
+  ns <- length(specList)
+
+  if (!all(sapply(specList, is.spectrum, check.only = TRUE))) {
+    stop("Non-spectral objects in input list.")
+  }
+
+  if (length(weights) != ns) {
+    stop("Need as many weights as input spectra.")
+  }
+
+  # remove lowest/biased frequencies from spectral estimates
+  specList <- lapply(specList, remove.lowestFreq, iRemove = iRemoveLowest)
+
+  # interpolate if spectra have different lengths
+  interpolate <- stats::var(sapply(specList, get.length)) > 0
+
+  if (!interpolate) {
+    # equal lengths but check if frequency axes are different
+    freqs <- sapply(specList, get.freq)
+    interpolate <- !all(apply(freqs, 1, stats::var) == 0.)
+    # later, one could introduce some tolerance here for the deviation between
+    # the individual frequency axes...
+  }
+
+  if (interpolate) {
+
+    # use the longest run for the reference spectrum
+    freqRef <- seq(from = min(sapply(specList, get.fstart.existing)),
+                   to = max(sapply(specList, get.fend.existing)),
+                   by = min(sapply(specList, get.df)))
+
+    specList <- lapply(specList, SpecInterpolate,
+                       freqRef = freqRef, check = FALSE)
+
+  } else {
+
+    freqRef <- get.freq(specList[[1]])
+  }
+
+  # Build matrices from input data
+
+  nf <- length(freqRef)
+
+  specMatrix <- sapply(specList, get.spec)
+  dofMatrix  <- sapply(specList, get.dofs)
+
+  # weights at each frequency
+  weightMatrix <- matrix(weights, nrow = nf, ncol = ns, byrow = TRUE)
+  # missing spectral estimates
+  missingObs <- is.na(specMatrix)
+  # contributing number of records
+  nRecord <- rowSums(!missingObs)
+
+  # put weights to NA at missing estimates
+  weightMatrix[missingObs] <- NA
+
+  # normalise weights across spectra
+  weightMatrix <- t(apply(weightMatrix, 1, function(x) {
+    x / sum(x, na.rm = TRUE)}))
+
+  # mean weighted spectra
+  result <- list()
+  result$freq <- freqRef
+  result$spec <- rowSums(specMatrix * weightMatrix, na.rm = TRUE)
+  result$dof <- rowSums(dofMatrix * weightMatrix, na.rm = TRUE) * nRecord
+  result$nRecord <- nRecord
   class(result) <- "spec"
 
-  return(list(spec = AddConfInterval(result), nRecord = nRecord))
+  return(AddConfInterval(result))
 }
-
-
-# Helper functions
-
-
-remove.lowestFreq <- function(spec, iRemove) # Remove lowest frequencies from a spectra (as they are
-# biased by detrending and the MTM estimator)
-{
-  if (iRemove == 0)
-    index = seq(spec$spec) else index <- (-(1:iRemove))
-  spec$spec <- spec$spec[index]
-  spec$freq <- spec$freq[index]
-  spec$dof <- spec$dof[index]
-  return(spec)
-}
-
-# Helper functions to access the list elements to determine
-# the target frequency discretisation
-get.df <- function(x) return(mean(diff(x$freq)))
-get.fend.existing <- function(x) return(max(x$freq[!is.na(x$spec)]))
-get.fstart.existing <- function(x) return(min(x$freq[!is.na(x$spec)]))
-
-
-# f (bNormalize) Normalize to the mean of the common interval
-# fmin<-min(unlist(lapply(temp,get.fend.existing)))
-# fmax<-max(unlist(lapply(temp,get.fstart.existing)))
-# i.min<-ClosestElement(freqRef,fmin)
-# i.max<-ClosestElement(freqRef,fmax) var.band<-vector() for
-# (i in 1:length(temp)) {
-# var.band[i]<-mean(temp[[i]]$spec[i.min:i.max]) }
-# rescale<-mean(var.band)/var.band if (!is.null(weights))
-# rescale=weights for (i in 1:length(temp))
-# temp[[i]]$spec<-temp[[i]]$spec*rescale[i]

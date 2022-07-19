@@ -34,7 +34,7 @@ y <- cumsum(c(val.at.min.x, d.y))
 data.frame(x, y)
 
 }
-slps <- c(-1, -2, -1)
+slps <- c(-1, -0.5, -1)
 brks <- c(1e-03, 1e-02)
 emp.spec <- PiecewiseLinear(log(seq(1/1e05, 1/2, 1/1e05)), 0, log(brks), slps)
 emp.spec <- exp(emp.spec)
@@ -51,6 +51,11 @@ LPlot(spec1)
 lines(emp.spec, col = "Red")
 abline(v = brks, col = "Green")
 }
+\seealso{
+Other SimPowerlaw SimPLS SimFromEmpiricalSpectrum: 
+\code{\link{SimPowerlaw}()}
+}
 \author{
 Thomas Laepple and Andrew Dolman
 }
+\concept{SimPowerlaw SimPLS SimFromEmpiricalSpectrum}

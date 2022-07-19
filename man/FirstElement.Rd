@@ -6,6 +6,9 @@
 \usage{
 FirstElement(x)
 }
+\arguments{
+\item{x}{a vector}
+}
 \value{
 first element of X
 }

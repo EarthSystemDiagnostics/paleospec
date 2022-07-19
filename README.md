@@ -1,23 +1,29 @@
-# Overview
 
-PaleoSpec is an R package to assist the analysis of variance and power spectra
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# License
-MIT 
+# PaleoSpec
 
-# Installation 
+<!-- badges: start -->
 
-PaleoSpec can be installed directly from Github using the devtools package:
+[![Codecov test
+coverage](https://codecov.io/gh/EarthSystemDiagnostics/paleospec/branch/master/graph/badge.svg)](https://app.codecov.io/gh/EarthSystemDiagnostics/paleospec?branch=master)
+<!-- badges: end -->
 
-```
-if (!require("devtools")) {
-  install.packages("devtools")
-}
+PaleoSpec is an R package to assist the analysis of variance and power
+spectra.
 
+## Installation
+
+You can install the development version of PaleoSpec from
+[GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
 devtools::install_github("EarthSystemDiagnostics/paleospec")
 ```
 
+## Usage
 
-# Usage
+Please refer to function references here:
 
-Please refer to the manual PaleoSpec.pdf for an overview and the examples in the help file.
+<https://earthsystemdiagnostics.github.io/paleospec/reference/index.html>

@@ -53,27 +53,29 @@ LogSmooth <- function(spectra, df.log = 0.05, removeFirst = 1e+06,
 }
 
 
-# Helper function to smooth power spectra
-weights <- function(x, sigma) 1/sqrt(2 * pi * sigma^2) * exp(-x^2/(2 *
-  sigma^2))
+# Helper functions to smooth power spectra
+
+#' weights
+#'
+#' @return
+#' @keywords internal
+weights <- function(x, sigma) {
+  1/sqrt(2 * pi * sigma^2) * exp(-x^2/(2 * sigma^2))
+  }
 
 #' @title weights
-#' @param ftarget
-#' @param f
-#' @param df.log
 #' @return weight vector
 #' @author Thomas Laepple
+#' @keywords internal
 fweights <- function(ftarget, f, df.log) {
   sigma <- ftarget * (exp(df.log) - exp(-df.log))
   return(weights(f - ftarget, sigma))
 }
 
 #' @title fweights.lin
-#' @param ftarget
-#' @param f
-#' @param df.log
 #' @return  weight vector
 #' @author Thomas Laepple
+#' @keywords internal
 fweights.lin <- function(ftarget, f, df.log) {
   sigma <- df.log
   return(weights(f - ftarget, sigma))
@@ -81,11 +83,9 @@ fweights.lin <- function(ftarget, f, df.log) {
 
 
 #' @title smoothlog
-#' @param x
-#' @param f
-#' @param df.log
 #' @return  smoothed x
 #' @author Thomas Laepple
+#' @keywords internal
 smoothlog <- function(x, f, df.log) {
   x.smooth <- vector()
   for (i in 1:length(f)) {
@@ -98,12 +98,9 @@ smoothlog <- function(x, f, df.log) {
 
 
 #' @title smoothlog.cutEnd
-#' @param x
-#' @param f
-#' @param df.log
-#' @param dof
 #' @return  smoothed x
 #' @author Thomas Laepple
+#' @keywords internal
 smoothlog.cutEnd <- function(x, f, df.log, dof = 1) {
   x.smooth <- vector()
   dof.smooth <- vector()
@@ -129,12 +126,9 @@ smoothlog.cutEnd <- function(x, f, df.log, dof = 1) {
 
 
 #' @title smoothlin.cutEnd
-#' @param x
-#' @param f
-#' @param df.log
-#' @param dof
 #' @return  smoothed x
 #' @author Thomas Laepple
+#' @keywords internal
 smoothlin.cutEnd <- function(x, f, df.log, dof = 1) {
   x.smooth <- vector()
   dof.smooth <- vector()

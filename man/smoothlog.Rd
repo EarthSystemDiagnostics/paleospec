@@ -15,3 +15,4 @@ smoothlog
 \author{
 Thomas Laepple
 }
+\keyword{internal}
