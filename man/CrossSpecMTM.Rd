@@ -11,9 +11,11 @@ CrossSpecMTM(x, y = NULL, dt = 1, k = NULL, nw = 2, detrend = T)
 
 \item{dt}{time stepping (default = 1)}
 
-\item{k}{The number of Slepian tapers used, often (default = NULL). For default NULL (2*nw -1) is used except for the cases 2*nw > N}
+\item{k}{The number of Slepian tapers used, often (default = NULL). For
+default NULL (2*nw -1) is used except for the cases 2*nw > N}
 
-\item{nw}{slepian bandwidth parameter, typically something between 2.0 (default) and 8.0}
+\item{nw}{slepian bandwidth parameter, typically something between 2.0
+(default) and 8.0}
 
 \item{detrend}{(default=T)}
 }
@@ -21,5 +23,17 @@ CrossSpecMTM(x, y = NULL, dt = 1, k = NULL, nw = 2, detrend = T)
 spectra object
 }
 \description{
-estimates cross spectral densities using slepian tapers with adaptive weighting. Function is an adaption of Peter Huybers Matlab coherence function cmtm.m
+estimates cross spectral densities using slepian tapers with
+  adaptive weighting. Function is an adaptation of Peter Huybers Matlab
+  coherence function cmtm.m
+}
+\examples{
+x <- SimPowerlaw(1, 1e03)
+y <- ApplyFilter(x, filter = dnorm(-5:5, 0, 1), method  =3)
+cs1 <- CrossSpecMTM(x, y)
+plot(cs1$freq[1:length(x)], cs1$coh, log = "xy", type = "l")
+
+ch1 <- Coherence(x, y)
+lines(ch1$freq, ch1$coh, col = "red")
+
 }

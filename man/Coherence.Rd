@@ -20,7 +20,7 @@ Coherence(
 
 \item{dt}{time stepping (default = 1)}
 
-\item{nw}{number of slepian taper (default = 8)}
+\item{nw}{number of Slepian taper (default = 8)}
 
 \item{k}{order (default = NULL)}
 
@@ -28,13 +28,18 @@ Coherence(
 
 \item{qbias}{bias correction fo coherence estimate (default = 0/no)}
 
-\item{confn}{number of interations to use in MC for uncertainty estimation of the phase (default = 0)}
+\item{confn}{number of interactions to use in MC for uncertainty estimation
+of the phase (default = 0)}
 
-\item{dpssIN}{allows to use an predefined dpss object to reduce computation time when applied multiple times (default=NULL). If specified nw and k are obsolete.}
+\item{dpssIN}{allows to use an predefined dpss object to reduce computation
+time when applied multiple times (default=NULL). If specified nw and k are
+obsolete.}
 }
 \value{
 spectra object
 }
 \description{
-estimates coherence using slepian tapers with adaptive weighting. Function is an adaption of Peter Huybers Matlab coherence function cmtm.m
+estimates coherence using slepian tapers with adaptive
+  weighting. Function is an adaption of Peter Huybers Matlab coherence
+  function cmtm.m
 }
