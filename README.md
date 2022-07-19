@@ -4,6 +4,9 @@
 # PaleoSpec
 
 <!-- badges: start -->
+
+[![Codecov test
+coverage](https://codecov.io/gh/EarthSystemDiagnostics/paleospec/branch/master/graph/badge.svg)](https://app.codecov.io/gh/EarthSystemDiagnostics/paleospec?branch=master)
 <!-- badges: end -->
 
 PaleoSpec is an R package to assist the analysis of variance and power

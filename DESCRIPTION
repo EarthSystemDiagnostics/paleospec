@@ -18,5 +18,6 @@ Imports:
     multitaper,
     zoo
 Suggests:
+    covr,
     testthat
 URL: https://earthsystemdiagnostics.github.io/paleospec/
