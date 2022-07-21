@@ -86,7 +86,7 @@ Coherence <- function(x, y = NULL, dt = 1, nw = 8, k = NULL, detrend = T, qbias 
     c.conf <-
       sapply(conf.lev, function(y) {
         sapply(c, function(x) {
-          CoherenceConf(v, lev = y, unbias = 1, c = 0)
+          CoherenceConf(v, lev = y, unbias = 1, c = x)
         })
       })
     output <- c(output, list(c.conf = c(c.conf)))
@@ -152,9 +152,9 @@ CoherenceBias <- function(cb, dof) {
 CoherenceConf <- function(v, lev = 0.95, unbias = 1, c = 0) {
   z <- seq(0, 1, .0005)
 
-  f <- vector()
+  f <- vector(mode = "numeric", length = length(z))
   for (i1 in 1:length(z)) {
-    A <- vector()
+    A <- vector(mode = "numeric", length = (v-1))
     A[1] <- 1
     for (k in 1:(v - 1)) {
       A[k + 1] <- A[k] * (v - k) * (2 * k - 1) / ((2 * v - (2 * k + 1)) * k) * ((1 - c * z[i1]) / (1 + c * z[i1]))^2
@@ -163,7 +163,7 @@ CoherenceConf <- function(v, lev = 0.95, unbias = 1, c = 0) {
       gamma(v - .5) / (sqrt(pi) * gamma(v)) * sum(A)
   }
 
-  F <- vector()
+  F <- vector(mode = "numeric", length = (length(f) / 2)-1)
   for (i1 in seq(2, length(f) / 2)) F[i1] <- f[2 * (i1 - 1) + 1] + 4 * f[2 * i1] + f[2 * i1 + 1]
 
   F <- F / (6 * length(F))
