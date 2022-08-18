@@ -23,6 +23,7 @@
 #'     \code{bPeriod = TRUE}.
 #' @param ylim range of y-axis values; if \code{NULL} (the default) it is
 #'     calculated internally.
+#' @inheritParams graphics::plot.default
 #' @param ... further graphical parameters passed to \code{plot}.
 #' @examples
 #' x <- ts(arima.sim(list(ar = 0.9), 1000))
@@ -33,7 +34,7 @@
 #' @export
 LPlot <- function(x, conf = TRUE, bPeriod = FALSE, bNoPlot = FALSE, axes = TRUE,
                   col = "black", alpha = 0.3, removeFirst = 0, removeLast = 0,
-                  xlab = "f", ylab = "PSD", xlim = NULL, ylim = NULL, ...) {
+                  xlab = "f", ylab = "PSD", xlim = NULL, ylim = NULL, log = "xy", ...) {
 
     is.spectrum(x, dof = FALSE)
 
@@ -46,7 +47,7 @@ LPlot <- function(x, conf = TRUE, bPeriod = FALSE, bNoPlot = FALSE, axes = TRUE,
     x <- remove.lowestFreq(x, iRemove = removeFirst)
     x <- remove.highestFreq(x, iRemove = removeLast)
 
-    plot(x$freq, x$spec, type = "n", log = "xy", xlab = xlab, ylab = ylab,
+    plot(x$freq, x$spec, type = "n", log = log, xlab = xlab, ylab = ylab,
          xlim = xlim, ylim = ylim, axes = axes, ...)
 
     if (conf & has.limits(x) & !bNoPlot) {
@@ -57,3 +58,37 @@ LPlot <- function(x, conf = TRUE, bPeriod = FALSE, bNoPlot = FALSE, axes = TRUE,
     if (!bNoPlot) lines(x$freq, x$spec, col = col, ...)
 
 }
+
+
+#' Add a spectrum to an existing log-log spectral plot.
+#'
+#' @description This function adds a spectrum to an existing double-logarithmic plot and
+#' optionally adds a transparent confidence interval.
+#' @param ... further graphical parameters passed to \code{lines}.
+#' @inheritParams LPlot
+#' @examples
+#' x <- ts(arima.sim(list(ar = 0.9), 1000))
+#' spec <- SpecMTM(x)
+#' LPlot(spec, col = "grey")
+#' LLines(LogSmooth(spec), lwd = 2)
+#' @author Thomas Laepple
+#' @export
+LLines<-function(x, conf = TRUE, bPeriod = FALSE, col = "black", alpha = 0.3,
+                 removeFirst = 0, removeLast = 0, ...) {
+
+  is.spectrum(x, dof = FALSE)
+
+  if (bPeriod) x$freq <- 1/x$freq
+
+  x <- remove.lowestFreq(x, iRemove = removeFirst)
+  x <- remove.highestFreq(x, iRemove = removeLast)
+
+  if (conf & has.limits(x)) {
+    polygon(c(x$freq, rev(x$freq)), c(x$lim.1, rev(x$lim.2)),
+            col = ColTransparent(col, alpha), border = NA)
+  }
+
+  lines(x$freq, x$spec, col = col, ...)
+
+}
+

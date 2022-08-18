@@ -18,6 +18,7 @@ LPlot(
   ylab = "PSD",
   xlim = NULL,
   ylim = NULL,
+  log = "xy",
   ...
 )
 }
@@ -55,6 +56,10 @@ calculated internally and automatically reversed for
 
 \item{ylim}{range of y-axis values; if \code{NULL} (the default) it is
 calculated internally.}
+
+\item{log}{a character string which contains \code{"x"} if the x axis
+    is to be logarithmic, \code{"y"} if the y axis is to be logarithmic
+    and \code{"xy"} or \code{"yx"} if both axes are to be logarithmic.}
 
 \item{...}{further graphical parameters passed to \code{plot}.}
 }
