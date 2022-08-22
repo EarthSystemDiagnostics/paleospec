@@ -28,7 +28,9 @@ SimPowerlaw <- function(beta, N)
 {
   # Pad the length of the timeseries so that it is highly composite - this speeds
   # up the FFT operations.
-  N2 <- (3^ceiling(log(N, base = 3)))
+  #N2 <- (3^ceiling(log(N, base = 3)))
+  N2 <- stats::nextn(N, c(3, 5, 7))
+
   df  <- 1 / N2
   f <- seq(from = df, to = 1/2, by = df)
   Filter <- sqrt(1/(f^beta))
@@ -102,7 +104,8 @@ SimPLS <- function(N, beta, alpha = -1){
 
   # Pad the length of the timeseries so that it is highly composite - this speeds
   # up the FFT operations.
-  N2 <- (3^ceiling(log(N, base = 3)))
+  #N2 <- (3^ceiling(log(N, base = 3)))
+  N2 <- stats::nextn(N, c(3, 5, 7))
 
   x2 <- rnorm(N2)
   xfft <- fft(x2)
@@ -176,7 +179,8 @@ SimFromEmpiricalSpec <- function(spec, N)
 {
   # Pad the length of the timeseries so that it is highly composite - this speeds
   # up the FFT operations.
-  N2 <- (3^ceiling(log(N, base = 3)))
+  #N2 <- (3^ceiling(log(N, base = 3)))
+  N2 <- stats::nextn(N, c(3, 5, 7))
   df  <- 1 / N2
   f <- seq(from = df, to = 1/2, by = df)
 
