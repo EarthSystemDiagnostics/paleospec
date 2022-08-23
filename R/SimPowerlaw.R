@@ -23,7 +23,7 @@ AnPowerlaw<-function(beta,freq,return.scaling=FALSE)
 #' @return vector containing the timeseries
 #' @author Thomas Laepple
 #' @export
-#' @family SimPowerlaw SimPLS SimFromEmpiricalSpectrum
+#' @family functions to generate timeseries with powerlaw like spectra
 SimPowerlaw <- function(beta, N)
 {
   # Pad the length of the timeseries so that it is highly composite - this speeds
@@ -62,7 +62,7 @@ SimPowerlaw <- function(beta, N)
 #'
 #'   If alpha<0, then the timeseries is normalized such that it has EXPECTED
 #'   variance abs(alpha), and the EXPECTED PSD is proportional to f^(-beta).
-#' @family SimPLS SimPowerlaw SimFromEmpiricalSpectrum
+#' @family functions to generate timeseries with powerlaw like spectra
 #' @export
 #'
 #' @examples
@@ -140,7 +140,7 @@ SimPLS <- function(N, beta, alpha = -1){
 #' @description Adapted from SimPowerlaw
 #' @return vector containing the timeseries
 #' @author Thomas Laepple and Andrew Dolman
-#' @family SimPowerlaw SimPLS SimFromEmpiricalSpectrum
+#' @family functions to generate timeseries with powerlaw like spectra
 #' @export
 #' @examples
 #' # Create a piecewise spectrum
