@@ -207,6 +207,11 @@ SimFromEmpiricalSpec <- function(spec, N)
 
   x   <- rnorm(N2, 1)
   fx  <- fft(x)
+
+  stopifnot(
+    length(fx) == length(Filter)
+  )
+
   ffx <- fx * Filter
   result <- Re(fft(ffx, inverse = TRUE))[1:N]
 

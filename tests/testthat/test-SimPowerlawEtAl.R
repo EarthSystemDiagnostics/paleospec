@@ -85,9 +85,7 @@ test_that("SimFromEmpiricalSpec", {
 
   ts_emp1 <- SimFromEmpiricalSpec(spec = spec_a0.5_b2, N = N)
   spec_emp1 <- SpecMTM(ts(ts_emp1))
-  si_emp1 <- SlopeFit(spec_emp1)
-
-  abline(log10(0.5), -2)
+  si_emp1 <- SlopeFit(spec_emp1, bDebug = FALSE)
 
   expect_equal(si_emp1$slope, -2.19739592777673)
   expect_equal((si_emp1$intercept), 0.327749966450805)
