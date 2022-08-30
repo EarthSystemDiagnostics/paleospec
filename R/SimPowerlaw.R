@@ -23,12 +23,14 @@ AnPowerlaw<-function(beta,freq,return.scaling=FALSE)
 #' @return vector containing the timeseries
 #' @author Thomas Laepple
 #' @export
-#' @family SimPowerlaw SimPLS SimFromEmpiricalSpectrum
+#' @family functions to generate timeseries with powerlaw like spectra
 SimPowerlaw <- function(beta, N)
 {
   # Pad the length of the timeseries so that it is highly composite - this speeds
   # up the FFT operations.
-  N2 <- (3^ceiling(log(N, base = 3)))
+  #N2 <- (3^ceiling(log(N, base = 3)))
+  N2 <- stats::nextn(N, c(3, 5, 7))
+
   df  <- 1 / N2
   f <- seq(from = df, to = 1/2, by = df)
   Filter <- sqrt(1/(f^beta))
@@ -60,7 +62,7 @@ SimPowerlaw <- function(beta, N)
 #'
 #'   If alpha<0, then the timeseries is normalized such that it has EXPECTED
 #'   variance abs(alpha), and the EXPECTED PSD is proportional to f^(-beta).
-#' @family SimPLS SimPowerlaw SimFromEmpiricalSpectrum
+#' @family functions to generate timeseries with powerlaw like spectra
 #' @export
 #'
 #' @examples
@@ -102,7 +104,8 @@ SimPLS <- function(N, beta, alpha = -1){
 
   # Pad the length of the timeseries so that it is highly composite - this speeds
   # up the FFT operations.
-  N2 <- (3^ceiling(log(N, base = 3)))
+  #N2 <- (3^ceiling(log(N, base = 3)))
+  N2 <- stats::nextn(N, c(3, 5, 7))
 
   x2 <- rnorm(N2)
   xfft <- fft(x2)
@@ -137,7 +140,7 @@ SimPLS <- function(N, beta, alpha = -1){
 #' @description Adapted from SimPowerlaw
 #' @return vector containing the timeseries
 #' @author Thomas Laepple and Andrew Dolman
-#' @family SimPowerlaw SimPLS SimFromEmpiricalSpectrum
+#' @family functions to generate timeseries with powerlaw like spectra
 #' @export
 #' @examples
 #' # Create a piecewise spectrum
@@ -176,7 +179,14 @@ SimFromEmpiricalSpec <- function(spec, N)
 {
   # Pad the length of the timeseries so that it is highly composite - this speeds
   # up the FFT operations.
-  N2 <- (3^ceiling(log(N, base = 3)))
+  #N2 <- (3^ceiling(log(N, base = 3)))
+  #N2 <- N
+  if (length(spec$freq) > N/2) {
+    N2 <- stats::nextn(N, c(3, 5, 7))
+  } else {
+      N2 <- N
+      }
+
   df  <- 1 / N2
   f <- seq(from = df, to = 1/2, by = df)
 
@@ -188,9 +198,20 @@ SimFromEmpiricalSpec <- function(spec, N)
 
   Filter <- sqrt(approx(spec$freq, spec$spec, f)$y)
 
-  Filter <- c(max(Filter), Filter, rev(Filter))
+  if (N2 %% 2 == 0){
+    Filter <- c(Filter, rev(Filter))
+  } else {
+    Filter <- c(max(Filter), Filter, rev(Filter))
+  }
+
+
   x   <- rnorm(N2, 1)
   fx  <- fft(x)
+
+  stopifnot(
+    length(fx) == length(Filter)
+  )
+
   ffx <- fx * Filter
   result <- Re(fft(ffx, inverse = TRUE))[1:N]
 

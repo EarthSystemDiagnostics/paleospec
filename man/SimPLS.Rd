@@ -60,7 +60,13 @@ hist(rep.var)
 abline(v  = 2, col = "Red")
 mean(rep.var)
 }
+\seealso{
+Other functions to generate timeseries with powerlaw like spectra: 
+\code{\link{SimFromEmpiricalSpec}()},
+\code{\link{SimPowerlaw}()},
+\code{\link{SimProxySeries}()}
+}
 \author{
 Torben Kunz, Andrew Dolman
 }
-\concept{SimPLS SimPowerlaw SimFromEmpiricalSpectrum}
+\concept{functions to generate timeseries with powerlaw like spectra}
