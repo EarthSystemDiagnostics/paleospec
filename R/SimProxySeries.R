@@ -172,14 +172,9 @@ SimProxySeries <-
            var.noise = 0,
            val = 0, seed = NULL) {
 
-    if (smth.arch$type %in% c("n", "bioturbation", "diffusion") == FALSE) {
-      stop("smth.arch$type must be one of n, bioturbation, or diffusion")
-    }
 
-    if (smth.lab$type %in% c("n", "rect") == FALSE) {
-      stop("smth.lab$type must be one of n or rect")
-    }
-
+    smth.arch$type <- match.arg(smth.arch$type, c("n", "bioturbation", "diffusion"))
+    smth.lab$type <- match.arg(smth.lab$type, c("n", "rect"))
 
     if (is.null(seed) == FALSE) set.seed(seed)
 
