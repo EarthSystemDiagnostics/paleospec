@@ -26,7 +26,7 @@ Climate — SimProxySeries"><meta property="og:description" content="This functi
     
     <a class="navbar-brand me-2" href="../index.html">PaleoSpec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,7 +80,8 @@ Climate</h1>
 <span>  t.smpl <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  var.noise <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  val <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  seed <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  rseeds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
+<span>  nser <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">sim.proxy.series</span><span class="op">(</span></span>
@@ -94,7 +95,8 @@ Climate</h1>
 <span>  t.smpl <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  var.noise <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  val <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  seed <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  rseeds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
+<span>  nser <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -187,6 +189,28 @@ represent, for example, measurement noise).</p></dd>
   internally sets val &lt;- val + 1, because t.smpl might specify unequally
   spaced sampling times such that the PSD of the sample white noise might not
   be defined.</p></dd>
+
+
+<dt>rseeds</dt>
+<dd><p>vector of length 3, integer or NA. Random seeds to fix the
+realisation of specific random processes. There are three random processes:</p>
+<p>process-1 (controlled by rseeds[1]) represents the climate
+  process-2 (controlled by rseeds[2]) represents the signal carrier mixing
+  paths
+  process-3 (controlled by rseeds[3]) represents the additional sample white
+  noise (e.g., measurement noise)</p>
+<p>If rseeds[i] == NA: a random sequence is drawn with rnorm() without setting
+  a specific random seed before.</p>
+<p>If rseeds[i] == integer: a random seed is set with set.seed(rseeds[i]) and
+  then a random sequence is drawn with rnorm. After this draw the random
+  number generator is reset to its previous state in order to avoid any
+  interference with other calls to the random number generator inside or
+  outside of sim.proxy.series.</p></dd>
+
+
+<dt>nser</dt>
+<dd><p>integer (&gt;=1) If val == 0: number of time series generated (all
+with the same parameters). If val &gt; 0: nser has no effect.</p></dd>
 
 </dl></div>
     <div class="section level2">
