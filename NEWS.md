@@ -1,3 +1,7 @@
+# PaleoSpec 0.2.5
+
+* New function SimProxySeries, sim.proxy.series
+
 # PaleoSpec 0.2.4
 
 * Bug fix to `Bandpass()` was calling lowpass instead of Lowpass
