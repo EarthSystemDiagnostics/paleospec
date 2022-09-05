@@ -17,7 +17,8 @@ SimProxySeries(
   t.smpl = NULL,
   var.noise = 0,
   val = 0,
-  seed = NULL
+  rseeds = c(NA, NA, NA),
+  nser = 1
 )
 
 sim.proxy.series(
@@ -31,7 +32,8 @@ sim.proxy.series(
   t.smpl = NULL,
   var.noise = 0,
   val = 0,
-  seed = NULL
+  rseeds = c(NA, NA, NA),
+  nser = 1
 )
 }
 \arguments{
@@ -116,6 +118,27 @@ represent, for example, measurement noise).}
   internally sets val <- val + 1, because t.smpl might specify unequally
   spaced sampling times such that the PSD of the sample white noise might not
   be defined.}
+
+\item{rseeds}{vector of length 3, integer or NA. Random seeds to fix the
+realisation of specific random processes. There are three random processes:
+
+  process-1 (controlled by rseeds[1]) represents the climate
+  process-2 (controlled by rseeds[2]) represents the signal carrier mixing
+  paths
+  process-3 (controlled by rseeds[3]) represents the additional sample white
+  noise (e.g., measurement noise)
+
+  If rseeds[i] == NA: a random sequence is drawn with rnorm() without setting
+  a specific random seed before.
+
+  If rseeds[i] == integer: a random seed is set with set.seed(rseeds[i]) and
+  then a random sequence is drawn with rnorm. After this draw the random
+  number generator is reset to its previous state in order to avoid any
+  interference with other calls to the random number generator inside or
+  outside of sim.proxy.series.}
+
+\item{nser}{integer (>=1) If val == 0: number of time series generated (all
+with the same parameters). If val > 0: nser has no effect.}
 }
 \value{
 A vector or list.
