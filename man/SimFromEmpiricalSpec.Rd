@@ -52,10 +52,12 @@ lines(emp.spec, col = "Red")
 abline(v = brks, col = "Green")
 }
 \seealso{
-Other SimPowerlaw SimPLS SimFromEmpiricalSpectrum: 
-\code{\link{SimPowerlaw}()}
+Other functions to generate timeseries with powerlaw like spectra: 
+\code{\link{SimPLS}()},
+\code{\link{SimPowerlaw}()},
+\code{\link{SimProxySeries}()}
 }
 \author{
 Thomas Laepple and Andrew Dolman
 }
-\concept{SimPowerlaw SimPLS SimFromEmpiricalSpectrum}
+\concept{functions to generate timeseries with powerlaw like spectra}

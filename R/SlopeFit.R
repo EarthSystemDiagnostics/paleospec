@@ -83,5 +83,5 @@ SlopeFit <- function(spec, freq.start = NULL, freq.end = NULL,
     intercept[i] <- model$coeff[1]
   }
   return(list(slope = slope, slopesd = slopesd, spec = saveSpec,
-    freq = binFreq, intercept = intercept))
+    freq = binFreq, intercept = exp(intercept)))
 }

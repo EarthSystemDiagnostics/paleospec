@@ -21,10 +21,12 @@ Simulate a random timeseries with a powerlaw spectrum
 Method: FFT white noise, rescale, FFT back, the result is scaled to variance 1
 }
 \seealso{
-Other SimPowerlaw SimPLS SimFromEmpiricalSpectrum: 
-\code{\link{SimFromEmpiricalSpec}()}
+Other functions to generate timeseries with powerlaw like spectra: 
+\code{\link{SimFromEmpiricalSpec}()},
+\code{\link{SimPLS}()},
+\code{\link{SimProxySeries}()}
 }
 \author{
 Thomas Laepple
 }
-\concept{SimPowerlaw SimPLS SimFromEmpiricalSpectrum}
+\concept{functions to generate timeseries with powerlaw like spectra}
