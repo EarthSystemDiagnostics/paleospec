@@ -1,11 +1,12 @@
-#' @title Smoothes the spectrum using a log smoother
-#' @param spectra spectra: list(spec,freq)
-#'  spec[specIndex]: spectra density vector
-#'  freq[specIndex]: frequency vector
+#' @title Smooths the spectrum using a log smoother
+#' @param spectra spectra: list(spec,freq) spec[specIndex]: spectra density
+#'   vector freq[specIndex]: frequency vector
 #' @param df.log width of the smoother in log units
-#' @param removeFirst  elements to remove on the slow side (one element recommended because of the detrending
+#' @param removeFirst elements to remove on the slow side (one element
+#'   recommended because of the detrending)
 #' @param removeLast elements to remove on the fast side
-#' @param bLog TRUE: average in the log space of the power, FALSE: arithmetic average
+#' @param bLog TRUE: average in the log space of the power, FALSE: arithmetic
+#'   average
 #' @return smoothed spectrum
 #' @examples
 #' x<-ts(arima.sim(list(ar = 0.9),1000))
@@ -17,25 +18,36 @@
 #' legend('bottomleft', col=c('grey','green','blue','red'),
 #' lwd=2,c('raw','smoothed 0.01',
 #'  'smoothed 0.05', 'smoothed 0.1'), bty='n')
+#'
+#' # Removal of lower (first) and higher (last) frequencies
+#' LPlot(spec,col='grey')
+#' LLines(LogSmooth(spec,df.log=0.01, removeFirst = 1),lwd=2,col='green')
+#' LLines(LogSmooth(spec,df.log=0.05, removeLast = 20),lwd=2,col='blue')
+#' LLines(LogSmooth(spec,df.log=0.1, removeFirst = 3, removeLast = 20),lwd=2,col='red')
 #' @author Thomas Laepple
 #' @export
-LogSmooth <- function(spectra, df.log = 0.05, removeFirst = 1e+06,
-  removeLast = 0, bLog = FALSE) {
+LogSmooth <- function(spectra, df.log = 0.05,
+                      removeFirst = 0, removeLast = 0,
+                      bLog = FALSE) {
 
   result <- list()
-  result$freq <- spectra$freq[-1 * removeFirst]
+  removeFirst <- removeFirst+1
+  nfreq <- length(spectra$spec)
+  result$freq <- spectra$freq[removeFirst:nfreq]
 
   if (bLog) {
-    temp <- smoothlog.cutEnd(log(spectra$spec[-1 * removeFirst]),
+
+    temp <- smoothlog.cutEnd(log(spectra$spec[removeFirst:nfreq]),
                              result$freq, df.log,
-                             dof = spectra$dof[-1 * removeFirst])
+                             dof = spectra$dof[removeFirst:nfreq])
 
     temp$spec <- exp(temp$spec)
 
   } else {
-    temp <- smoothlog.cutEnd(spectra$spec[-1 * removeFirst],
+
+    temp <- smoothlog.cutEnd(spectra$spec[removeFirst:nfreq],
                              result$freq, df.log,
-                             dof = spectra$dof[-1 * removeFirst])
+                             dof = spectra$dof[removeFirst:nfreq])
   }
 
   result$spec <- temp$spec[1:(length(temp$spec) - removeLast)]
@@ -51,6 +63,7 @@ LogSmooth <- function(spectra, df.log = 0.05, removeFirst = 1e+06,
   class(result) <- "spec"
   return(result)
 }
+
 
 
 # Helper functions to smooth power spectra
