@@ -82,7 +82,25 @@
 #'   internally sets val <- val + 1, because t.smpl might specify unequally
 #'   spaced sampling times such that the PSD of the sample white noise might not
 #'   be defined.
+#' @param rseeds vector of length 3, integer or NA. Random seeds to fix the
+#' realisation of specific random processes. There are three random processes:
 #'
+#'   process-1 (controlled by rseeds[1]) represents the climate
+#'   process-2 (controlled by rseeds[2]) represents the signal carrier mixing
+#'   paths
+#'   process-3 (controlled by rseeds[3]) represents the additional sample white
+#'   noise (e.g., measurement noise)
+#'
+#'   If rseeds[i] == NA: a random sequence is drawn with rnorm() without setting
+#'   a specific random seed before.
+#'
+#'   If rseeds[i] == integer: a random seed is set with set.seed(rseeds[i]) and
+#'   then a random sequence is drawn with rnorm. After this draw the random
+#'   number generator is reset to its previous state in order to avoid any
+#'   interference with other calls to the random number generator inside or
+#'   outside of sim.proxy.series.
+#' @param nser integer (>=1) If val == 0: number of time series generated (all
+#'   with the same parameters). If val > 0: nser has no effect.
 #' @return A vector or list.
 #' @family functions to generate timeseries with powerlaw like spectra
 #' @author Torben Kunz
@@ -160,88 +178,107 @@
 #' lines(time, ts3_sub, col = "Orange", pch = 16)
 #' points(time, ts3_sub, col = "Orange", pch = 16)
 #'
-SimProxySeries <-
-  function(a = -1,
-           b = 1,
-           nt = 100,
-           f.scl = 1,
-           smth.arch = list(type = "n", tau = 0),
-           smth.lab = list(type = "n", tau = 0),
-           N = 0,
-           t.smpl = NULL,
-           var.noise = 0,
-           val = 0, seed = NULL) {
+SimProxySeries <- function(a = -1, b = 1,
+                           nt = 100, f.scl = 1,
+                           smth.arch = list(type = "n", tau = 0),
+                           smth.lab = list(type = "n", tau = 0),
+                           N = 0,
+                           t.smpl = NULL,
+                           var.noise = 0,
+                           val = 0,
+                           rseeds = c(NA, NA, NA),
+                           nser = 1) {
 
 
-    smth.arch$type <- match.arg(smth.arch$type, c("n", "bioturbation", "diffusion"))
-    smth.lab$type <- match.arg(smth.lab$type, c("n", "rect"))
+  # validate inputs
+  stopifnot(length(val) == 1)
+  stopifnot(val %in% 0:4)
 
-    if (is.null(seed) == FALSE) set.seed(seed)
+  smth.arch$type <- match.arg(smth.arch$type, c("n", "bioturbation", "diffusion"))
+  smth.lab$type <- match.arg(smth.lab$type, c("n", "rect"))
 
-    if (is.null(t.smpl)) {
-      f.scl <- 1
-    } else{
-      if (val == 1 | val == 3)
-        val <- val + 1
-    }
-    fax <- 0:(nt - 1) / nt
-    fax[fax > 0.5] <- fax[fax > 0.5] - 1
-    fax <- fax * f.scl
-    P <- c(0, abs(a) * abs(fax[2:nt]) ^ (-b))
-    if (smth.arch$type != "n" | smth.lab$type != "n") {
-      tf2 <- rep(1, length(fax))
-      if (smth.arch$type == "bioturbation")
-        tf2[-1] <- tf2[-1] / (1 + (2 * pi * fax[-1] * smth.arch$tau) ^ 2)
-      if (smth.arch$type == "diffusion")
-        tf2[-1] <- tf2[-1] * exp(-(2 * pi * fax[-1] * smth.arch$tau) ^ 2)
-      if (smth.lab$type == "rect" &
-          smth.lab$tau > 0) {
-        y <- pi * fax[-1] * smth.lab$tau
-        tf2[-1] <- tf2[-1] * (sin(y) / y) ^ 2
-      }
-      if (N > 0)
-        var.noise <- var.noise + mean(P * (1 - tf2)) * f.scl / N
-      P <- P * tf2
-    }
-    if (a < 0) {
-      var.tot <- var.noise + mean(P) * f.scl
-      P <- abs(a) * P / var.tot
-      var.noise <- abs(a) * var.noise / var.tot
-    }
-    if (val == 0) {
-      xfft <- fft(rnorm(nt)) * sqrt(P)
-      if (is.null(t.smpl)) {
-        x <- fft(xfft, inverse = TRUE) / nt
-      } else{
 
-        x <- rep(0, length(t.smpl))
-        for (iif in 1:nt) {
-          x <- x + xfft[iif] * exp(1i * 2 * pi * fax[iif] * t.smpl)
-        }
-        x <- x / nt
-      }
-      x <- Re(x) * sqrt(f.scl)
-      if (var.noise == 0) {
-        x
-      } else{
-        x + sqrt(var.noise) * rnorm(length(x))
-      }
-    } else if (val == 1) {
-      list(fax = fax[fax > 0], psd = P[fax > 0] + var.noise)
-    } else if (val == 2) {
-      list(fax = fax[fax > 0],
-           psd = P[fax > 0],
-           var = var.noise)
-    } else if (val == 3) {
-      list(fax = fax, psd = P + var.noise)
-    } else if (val == 4) {
-      list(fax = fax,
-           psd = P,
-           var = var.noise)
-    }
+  if (is.null(t.smpl)) {
+    f.scl <- 1
+  } else {
+    if (val == 1 | val == 3) val <- val + 1
   }
 
+  fax <- 0:(nt - 1) / nt
+  fax[fax > 0.5] <- fax[fax > 0.5] - 1
+  fax <- fax * f.scl
+
+  P <- c(0, abs(a) * abs(fax[2:nt])^(-b))
+
+  var.noise.N <- 0
+
+  if (smth.arch$type != "n" | smth.lab$type != "n") {
+    tf2 <- rep(1, length(fax))
+    if (smth.arch$type == "bioturbation") tf2[-1] <- tf2[-1] / (1 + (2 * pi * fax[-1] * smth.arch$tau)^2)
+    if (smth.arch$type == "diffusion") tf2[-1] <- tf2[-1] * exp(-(2 * pi * fax[-1] * smth.arch$tau)^2)
+    if (smth.lab$type == "rect" & smth.lab$tau > 0) {
+      y <- pi * fax[-1] * smth.lab$tau
+      tf2[-1] <- tf2[-1] * (sin(y) / y)^2
+    }
+    if (N > 0) var.noise.N <- mean(P * (1 - tf2)) * f.scl / N
+    P <- P * tf2
+  }
+
+  if (a < 0) {
+    var.tot <- var.noise + var.noise.N + mean(P) * f.scl
+    P <- abs(a) * P / var.tot
+    var.noise <- abs(a) * var.noise / var.tot
+    var.noise.N <- abs(a) * var.noise.N / var.tot
+  }
+
+  if (val == 0) {
+    xfft <- mvfft(gen.ran.seq(nt, nser, rseeds[1])) * sqrt(P)
+    if (is.null(t.smpl)) {
+      x <- mvfft(xfft, inverse = TRUE) / nt
+    } else {
+      x <- matrix(0, length(t.smpl), nser)
+      for (iif in 1:nt) {
+        x <- x + exp(1i * 2 * pi * fax[iif] * t.smpl) %*% t(xfft[iif, ])
+      }
+      x <- x / nt
+    }
+    x <- Re(x) * sqrt(f.scl)
+    if (var.noise > 0) x <- x + sqrt(var.noise) * gen.ran.seq(dim(x)[1], nser, rseeds[3])
+    if (var.noise.N > 0) x <- x + sqrt(var.noise.N) * gen.ran.seq(dim(x)[1], nser, rseeds[2])
+    if (nser == 1) as.vector(x) else x
+  } else if (val == 1) {
+    list(fax = fax[fax > 0], psd = P[fax > 0] + var.noise + var.noise.N)
+  } else if (val == 2) {
+    list(fax = fax[fax > 0], psd = P[fax > 0], var = var.noise + var.noise.N)
+  } else if (val == 3) {
+    list(fax = fax, psd = P + var.noise + var.noise.N)
+  } else if (val == 4) {
+    list(fax = fax, psd = P, var = var.noise + var.noise.N)
+  }
+}
 
 #' @rdname SimProxySeries
 #' @export
 sim.proxy.series <- SimProxySeries
+
+
+#' Generate Random Numbers Without Affecting the State of .Random.seed
+#'
+#' @param n number of observations
+#' @param nser number of replicate series
+#' @param s NA or integer, passed to set.seed() if integer
+#' @return a matrix
+#' @keywords internal
+gen.ran.seq <- function(n, nser, s) {
+  if (is.na(s)) {
+    x <- matrix(rnorm(n * nser), n, nser)
+  } else {
+    if (exists(".Random.seed")) rs <- .Random.seed
+    set.seed(s)
+    x <- matrix(rep(rnorm(n), nser), n, nser)
+    if (exists("rs")){.Random.seed <<- rs}    else {
+      set.seed(NULL)
+    }
+  }
+  x
+}
