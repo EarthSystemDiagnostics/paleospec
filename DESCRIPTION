@@ -10,7 +10,7 @@ Authors@R: c(
   )
 Description: Tools for power spectral analyis, especially of climate data.
 Depends:
-    R (>= 3.6.1)
+    R (>= 3.5.1)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
