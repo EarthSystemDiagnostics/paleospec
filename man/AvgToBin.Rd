@@ -52,6 +52,29 @@ linear interpolation from the neighbours to the center of the bin.
 
 Probably the binning could be considerably speeded up by using \code{?cut}.
 }
+\examples{
+N <- 100
+x1 <- seq(1, N, by = 1)
+y1 <- SimPLS(N, a = 0.1, b = 1)
+plot(x1, y1, type = "l")
+
+y2 <- AvgToBin(x1, y1, 13)
+lines(y2$centers, y2$avg, col = "green")
+
+#Add some NA values to the timeseries
+y1[(N/2):(N/2 +5)] <- NA
+plot(x1, y1, type = "l")
+
+y2 <- AvgToBin(x1, y1, 25)
+lines(y2$centers, y2$avg, col = "green")
+
+# Large enough bins will average across the gap
+y3 <- AvgToBin(x1, y1, 10)
+lines(y3$centers, y3$avg, col = "red")
+# Or interpolate to nearest neighbour
+y3 <- AvgToBin(x1, y1, 25, bFill = TRUE)
+lines(y3$centers, y3$avg, col = "blue")
+}
 \author{
 Thomas Laepple
 }
