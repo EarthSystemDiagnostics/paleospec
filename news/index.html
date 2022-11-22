@@ -40,34 +40,43 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.5" id="paleospec-025">PaleoSpec 0.2.5<a class="anchor" aria-label="anchor" href="#paleospec-025"></a></h2>
-<ul><li>New function SimProxySeries, sim.proxy.series</li></ul></div>
+<ul><li>New function SimProxySeries, sim.proxy.series</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.4" id="paleospec-024">PaleoSpec 0.2.4<a class="anchor" aria-label="anchor" href="#paleospec-024"></a></h2>
-<ul><li>Bug fix to <code><a href="../reference/Bandpass.html">Bandpass()</a></code> was calling lowpass instead of Lowpass</li></ul></div>
+<ul><li>Bug fix to <code><a href="../reference/Bandpass.html">Bandpass()</a></code> was calling lowpass instead of Lowpass</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.3" id="paleospec-023">PaleoSpec 0.2.3<a class="anchor" aria-label="anchor" href="#paleospec-023"></a></h2>
-<ul><li>Overhaul of spectral averaging and interpolation functions</li></ul></div>
+<ul><li>Overhaul of spectral averaging and interpolation functions</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.2" id="paleospec-022">PaleoSpec 0.2.2<a class="anchor" aria-label="anchor" href="#paleospec-022"></a></h2>
 <ul><li>
 <p>Bug fix to <code><a href="../reference/ApplyFilter.html">ApplyFilter()</a></code> function following up on #3:</p>
 <p>A bug occurred upon matching the filtered values back on the index positions of the original input time series vector after removing any leading/trailing NA values, which happened only in the case of duplicate values in the input series. This is fixed now by an update to the index matching.</p>
-</li></ul></div>
+</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.1" id="paleospec-021">PaleoSpec 0.2.1<a class="anchor" aria-label="anchor" href="#paleospec-021"></a></h2>
-<ul><li>Filter function <code><a href="../reference/ApplyFilter.html">ApplyFilter()</a></code> now handles NA values in the input time series:<ul><li>leading and trailing NA values are automatically stripped from the input so that they do not migrate into the filtered result upon applying any of the endpoint constraint methods, but they are added in again after applying the filter, so that the output result has the same length as the input;</li></ul></li>
+<ul><li>Filter function <code><a href="../reference/ApplyFilter.html">ApplyFilter()</a></code> now handles NA values in the input time series:
+<ul><li>leading and trailing NA values are automatically stripped from the input so that they do not migrate into the filtered result upon applying any of the endpoint constraint methods, but they are added in again after applying the filter, so that the output result has the same length as the input;</li>
+</ul></li>
 <li>internal NA values are still ignored per default, but can be removed by linear interpolation from the neighbouring values by toggling the respective new function parameter.</li>
 <li>Source code for the function was tidied, the function documentation updated, and unit code testing was added.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="paleospec-020">PaleoSpec 0.2.0<a class="anchor" aria-label="anchor" href="#paleospec-020"></a></h2>
-<ul><li>New function <code><a href="../reference/SimPLS.html">SimPLS()</a></code> to simulate powerlaw timeseries with a prescribed alpha, i.e. alpha*f^(-beta).</li></ul></div>
+<ul><li>New function <code><a href="../reference/SimPLS.html">SimPLS()</a></code> to simulate powerlaw timeseries with a prescribed alpha, i.e. alpha*f^(-beta).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="paleospec-010">PaleoSpec 0.1.0<a class="anchor" aria-label="anchor" href="#paleospec-010"></a></h2>
-<ul><li>Proper package version.</li></ul></div>
+<ul><li>Proper package version.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.0.9000" id="paleospec-0009000">PaleoSpec 0.0.0.9000<a class="anchor" aria-label="anchor" href="#paleospec-0009000"></a></h2>
-<ul><li>Rough migration from bundle of functions based on <code>paleolibrary</code> to <code>PaleoSpec</code> package.</li></ul></div>
+<ul><li>Rough migration from bundle of functions based on <code>paleolibrary</code> to <code>PaleoSpec</code> package.</li>
+</ul></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
