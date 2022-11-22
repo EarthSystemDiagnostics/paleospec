@@ -35,6 +35,11 @@ LogSmooth <- function(spectra, df.log = 0.05,
   nfreq <- length(spectra$spec)
   result$freq <- spectra$freq[removeFirst:nfreq]
 
+  if (length(spectra$dof) == 1){
+    spectra$dof <- rep(spectra$dof, length(spectra$freq))
+  }
+
+
   if (bLog) {
 
     temp <- smoothlog.cutEnd(log(spectra$spec[removeFirst:nfreq]),
