@@ -1,3 +1,9 @@
+# PaleoSpec 0.2.6
+
+* Return vector of DOF from LogSmooth even if they are all the same
+* Add tests for freq trimming in LogSmooth
+* Minor documentation fixes
+
 # PaleoSpec 0.2.5
 
 * New function SimProxySeries, sim.proxy.series
