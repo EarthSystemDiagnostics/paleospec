@@ -144,6 +144,9 @@ DF2Spec <- function(spec_df){
 
   if (length(lst) == 1) {
     lst <- lst[[1]]
+    lst <- as.spec(lst)
+  } else {
+    class(lst) <- c("list", "spec_list", class(lst))
   }
 
   class(lst) <- unique(class(lst))
