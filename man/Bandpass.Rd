@@ -2,7 +2,7 @@
 % Please edit documentation in R/Bandpass.R
 \name{Bandpass}
 \alias{Bandpass}
-\title{calculate  weights for a bandpass filter}
+\title{Calculate  Weights for a Bandpass Filter}
 \usage{
 Bandpass(omega.upper, omega.lower, n, sample = 1, convergence = T)
 }
@@ -16,8 +16,6 @@ Bandpass(omega.upper, omega.lower, n, sample = 1, convergence = T)
 \item{sample}{sampling rate of the timeseries on which the filter will be applied (1/deltat)}
 
 \item{convergence}{TRUE: smoothed least square lowpass; FALSE = unsmoothed}
-
-\item{omega.c}{cutoff frequency}
 }
 \value{
 vector of filter weights

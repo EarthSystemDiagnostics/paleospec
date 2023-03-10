@@ -1,3 +1,8 @@
+# PaleoSpec 0.2.7
+
+* Add "TidySpec" functions to convert spec objects to and from data.frames/tibbles
+* Add new class "spec_df" which is a data.frame of spec object(s)
+
 # PaleoSpec 0.2.6
 
 * Return vector of DOF from LogSmooth even if they are all the same
