@@ -1,6 +1,8 @@
 Package: PaleoSpec
 Title: Spectral tools for the ECUS group
+
 Version: 0.2.7
+
 Authors@R: c(
   person("Thomas", "Laepple", email = "tlaepple@awi.de", role = c("aut", "cre")),
   person("Thomas", "Muench", email = "tmuench@awi.de", role = c("aut")),
