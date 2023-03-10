@@ -49,6 +49,9 @@
     <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/ConfVar.html</loc>
   </url>
   <url>
+    <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/DF2Spec.html</loc>
+  </url>
+  <url>
     <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/FirstElement.html</loc>
   </url>
   <url>
@@ -121,6 +124,9 @@
     <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/SlopeFit.html</loc>
   </url>
   <url>
+    <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/Spec2DF.html</loc>
+  </url>
+  <url>
     <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/SpecInterpolate.html</loc>
   </url>
   <url>
@@ -128,6 +134,15 @@
   </url>
   <url>
     <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/SubsampleTimeseriesBlock.html</loc>
+  </url>
+  <url>
+    <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/as.data.frame.spec.html</loc>
+  </url>
+  <url>
+    <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/as.spec.html</loc>
+  </url>
+  <url>
+    <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/as_spec_df.html</loc>
   </url>
   <url>
     <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/fweights.html</loc>

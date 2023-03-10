@@ -16,7 +16,7 @@ process"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mat
     
     <a class="navbar-brand me-2" href="../index.html">PaleoSpec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,7 +94,7 @@ process</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">temp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">1000</span>,<span class="fu"><a href="PSP.CorAfterRollmean.html">PSP.CorAfterRollmean</a></span><span class="op">(</span><span class="fl">1000</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="va">temp</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5003331 0.8216889 0.9304149</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5002120 0.8217006 0.9303501</span>
 <span class="r-in"><span><span class="fu">PSP.CorUntilF</span><span class="op">(</span>f<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>,<span class="fl">0.5</span><span class="op">/</span><span class="fl">10</span>,<span class="fl">0.5</span><span class="op">/</span><span class="fl">50</span><span class="op">)</span>,betaSignal<span class="op">=</span><span class="fl">1</span>,betaNoise<span class="op">=</span><span class="fl">0</span>,N<span class="op">=</span><span class="fl">1000</span>,r<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5000000 0.8253528 0.9341159</span>
 </code></pre></div>
