@@ -7,6 +7,7 @@
 #' @return Object of class spec
 #' @export
 #' @family TidySpec
+#' @author Andrew Dolman <andrew.dolman@awi.de>
 as.spec <- function(x){
   class(x) <- unique(append(c("spec", "list"), class(x)) )
   x
@@ -20,6 +21,7 @@ as.spec <- function(x){
 #' @return Object of class spec_df
 #' @export
 #' @family TidySpec
+#' @author Andrew Dolman <andrew.dolman@awi.de>
 as_spec_df <- function(x) {
   class(x) <- unique(append(c("spec_df", "list"), class(x)))
   x
@@ -34,6 +36,7 @@ as_spec_df <- function(x) {
 #' @return A dataframe or tibble (if package tibble is installed)
 #' @export
 #' @family TidySpec
+#' @author Andrew Dolman <andrew.dolman@awi.de>
 #' @examples
 #' library(PaleoSpec)
 #' ts1 <- ts(rnorm(100))
@@ -77,7 +80,7 @@ as.data.frame.spec <- function(x){
 #' @family TidySpec
 #' @importFrom tibble as_tibble
 #' @importFrom data.table rbindlist
-#'
+#' @author Andrew Dolman <andrew.dolman@awi.de>
 #' @examples
 #' library(PaleoSpec)
 #' ts1 <- ts(SimPLS(1000, beta = 1))
@@ -115,6 +118,7 @@ Spec2DF <- function(x){
 #' @return A spec object or a list of spec objects
 #' @export
 #' @family TidySpec
+#' @author Andrew Dolman <andrew.dolman@awi.de>
 #' @examples
 #' library(PaleoSpec)
 #' ts1 <- ts(SimPLS(1000, beta = 1))

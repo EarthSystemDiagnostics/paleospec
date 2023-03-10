@@ -22,4 +22,7 @@ Other TidySpec:
 \code{\link{as.data.frame.spec}()},
 \code{\link{as.spec}()}
 }
+\author{
+Andrew Dolman <andrew.dolman@awi.de>
+}
 \concept{TidySpec}
