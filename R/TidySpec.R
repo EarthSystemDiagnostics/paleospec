@@ -102,7 +102,7 @@ Spec2DF <- function(x){
   df <- data.table::rbindlist(df.lst, fill = TRUE, idcol = "spec_id")
 
   if (require("tibble", character.only = TRUE)){
-  df <- dplyr::as_tibble(df)
+  df <- tibble::as_tibble(df)
   }
 
   class(df) <- c("spec_df", class(df))
