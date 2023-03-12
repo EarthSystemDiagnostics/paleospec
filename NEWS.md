@@ -1,3 +1,7 @@
+# PaleoSpec 0.2.8
+
+* Add SpecACF and related functions
+
 # PaleoSpec 0.2.7
 
 * Add "TidySpec" functions to convert spec objects to and from data.frames/tibbles
