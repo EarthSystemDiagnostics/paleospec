@@ -6,6 +6,9 @@
 \usage{
 weights(x, sigma)
 }
+\value{
+a vector
+}
 \description{
 weights
 }

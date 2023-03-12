@@ -4,10 +4,12 @@
 #' @param x the value to find the closest match to
 #' @param type methods N, M or L
 #'
-#' @return
+#' @return a vector of length 1
 #' @export
 #'
 #' @examples
+#' a <- 1:10
+#' ClosestElement(a, 3.4)
 ClosestElement <- function(xvector, x, type = "N")
 {
   if (type == "N")

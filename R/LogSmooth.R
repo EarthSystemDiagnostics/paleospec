@@ -75,7 +75,7 @@ LogSmooth <- function(spectra, df.log = 0.05,
 
 #' weights
 #'
-#' @return
+#' @return a vector
 #' @keywords internal
 weights <- function(x, sigma) {
   1/sqrt(2 * pi * sigma^2) * exp(-x^2/(2 * sigma^2))

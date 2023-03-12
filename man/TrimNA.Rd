@@ -16,8 +16,8 @@ a numeric matrix
 Remove leading and trailing rows of all NA
 }
 \examples{
-m <- matrix(c(NA, NA, NA, 1:9, NA,NA,NA, 10:12, NA,NA,NA), ncol = 3, byrow = T)
+m <- matrix(c(NA, NA, NA, 1:9, NA,NA,NA, 10:12, NA,NA,NA), ncol = 3, byrow = TRUE)
 m
-TrimNA(m)
+PaleoSpec:::TrimNA(m)
 }
-\keyword{internal#'}
+\keyword{internal}
