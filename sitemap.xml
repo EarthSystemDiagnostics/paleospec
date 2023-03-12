@@ -37,6 +37,9 @@
     <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/Bandpass.html</loc>
   </url>
   <url>
+    <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/BinTimeseries.html</loc>
+  </url>
+  <url>
     <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/ClosestElement.html</loc>
   </url>
   <url>
@@ -127,6 +130,9 @@
     <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/Spec2DF.html</loc>
   </url>
   <url>
+    <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/SpecACF.html</loc>
+  </url>
+  <url>
     <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/SpecInterpolate.html</loc>
   </url>
   <url>
@@ -134,6 +140,9 @@
   </url>
   <url>
     <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/SubsampleTimeseriesBlock.html</loc>
+  </url>
+  <url>
+    <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/TrimNA.html</loc>
   </url>
   <url>
     <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/as.data.frame.spec.html</loc>
@@ -158,6 +167,12 @@
   </url>
   <url>
     <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/is.spectrum.html</loc>
+  </url>
+  <url>
+    <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/mean.ACF.html</loc>
+  </url>
+  <url>
+    <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/mvacf.by.fft.html</loc>
   </url>
   <url>
     <loc>https://earthsystemdiagnostics.github.io/paleospec/reference/remove.highestFreq.html</loc>
