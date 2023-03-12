@@ -7,7 +7,7 @@
 DF2Spec(spec_df)
 }
 \arguments{
-\item{spec_df}{}
+\item{spec_df}{A spec_df object}
 }
 \value{
 A spec object or a list of spec objects

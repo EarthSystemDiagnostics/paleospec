@@ -220,11 +220,11 @@ mvacf.by.fft <- function(x){
 #' @param m a numeric matrix
 #'
 #' @return a numeric matrix
-#' @keywords internal#'
+#' @keywords internal
 #' @examples
-#' m <- matrix(c(NA, NA, NA, 1:9, NA,NA,NA, 10:12, NA,NA,NA), ncol = 3, byrow = T)
+#' m <- matrix(c(NA, NA, NA, 1:9, NA,NA,NA, 10:12, NA,NA,NA), ncol = 3, byrow = TRUE)
 #' m
-#' TrimNA(m)
+#' PaleoSpec:::TrimNA(m)
 TrimNA <- function(m){
 
   empty.row <- is.nan(rowMeans(m, na.rm = TRUE))
