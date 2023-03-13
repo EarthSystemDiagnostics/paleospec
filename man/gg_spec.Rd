@@ -75,7 +75,7 @@ p <- gg_spec(sp2, p, spec_id = "df2")
 p <- p + ggplot2::geom_abline(intercept = log10(alpha), slope = -beta, colour = "red")
 p
 
-# Or directly plot named or unamed list
+# Or directly plot named or unnamed list
 
 gg_spec(list(sp1, sp2))
 gg_spec(list(raw = sp1, smoothed = sp2))
