@@ -1,4 +1,4 @@
-#' Estimate Power Spectra via the Autocorrelation Function
+#' Estimate Power Spectra via the Autocovariance Function
 #'
 #' @param x a vector or matrix of binned values, possibly with gaps
 #' @param bin.width the width of the bins, effectively delta_t

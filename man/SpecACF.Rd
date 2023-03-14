@@ -2,7 +2,7 @@
 % Please edit documentation in R/SpecACF.R
 \name{SpecACF}
 \alias{SpecACF}
-\title{Estimate Power Spectra via the Autocorrelation Function}
+\title{Estimate Power Spectra via the Autocovariance Function}
 \usage{
 SpecACF(
   x,
