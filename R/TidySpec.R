@@ -131,7 +131,7 @@ Spec2DF <- function(x){
 #' sp_lst <- list(sp1 = sp1, sp2 = sp2)
 #' sp_df <- Spec2DF(sp_lst)
 #' sp_df
-#' DF2Spec(sp_df)
+#' str(DF2Spec(sp_df))
 DF2Spec <- function(spec_df){
 
   stopifnot(c("freq", "spec") %in% names(spec_df))

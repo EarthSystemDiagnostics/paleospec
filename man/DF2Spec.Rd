@@ -24,7 +24,7 @@ sp2 <- SpecMTM(ts2)
 sp_lst <- list(sp1 = sp1, sp2 = sp2)
 sp_df <- Spec2DF(sp_lst)
 sp_df
-DF2Spec(sp_df)
+str(DF2Spec(sp_df))
 }
 \seealso{
 Other TidySpec: 
