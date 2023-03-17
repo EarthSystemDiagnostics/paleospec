@@ -59,6 +59,7 @@
 gg_spec <- function(x, gg = NULL, conf = TRUE,
                     spec_id = NULL,
                     colour = spec_id,
+                    #linetype = spec_id,
                     alpha.line = 1,
                     alpha.ribbon = 0.3,
                     removeFirst = 0, removeLast = 0,
@@ -127,6 +128,7 @@ gg_spec <- function(x, gg = NULL, conf = TRUE,
 
   p <- p + ggplot2::geom_line(data = df, ggplot2::aes(x = Frequency, y = PSD,
                                                       group = spec_id,
+                                                      #linetype = {{ linetype }},
                                                       colour = {{ colour }}),
                               alpha = alpha.line
   ) +
@@ -142,15 +144,24 @@ gg_spec <- function(x, gg = NULL, conf = TRUE,
     ggplot2::theme(panel.grid.minor = ggplot2::element_blank()) +
     ggplot2::scale_alpha()
 
-
   g <- ggplot2::ggplot_build(p)
   colrs <- unlist(unique(sapply(g$data, function(x) unique(x["colour"])$colour)))
   colrs <- colrs[is.na(colrs) == FALSE]
   ncolrs <- length(colrs)
 
+  #ltys <- unlist(unique(sapply(g$data, function(x) unique(x["linetype"])$linetype)))
+  #ltys <- ltys[is.na(ltys) == FALSE]
+  #nltys <- length(ltys)
+  #print(nltys)
+
+ # p <- p +
+ #   ggplot2::scale_linetype_manual("", values = rep(1, nltys))
+
+
   if (ncolrs <= min.colours){
 
-    p <- p + ggplot2::scale_colour_manual("", values = "black", aesthetics = c("colour", "fill"))
+    p <- p + ggplot2::scale_colour_manual("", values = "black",
+                                          aesthetics = c("colour", "fill"))
 
     if (is.null({{ colour }})){
       p <- p + ggplot2::theme(legend.position = "none")
