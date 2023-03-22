@@ -60,7 +60,9 @@ as.data.frame.spec <- function(x){
 
   }
 
-  if (require("tibble", character.only = TRUE)){
+  tibble_installed <- requireNamespace("tibble", quietly = TRUE)
+
+  if (tibble_installed){
     df <- tibble::as_tibble(df)
   }
 
@@ -78,7 +80,6 @@ as.data.frame.spec <- function(x){
 #' @return A spec_df object
 #' @export
 #' @family TidySpec
-#' @importFrom tibble as_tibble
 #' @importFrom data.table rbindlist
 #' @author Andrew Dolman <andrew.dolman@awi.de>
 #' @examples
@@ -101,8 +102,10 @@ Spec2DF <- function(x){
 
   df <- data.table::rbindlist(df.lst, fill = TRUE, idcol = "spec_id")
 
-  if (require("tibble", character.only = TRUE)){
-  df <- tibble::as_tibble(df)
+  tibble_installed <- requireNamespace("tibble", quietly = TRUE)
+
+  if (tibble_installed){
+    df <- tibble::as_tibble(df)
   }
 
   class(df) <- c("spec_df", class(df))
@@ -113,7 +116,7 @@ Spec2DF <- function(x){
 
 #' Transform a spec_df Object into a spec Object or List of spec Objects
 #'
-#' @param spec_df
+#' @param spec_df A spec_df object
 #'
 #' @return A spec object or a list of spec objects
 #' @export
@@ -128,7 +131,7 @@ Spec2DF <- function(x){
 #' sp_lst <- list(sp1 = sp1, sp2 = sp2)
 #' sp_df <- Spec2DF(sp_lst)
 #' sp_df
-#' DF2Spec(sp_df)
+#' str(DF2Spec(sp_df))
 DF2Spec <- function(spec_df){
 
   stopifnot(c("freq", "spec") %in% names(spec_df))
