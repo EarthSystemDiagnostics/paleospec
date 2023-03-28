@@ -13,6 +13,8 @@
 #'   high frequency side respectively. Will be unpredictable when used with a
 #'   list of spectra, or spec_df object with multiple spectra with different
 #'   frequency axes.
+#' @param force.CI Force the plotting of confidence regions when the total number
+#' of frequencies exceeds 10000. Defaults to FALSE
 #'
 #' @return a ggplot object
 #' @export
@@ -63,6 +65,7 @@ gg_spec <- function(x, gg = NULL, conf = TRUE,
                     alpha.line = 1,
                     alpha.ribbon = 0.3,
                     removeFirst = 0, removeLast = 0,
+                    force.CI = FALSE,
                     min.colours = 2) {
 
   gg_installed <- requireNamespace("ggplot2", quietly = TRUE)
@@ -114,7 +117,7 @@ gg_spec <- function(x, gg = NULL, conf = TRUE,
 
   if (conf == TRUE & exists("lim.1", df)){
 
-    if (nrow(df) > 1e04){
+    if (nrow(df) > 1e04 & force.CI == FALSE){
       warning("geom_ribbon is very slow when the number of points > 1e04, skipping the confidence region")
     } else {
 

@@ -14,6 +14,7 @@ gg_spec(
   alpha.ribbon = 0.3,
   removeFirst = 0,
   removeLast = 0,
+  force.CI = FALSE,
   min.colours = 2
 )
 }
@@ -36,6 +37,9 @@ gg_spec(
 high frequency side respectively. Will be unpredictable when used with a
 list of spectra, or spec_df object with multiple spectra with different
 frequency axes.}
+
+\item{force.CI}{Force the plotting of confidence regions when the total number
+of frequencies exceeds 10000. Defaults to FALSE}
 
 \item{min.colours}{minimum number of spectra before starting to colour them
 separately}
