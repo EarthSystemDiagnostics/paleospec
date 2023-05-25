@@ -38,27 +38,32 @@ powerlaw like properties, where: $S(f) = \alpha f^{-\beta}$
 
 ``` r
 library(PaleoSpec)
+
+# setting the seed of the random number generator so that this example will 
+# always generate the same time series
 set.seed(20221109)
+
+# length of the time series
 N <- 1e04
 
+# parameters of the powerlaw spectrum
 alpha <- 0.1
 beta <- 1
 
 ts1 <- SimPLS(N = N, b = beta, a = alpha)
-
 plot(ts1, type = "l")
 ```
 
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
 
 `SpecMTM` can be used to estimate the power spectrum of a timeseries
-using the multitaper method (ref)
+using the multitaper method.
 
 ``` r
 sp1 <- SpecMTM(ts1)
 #> Warning in multitaper::spec.mtm(timeSeries = timeSeries, k = k, nw = nw, : Time
-#> series is not a ts object and deltat is not set. Frequency array and axes may be
-#> incorrect.
+#> series is not a ts object and deltat is not set. Frequency array and axes may
+#> be incorrect.
 ```
 
 The `LPlot` function will plot a power spectrum on log10-log10 axes.
