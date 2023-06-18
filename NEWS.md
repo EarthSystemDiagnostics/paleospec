@@ -1,3 +1,9 @@
+# PaleoSpec 0.2.91
+
+* Return vector of dof from SpecMTM even when all == 2
+* Allow forcing of CI in gg_spec even when number of freq is large
+* small doc changes
+
 # PaleoSpec 0.2.9
 
 * Add gg_spec
