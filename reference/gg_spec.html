@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">PaleoSpec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.91</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,7 @@
 <span>  alpha.ribbon <span class="op">=</span> <span class="fl">0.3</span>,</span>
 <span>  removeFirst <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  removeLast <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  force.CI <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  min.colours <span class="op">=</span> <span class="fl">2</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -94,6 +95,11 @@
 high frequency side respectively. Will be unpredictable when used with a
 list of spectra, or spec_df object with multiple spectra with different
 frequency axes.</p></dd>
+
+
+<dt>force.CI</dt>
+<dd><p>Force the plotting of confidence regions when the total number
+of frequencies exceeds 10000. Defaults to FALSE</p></dd>
 
 
 <dt>min.colours</dt>
