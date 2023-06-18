@@ -13,6 +13,8 @@
 #'   high frequency side respectively. Will be unpredictable when used with a
 #'   list of spectra, or spec_df object with multiple spectra with different
 #'   frequency axes.
+#' @param force.CI Force the plotting of confidence regions when the total number
+#' of frequencies exceeds 10000. Defaults to FALSE
 #'
 #' @return a ggplot object
 #' @export
@@ -62,6 +64,7 @@ gg_spec <- function(x, gg = NULL, conf = TRUE,
                     alpha.line = 1,
                     alpha.ribbon = 0.3,
                     removeFirst = 0, removeLast = 0,
+                    force.CI = FALSE,
                     min.colours = 2) {
 
   gg_installed <- requireNamespace("ggplot2", quietly = TRUE)
@@ -113,7 +116,7 @@ gg_spec <- function(x, gg = NULL, conf = TRUE,
 
   if (conf == TRUE & exists("lim.1", df)){
 
-    if (nrow(df) > 1e04){
+    if (nrow(df) > 1e04 & force.CI == FALSE){
       warning("geom_ribbon is very slow when the number of points > 1e04, skipping the confidence region")
     } else {
 
@@ -142,7 +145,6 @@ gg_spec <- function(x, gg = NULL, conf = TRUE,
     ggplot2::theme(panel.grid.minor = ggplot2::element_blank()) +
     ggplot2::scale_alpha()
 
-
   g <- ggplot2::ggplot_build(p)
   colrs <- unlist(unique(sapply(g$data, function(x) unique(x["colour"])$colour)))
   colrs <- colrs[is.na(colrs) == FALSE]
@@ -150,7 +152,8 @@ gg_spec <- function(x, gg = NULL, conf = TRUE,
 
   if (ncolrs <= min.colours){
 
-    p <- p + ggplot2::scale_colour_manual("", values = "black", aesthetics = c("colour", "fill"))
+    p <- p + ggplot2::scale_colour_manual("", values = "black",
+                                          aesthetics = c("colour", "fill"))
 
     if (is.null({{ colour }})){
       p <- p + ggplot2::theme(legend.position = "none")

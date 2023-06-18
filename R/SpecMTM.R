@@ -42,6 +42,14 @@ SpecMTM <- function(timeSeries, k = 3, nw = 2, nFFT = "default",
     plot = plot, na.action = na.action, returnInternals = returnInternals,
     ...)
   result$dof <- result$mtm$dofs
+
+  # if all dof are the same (e.g. when k = 1) then spec.mtm returns a vector of
+  # length 1, this can cause issues with later functions, so replicate to length
+  # of freq vector
+  if (length(result$dof) == 1){
+    result$dof <- rep(result$dof, length(result$freq))
+  }
+
   return(result)
 }
 
