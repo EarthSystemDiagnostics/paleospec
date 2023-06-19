@@ -13,6 +13,8 @@
 #'   high frequency side respectively. Will be unpredictable when used with a
 #'   list of spectra, or spec_df object with multiple spectra with different
 #'   frequency axes.
+#' @param force.CI Force the plotting of confidence regions when the total number
+#' of frequencies exceeds 10000. Defaults to FALSE
 #'
 #' @return a ggplot object
 #' @export
@@ -59,10 +61,10 @@
 gg_spec <- function(x, gg = NULL, conf = TRUE,
                     spec_id = NULL,
                     colour = spec_id,
-                    #linetype = spec_id,
                     alpha.line = 1,
                     alpha.ribbon = 0.3,
                     removeFirst = 0, removeLast = 0,
+                    force.CI = FALSE,
                     min.colours = 2) {
 
   gg_installed <- requireNamespace("ggplot2", quietly = TRUE)
@@ -114,7 +116,7 @@ gg_spec <- function(x, gg = NULL, conf = TRUE,
 
   if (conf == TRUE & exists("lim.1", df)){
 
-    if (nrow(df) > 1e04){
+    if (nrow(df) > 1e04 & force.CI == FALSE){
       warning("geom_ribbon is very slow when the number of points > 1e04, skipping the confidence region")
     } else {
 
@@ -128,7 +130,6 @@ gg_spec <- function(x, gg = NULL, conf = TRUE,
 
   p <- p + ggplot2::geom_line(data = df, ggplot2::aes(x = Frequency, y = PSD,
                                                       group = spec_id,
-                                                      #linetype = {{ linetype }},
                                                       colour = {{ colour }}),
                               alpha = alpha.line
   ) +
@@ -148,15 +149,6 @@ gg_spec <- function(x, gg = NULL, conf = TRUE,
   colrs <- unlist(unique(sapply(g$data, function(x) unique(x["colour"])$colour)))
   colrs <- colrs[is.na(colrs) == FALSE]
   ncolrs <- length(colrs)
-
-  #ltys <- unlist(unique(sapply(g$data, function(x) unique(x["linetype"])$linetype)))
-  #ltys <- ltys[is.na(ltys) == FALSE]
-  #nltys <- length(ltys)
-  #print(nltys)
-
- # p <- p +
- #   ggplot2::scale_linetype_manual("", values = rep(1, nltys))
-
 
   if (ncolrs <= min.colours){
 
