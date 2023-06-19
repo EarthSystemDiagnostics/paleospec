@@ -23,5 +23,8 @@ Suggests:
     covr,
     testthat,
     ggplot2,
-    tibble
+    tibble,
+    knitr,
+    rmarkdown
 URL: https://earthsystemdiagnostics.github.io/paleospec/
+VignetteBuilder: knitr
