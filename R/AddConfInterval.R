@@ -1,7 +1,7 @@
 #' Add confidence interval
 #'
 #' Add a confidence interval to a spectral estimate assuming the uncertainty of
-#' the spectral estimates follows a chi-squared distribution with the degress of
+#' the spectral estimates follows a chi-squared distribution with the degrees of
 #' the freedom from the spectral estimates.
 #'
 #' @param spec a spectral object of class \code{"spec"} or a list with the
@@ -16,7 +16,7 @@
 #'   respectively.
 #' @author Thomas Laepple
 #' @examples
-#' 
+#'
 #' N.R <- 1000
 #' N.T <- 100
 #' save.spec <- matrix(NA, N.T / 2, N.R)
@@ -33,7 +33,7 @@
 #' legend("bottomleft", lwd = 2, col = c("black", "red"),
 #'        legend = c("one realization with chisq conf intervals",
 #'                   "MC confidence intervals"))
-#' 
+#'
 #' @export
 AddConfInterval <- function(spec, pval = 0.05, MINVALUE = 1e-10) {
 
@@ -43,6 +43,8 @@ AddConfInterval <- function(spec, pval = 0.05, MINVALUE = 1e-10) {
   spec$lim.2 <- spec$spec * qchisq(c(pval / 2), spec$dof) / (spec$dof)
   spec$lim.1[spec$lim.1 < MINVALUE] <- MINVALUE
   spec$lim.2[spec$lim.2 < MINVALUE] <- MINVALUE
+
+  spec$pval <- pval
 
   return(spec)
 

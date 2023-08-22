@@ -21,8 +21,8 @@ You can install the development version of PaleoSpec from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("EarthSystemDiagnostics/paleospec")
+# install.packages("remotes")
+remotes::install_github("EarthSystemDiagnostics/paleospec")
 ```
 
 Please refer to function references here:
@@ -46,7 +46,7 @@ sunspot <- datasets::sunspot.month
 plot(sunspot)
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
 
 ``` r
 library(PaleoSpec)
@@ -54,7 +54,7 @@ sp_sun <- SpecMTM(sunspot)
 LPlot(sp_sun)
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
 
 Alternatively we can use the gg_spec() function to get a ggplot2
 
@@ -64,7 +64,7 @@ gg_spec(sp_sun)
 #> Adding another scale for colour, which will replace the existing scale.
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
 
 Appproximate confidence intervals can be added with the function
 AddConfInterval()
@@ -76,7 +76,7 @@ gg_spec(sp_sun)
 #> Adding another scale for colour, which will replace the existing scale.
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
 
 ### Simulating timeseries with given spectral properties
 
@@ -99,7 +99,7 @@ ts1 <- SimPLS(N = N, b = beta, a = alpha)
 plot(ts1, type = "l")
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
 
 `SpecMTM` can again be used to estimate the power spectrum using the
 multitaper method. If we convert the vector from SimPLS to a timeseries
@@ -113,7 +113,7 @@ LPlot(sp1)
 abline(log10(alpha), -beta, col = "red")
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
 
 You can add confidence intervals to the spectral estimates with
 `AddConfInterval`
@@ -124,7 +124,7 @@ LPlot(sp1)
 abline(log10(alpha), -beta, col = "red")
 ```
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
 
 The `LogSmooth` function can be used to smooth power spectra with
 equally spaced filter in log-space.
@@ -135,4 +135,4 @@ LPlot(sp1)
 LLines(sp1_f, col = "green")
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />

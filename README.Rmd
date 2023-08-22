@@ -29,9 +29,9 @@ PaleoSpec is an R package to assist in the spectral analysis of timeseries, in p
 
 You can install the development version of PaleoSpec from [GitHub](https://github.com/) with:
 
-``` r
-# install.packages("devtools")
-devtools::install_github("EarthSystemDiagnostics/paleospec")
+```{r, eval=FALSE}
+# install.packages("remotes")
+remotes::install_github("EarthSystemDiagnostics/paleospec")
 ```
 
 
