@@ -60,5 +60,5 @@ LPlot(sp1_f3_2F)
 LLines(sp1_f3_2T, col = "red")
 }
 \seealso{
-[FilterSpecLog] for filtering with filter widths equal in log spec
+[FilterSpecLog] for filtering with filter widths equal in log-space
 }
