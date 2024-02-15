@@ -24,7 +24,7 @@ the input object including the new list elements \code{lim.1} and
 }
 \description{
 Add a confidence interval to a spectral estimate assuming the uncertainty of
-the spectral estimates follows a chi-squared distribution with the degress of
+the spectral estimates follows a chi-squared distribution with the degrees of
 the freedom from the spectral estimates.
 }
 \examples{
