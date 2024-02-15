@@ -5,7 +5,7 @@
 #' @inheritParams stats::spec.pgram
 #' @inheritParams ApplyFilter
 #' @return A spec object (list)
-#' @seealso [FilterSpecLog] for filtering with filter widths equal in log-space
+#' @family functions to filter / smooth spectra
 #' @export
 #'
 #' @examples
@@ -129,7 +129,7 @@ FilterSpec <- function(spec, spans, method = 3, keep_low_f = TRUE) {
 #' @inheritParams ApplyFilter
 #'
 #' @return A spec object (list)
-#' @seealso [LogSmooth()] for an alternative implementation of log spaced filtering
+#' @family functions to filter / smooth spectra
 #' @export
 #' @examples
 #' library(PaleoSpec)

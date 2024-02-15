@@ -60,5 +60,8 @@ LPlot(sp1_f3_2F)
 LLines(sp1_f3_2T, col = "red")
 }
 \seealso{
-[FilterSpecLog] for filtering with filter widths equal in log-space
+Other functions to filter / smooth spectra: 
+\code{\link{FilterSpecLog}()},
+\code{\link{LogSmooth}()}
 }
+\concept{functions to filter / smooth spectra}

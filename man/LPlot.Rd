@@ -73,6 +73,12 @@ spec <- SpecMTM(x)
 LPlot(spec, col = "grey")
 LLines(LogSmooth(spec), lwd = 2)
 }
+\seealso{
+Other functions to plot power spectra: 
+\code{\link{LLines}()},
+\code{\link{gg_spec}()}
+}
 \author{
 Thomas Laepple
 }
+\concept{functions to plot power spectra}

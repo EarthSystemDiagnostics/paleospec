@@ -92,6 +92,11 @@ spec <- SpecMTM(x)
 LPlot(spec, col='grey')
 LLines(LogSmooth(spec), lwd=2)
 }
+\seealso{
+Other functions to estimate power spectra: 
+\code{\link{SpecACF}()}
+}
 \author{
 Thomas Laepple
 }
+\concept{functions to estimate power spectra}

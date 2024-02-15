@@ -22,6 +22,7 @@
 #'   spectrum.
 #' @author Torben Kunz and Andrew Dolman <andrew.dolman@awi.de>
 #' @return a spec object (list)
+#' @family functions to estimate power spectra
 #' @export
 #'
 #' @examples

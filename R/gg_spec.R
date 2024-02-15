@@ -17,6 +17,7 @@
 #' of frequencies exceeds 10000. Defaults to FALSE
 #'
 #' @return a ggplot object
+#' @family functions to plot power spectra
 #' @export
 #'
 #' @examples

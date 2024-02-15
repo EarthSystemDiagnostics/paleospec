@@ -56,6 +56,11 @@ sp2 <- LogSmooth(sp1)
 LPlot(sp1)
 LLines(sp2, col = "red")
 }
+\seealso{
+Other functions to estimate power spectra: 
+\code{\link{SpecMTM}()}
+}
 \author{
 Torben Kunz and Andrew Dolman <andrew.dolman@awi.de>
 }
+\concept{functions to estimate power spectra}

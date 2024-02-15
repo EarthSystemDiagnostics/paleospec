@@ -90,3 +90,9 @@ sp2 <- LogSmooth(sp1)
 p <- gg_spec(sp2, p)
 p
 }
+\seealso{
+Other functions to plot power spectra: 
+\code{\link{LLines}()},
+\code{\link{LPlot}()}
+}
+\concept{functions to plot power spectra}

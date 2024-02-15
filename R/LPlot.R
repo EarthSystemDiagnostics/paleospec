@@ -25,6 +25,7 @@
 #'     calculated internally.
 #' @inheritParams graphics::plot.default
 #' @param ... further graphical parameters passed to \code{plot}.
+#' @family functions to plot power spectra
 #' @examples
 #' x <- ts(arima.sim(list(ar = 0.9), 1000))
 #' spec <- SpecMTM(x)
@@ -66,6 +67,7 @@ LPlot <- function(x, conf = TRUE, bPeriod = FALSE, bNoPlot = FALSE, axes = TRUE,
 #' optionally adds a transparent confidence interval.
 #' @param ... further graphical parameters passed to \code{lines}.
 #' @inheritParams LPlot
+#' @family functions to plot power spectra
 #' @examples
 #' x <- ts(arima.sim(list(ar = 0.9), 1000))
 #' spec <- SpecMTM(x)

@@ -59,5 +59,8 @@ LLines(sp1_FSL_FS, col = "red")
 LLines(sp1_FS_FSL, col = "green")
 }
 \seealso{
-[LogSmooth()] for an alternative implementation of log spaced filtering
+Other functions to filter / smooth spectra: 
+\code{\link{FilterSpec}()},
+\code{\link{LogSmooth}()}
 }
+\concept{functions to filter / smooth spectra}

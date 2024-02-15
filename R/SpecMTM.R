@@ -12,6 +12,7 @@
 #' @inheritParams multitaper::spec.mtm
 #' @param ... additional arguments to multitaper::spec.mtm
 #' @return spectra object list(freq, spec, dof)
+#' @family functions to estimate power spectra
 #' @importFrom multitaper spec.mtm
 #' @examples
 #' x <- ts(arima.sim(list(ar = 0.9), 1000))
@@ -20,6 +21,7 @@
 #' LLines(LogSmooth(spec), lwd=2)
 #' @author Thomas Laepple
 #' @export
+
 SpecMTM <- function(timeSeries, k = 3, nw = 2, nFFT = "default",
   centre = c("Slepian"), dpssIN = NULL, returnZeroFreq = FALSE,
   Ftest = FALSE, jackknife = FALSE, jkCIProb = 0.95, maxAdaptiveIterations = 100,

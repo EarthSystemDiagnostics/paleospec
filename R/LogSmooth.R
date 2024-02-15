@@ -8,6 +8,7 @@
 #' @param bLog TRUE: average in the log space of the power, FALSE: arithmetic
 #'   average
 #' @return smoothed spectrum
+#' @family functions to filter / smooth spectra
 #' @examples
 #' x<-ts(arima.sim(list(ar = 0.9),1000))
 #' spec<-SpecMTM(x)

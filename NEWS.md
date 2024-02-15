@@ -1,3 +1,7 @@
+# PaleoSpec 0.31
+
+* Improve linking between function documentation using @family
+
 # PaleoSpec 0.3
 
 * Add FilterSpec and FilterSpecLog as replacements / alternatives to LogSmooth
