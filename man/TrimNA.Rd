@@ -4,20 +4,22 @@
 \alias{TrimNA}
 \title{Remove leading and trailing rows of all NA}
 \usage{
-TrimNA(m)
+TrimNA(m, trim = c("all", "any"))
 }
 \arguments{
-\item{m}{a numeric matrix}
+\item{m}{a numeric matrix, data.frame or vector}
+
+\item{trim}{trim leading and trailing rows of "all" NA or containing "any" NA values}
 }
 \value{
-a numeric matrix
+a numeric matrix, data.frame or vector
 }
 \description{
 Remove leading and trailing rows of all NA
 }
 \examples{
-m <- matrix(c(NA, NA, NA, 1:9, NA,NA,NA, 10:12, NA,NA,NA), ncol = 3, byrow = TRUE)
+m <- matrix(c(NA, NA, NA, 1, NA, NA, NA, 1, 1, NA, NA, NA, 1:9, NA,NA,NA, 10:12, NA, 1, NA, NA,NA,NA), ncol = 3, byrow = TRUE)
 m
-PaleoSpec:::TrimNA(m)
+TrimNA(m)
+TrimNA(m, trim = "any")
 }
-\keyword{internal}
