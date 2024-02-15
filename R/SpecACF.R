@@ -217,24 +217,43 @@ mvacf.by.fft <- function(x){
 
 #' Remove leading and trailing rows of all NA
 #'
-#' @param m a numeric matrix
-#'
-#' @return a numeric matrix
-#' @keywords internal
+#' @param m a numeric matrix, data.frame or vector
+#' @param trim trim leading and trailing rows of "all" NA or containing "any" NA values
+#' @return a numeric matrix, data.frame or vector
+#' @export
 #' @examples
-#' m <- matrix(c(NA, NA, NA, 1:9, NA,NA,NA, 10:12, NA,NA,NA), ncol = 3, byrow = TRUE)
+#' m <- matrix(c(NA, NA, NA, 1, NA, NA, NA, 1, 1, NA, NA, NA, 1:9, NA,NA,NA, 10:12, NA, 1, NA, NA,NA,NA), ncol = 3, byrow = TRUE)
 #' m
-#' PaleoSpec:::TrimNA(m)
-TrimNA <- function(m){
+#' TrimNA(m)
+#' TrimNA(m, trim = "any")
+TrimNA <- function(m, trim = c("all", "any")) {
+  trim <- match.arg(trim)
 
-  empty.row <- is.nan(rowMeans(m, na.rm = TRUE))
-  rank.good <- (empty.row == FALSE) * 1:length(empty.row)
+  # make it work on vectors
+  class_m <- class(m)
+  if (class_m[1] == "numeric") {
+    m <- cbind(m)
+  }
+
+  if (trim == "all") {
+    empty.row <- is.nan(rowMeans(m, na.rm = TRUE))
+    rank.good <- (empty.row == FALSE) * 1:length(empty.row)
+  } else if (trim == "any") {
+    empty.row <- is.na(rowMeans(m))
+    rank.good <- (empty.row == FALSE) * 1:length(empty.row)
+  }
 
   first.good <- which.min(empty.row * 1:length(empty.row))
   last.good <- which.max(rank.good)
 
-  m[first.good:last.good, , drop = FALSE]
+  m <- m[first.good:last.good, , drop = FALSE]
 
+  # return to a vector
+  if (class_m[1] == "numeric") {
+    m <- as.numeric(m)
+  }
+
+  return(m)
 }
 
 

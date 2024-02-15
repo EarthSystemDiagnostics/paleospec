@@ -1,3 +1,12 @@
+# PaleoSpec 0.3
+
+* Add FilterSpec and FilterSpecLog as replacements / alternatives to LogSmooth
+
+ FilterSpec and FilterSpecLog uses ApplyFilter to (optionally) avoid loosing the
+ highest and lowest frequencies when smoothing a spectrum. Default behaviour is 
+ method 3: min roughness (reflect and invert ends). Avoids the artefact seen at 
+ high freqs with LogSmooth.
+
 # PaleoSpec 0.2.91
 
 * Return vector of dof from SpecMTM even when all == 2
