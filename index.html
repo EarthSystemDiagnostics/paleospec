@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="index.html">PaleoSpec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.31</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,7 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>PaleoSpec is an R package to assist the analysis of variance and power spectra.</p>
+<p>PaleoSpec is an R package to assist in the spectral analysis of timeseries, in particular timeseries of climate variables from observational, model, and proxy paleoclimate data sources. PaleoSpec contains functions to analyse existing timeseries and to generate timeseries with specific spectral properties.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -66,12 +66,78 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"EarthSystemDiagnostics/paleospec"</span><span class="op">)</span></span></code></pre></div>
+<p>Please refer to function references here: <a href="https://earthsystemdiagnostics.github.io/paleospec/reference/index.html" class="uri">https://earthsystemdiagnostics.github.io/paleospec/reference/index.html</a></p>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p>Please refer to function references here:</p>
-<p><a href="https://earthsystemdiagnostics.github.io/paleospec/reference/index.html" class="uri">https://earthsystemdiagnostics.github.io/paleospec/reference/index.html</a></p>
+<div class="section level3">
+<h3 id="estimating-power-spectra">Estimating power spectra<a class="anchor" aria-label="anchor" href="#estimating-power-spectra"></a>
+</h3>
+<p><code>SpecMTM</code> can be used to estimate the power spectrum of a timeseries using the multitaper method.</p>
+<p>Here we estimate the spectrum of the monthly sunspot data that comes with R. The sunspot data are already a timeseries object so SpecMTM knows the correct frequency of the observations. We can plot the power spectrum with the PaleoSpec function LPlot.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sunspot</span> <span class="op">&lt;-</span> <span class="fu">datasets</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/datasets/sunspot.month.html" class="external-link">sunspot.month</a></span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sunspot</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-3-1.png" width="100%"></p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://earthsystemdiagnostics.github.io/paleospec/">PaleoSpec</a></span><span class="op">)</span></span>
+<span><span class="va">sp_sun</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/SpecMTM.html">SpecMTM</a></span><span class="op">(</span><span class="va">sunspot</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/LPlot.html">LPlot</a></span><span class="op">(</span><span class="va">sp_sun</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-4-1.png" width="100%"></p>
+<p>Alternatively we can use the gg_spec() function to get a ggplot2</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/gg_spec.html">gg_spec</a></span><span class="op">(</span><span class="va">sp_sun</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Scale for colour is already present.</span></span>
+<span><span class="co">#&gt; Adding another scale for colour, which will replace the existing scale.</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-5-1.png" width="100%"></p>
+<p>Appproximate confidence intervals can be added with the function AddConfInterval()</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sp_sun</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/AddConfInterval.html">AddConfInterval</a></span><span class="op">(</span><span class="va">sp_sun</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/gg_spec.html">gg_spec</a></span><span class="op">(</span><span class="va">sp_sun</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Scale for colour is already present.</span></span>
+<span><span class="co">#&gt; Adding another scale for colour, which will replace the existing scale.</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="100%"></p>
+</div>
+<div class="section level3">
+<h3 id="simulating-timeseries-with-given-spectral-properties">Simulating timeseries with given spectral properties<a class="anchor" aria-label="anchor" href="#simulating-timeseries-with-given-spectral-properties"></a>
+</h3>
+<p><code>SimPLS</code> can be used to create a timeseries whose power spectrum has powerlaw like properties, where: <span class="math inline"><em>S</em>(<em>f</em>) = <em>α</em><em>f</em><sup>−<em>β</em></sup></span></p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># setting the seed of the random number generator so that this example will </span></span>
+<span><span class="co"># always generate the same time series</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">20221109</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># length of the time series</span></span>
+<span><span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">1e04</span></span>
+<span></span>
+<span><span class="co"># parameters of the powerlaw spectrum</span></span>
+<span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.1</span></span>
+<span><span class="va">beta</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span></span>
+<span><span class="va">ts1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/SimPLS.html">SimPLS</a></span><span class="op">(</span>N <span class="op">=</span> <span class="va">N</span>, b <span class="op">=</span> <span class="va">beta</span>, a <span class="op">=</span> <span class="va">alpha</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ts1</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-7-1.png" width="100%"></p>
+<p><code>SpecMTM</code> can again be used to estimate the power spectrum using the multitaper method. If we convert the vector from SimPLS to a timeseries object, and add information about the sampling frequency of the timeseries then SpecMTM will have the correct frequency axis.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sp1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/SpecMTM.html">SpecMTM</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/ts.html" class="external-link">ts</a></span><span class="op">(</span><span class="va">ts1</span>, deltat <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/LPlot.html">LPlot</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="va">alpha</span><span class="op">)</span>, <span class="op">-</span><span class="va">beta</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-8-1.png" width="100%"></p>
+<p>You can add confidence intervals to the spectral estimates with <code>AddConfInterval</code></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sp1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/AddConfInterval.html">AddConfInterval</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/LPlot.html">LPlot</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="va">alpha</span><span class="op">)</span>, <span class="op">-</span><span class="va">beta</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-9-1.png" width="100%"></p>
+<p>The <code>LogSmooth</code> function can be used to smooth power spectra with equally spaced filter in log-space.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sp1_f</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/LogSmooth.html">LogSmooth</a></span><span class="op">(</span><span class="va">sp1</span>, df.log <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/LPlot.html">LPlot</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/LLines.html">LLines</a></span><span class="op">(</span><span class="va">sp1_f</span>, col <span class="op">=</span> <span class="st">"green"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-10-1.png" width="100%"></p>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">
