@@ -51,8 +51,8 @@ LLines(LogSmooth(spec,df.log=0.1, removeFirst = 3, removeLast = 20),lwd=2,col='r
 }
 \seealso{
 Other functions to filter / smooth spectra: 
-\code{\link{FilterSpecLog}()},
-\code{\link{FilterSpec}()}
+\code{\link{FilterSpec}()},
+\code{\link{FilterSpecLog}()}
 }
 \author{
 Thomas Laepple

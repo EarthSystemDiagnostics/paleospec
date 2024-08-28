@@ -41,8 +41,7 @@ SpecACF <- function(x, bin.width,
                     pos.f.only = TRUE,
                     return.working = FALSE){
 
-   # Convert ts to vector
-
+  # Convert ts to vector
   if (is.ts(x)){
     d <- dim(x)
     x <- as.vector(x)
@@ -50,16 +49,12 @@ SpecACF <- function(x, bin.width,
     if (is.null(d) == FALSE){
       dim(x) <- d
     }
-
   }
-
 
   # Convert vector to matrix
   if (is.vector(x)){
     x <- matrix(x, ncol = 1)
   }
-
-
 
   if (is.data.frame(x) == TRUE){
     x <- as.matrix(x)
@@ -93,7 +88,7 @@ SpecACF <- function(x, bin.width,
   freq = (lag / (nrow(x))) / bin.width
   spec = Re(stats::fft(acf)) * bin.width
 
-  rfreq <- (utils::tail(freq, 1) + freq[2])/2
+  rfreq = max(freq)
 
   if (pos.f.only){
     spec <- spec[freq > 0 & freq <= 1/(2*bin.width)]
