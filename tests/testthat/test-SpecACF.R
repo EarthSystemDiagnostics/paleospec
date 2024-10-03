@@ -26,7 +26,7 @@ test_that("SpecACF", {
   expect_equal(sp1_tap$dof, rep(3*2, length(sp1_tap$freq)))
 
   # test for neg freq
-  sp2 <- SpecACF(ts1, bin.width = 1, pos.f.only = FALSE)
+  sp2 <- SpecACF(ts1, bin.width = 1, k = 1, pos.f.only = FALSE)
 
   expect_s3_class(sp2, "spec")
 
@@ -39,7 +39,7 @@ test_that("SpecACF", {
 
   m <- matrix(rnorm(3*100), ncol = 3)
 
-  spm <- SpecACF(m, bin.width = 1)
+  spm <- SpecACF(m, bin.width = 1, k = 1)
 
   #LPlot(spm)
 
@@ -56,7 +56,7 @@ test_that("SpecACF", {
 
 
   # do not demean
-  sp1ndm <- SpecACF(rnorm(100, mean = 100), bin.width = 1, demean = FALSE,
+  sp1ndm <- SpecACF(rnorm(100, mean = 100), bin.width = 1, k = 1, demean = FALSE,
                     detrend = FALSE, return.working = TRUE, pos.f.only = FALSE)
   expect_true(mean(sp1ndm$working$x) > 90)
   expect_true(sp1ndm$spec[1] > sp2$spec[1])

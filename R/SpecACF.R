@@ -120,7 +120,7 @@
 #' )
 SpecACF <- function(x,
                       deltat = NULL, bin.width = NULL,
-                      k = 1, nw = 0,
+                      k = 3, nw = 2,
                       demean = TRUE, detrend = TRUE,
                       TrimNA = TRUE,
                       pos.f.only = TRUE,
