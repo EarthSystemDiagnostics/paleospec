@@ -49,3 +49,18 @@ test_that("plots have correct no colours", {
   expect_equal(nrow(unique(gg1_df2_b$data[[1]]["colour"])), 2)
 
 })
+
+
+test_that("removeFirst and removeLast operate on a per spec_id basis", {
+  sp1 <- SpecMTM(ts(rnorm(100)))
+  sp2 <- SpecMTM(ts(rnorm(1000)))
+
+  gf1 <- gg_spec(list(sp1, sp2), removeFirst = 1)
+
+  g0 <- gg_spec(list(sp1, sp2), removeFirst = 0)
+
+  gl3 <- gg_spec(list(sp1, sp2), removeLast = 3)
+
+  expect_that(nrow(g0$data) - nrow(gl3$data), equals(6))
+
+})

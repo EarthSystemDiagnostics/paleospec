@@ -148,7 +148,7 @@ test_that("FilterSpecLog handles df.log parameter correctly", {
 test_that("FilterSpecLog handles edge cases appropriately", {
   empty_spec <- list(freq = numeric(0), spec = numeric(0), dof = numeric(0), shape = numeric(0))
 
-  expect_error(FilterSpecLog(empty_spec))
+  expect_warning(expect_error(FilterSpecLog(empty_spec)))
   expect_error(FilterSpecLog("not a spec"))
 })
 

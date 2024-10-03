@@ -88,7 +88,7 @@ powerlaw like properties, where: $S(f) = \alpha f^{-\beta}$
 set.seed(20221109)
 
 # length of the time series
-N <- 1e04
+N <- 1e03
 
 # parameters of the powerlaw spectrum
 alpha <- 0.1

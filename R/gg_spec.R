@@ -86,23 +86,41 @@ gg_spec <- function(x, gg = NULL, conf = TRUE,
   }
 
 
-  if (removeFirst > 0) {
-    df <- df[rank(df$freq) > removeFirst, ]
-  }
-
-  if (removeLast > 0) {
-    df <- df[rank(-df$freq) > removeLast,]
-  }
+  ## Remove first and or last freqs on a per spec_id basis
 
   if (exists("spec_id", df) == FALSE){
     df$spec_id <- 1
-    }
-
+  }
 
   if (is.numeric(df$spec_id)){
     df$spec_id <- as.character(df$spec_id)
   }
 
+
+  if (removeFirst > 0) {
+    #df <- df[rank(df$freq) > removeFirst, ]
+
+    # Convert 'df' to a data.table
+    data.table::setDT(df)
+
+    # Group by 'spec_id' and filter rows where 'rank(freq)' is greater than 'removeFirst'
+    df <- df[, .SD[rank(freq) > removeFirst], by = spec_id]
+
+    # return to data.frame
+    df <- as.data.frame(df)
+  }
+
+  if (removeLast > 0) {
+    #df <- df[rank(-df$freq) > removeLast,]
+    # Convert 'df' to a data.table
+    data.table::setDT(df)
+
+    # Group by 'spec_id' and filter rows where 'rank(-freq)' is greater than 'removeLast'
+    df <- df[, .SD[rank(-freq) > removeLast], by = spec_id]
+
+    # return to data.frame
+    df <- as.data.frame(df)
+  }
 
 
   if (is.null(gg)) {

@@ -1,7 +1,9 @@
-#' Estimate Power Spectra via the Autocovariance Function
+#' Estimate Power Spectra via the Autocovariance Function With Optional Slepian
+#' Tapers
 #'
 #' @param x a vector or matrix of binned values, possibly with gaps
-#' @param bin.width the width of the bins, effectively delta_t
+#' @param deltat,bin.width the time-step of the timeseries, equivalently the
+#' width of the bins in a binned timeseries, set only one
 #' @param pos.f.only return only positive frequencies, defaults to TRUE If TRUE,
 #'   freq == 0, and frequencies higher than 1/(2*bin.width) which correspond to
 #'   the negative frequencies are removed
@@ -20,6 +22,8 @@
 #'   indicates that the estimates are unbiased such that smoothing across
 #'   frequencies to remove negative estimates results in an unbiased power
 #'   spectrum.
+#' @inheritParams SpecMTM
+#' @importFrom multitaper spec.mtm
 #' @author Torben Kunz and Andrew Dolman <andrew.dolman@awi.de>
 #' @return a spec object (list)
 #' @family functions to estimate power spectra
@@ -27,92 +31,221 @@
 #'
 #' @examples
 #' set.seed(20230312)
-#' x <- cumsum(rgamma(200, shape = 1.5, rate = 1.5/10))
-#' y <- SimProxySeries(a = 0.1, b = 1, t.smpl = x, nt = 2000,
-#'  smth.lab = list(type = "rect", tau = 1))
-#' y_binned <- BinTimeseries(x, y, bin.width = 15)
-#' sp1 <- SpecACF(y_binned$mean.value, bin.width = 15)
-#' sp2 <- LogSmooth(sp1)
-#' LPlot(sp1)
-#' LLines(sp2, col = "red")
-SpecACF <- function(x, bin.width,
-                    demean = TRUE, detrend = TRUE,
-                    TrimNA = TRUE,
-                    pos.f.only = TRUE,
-                    return.working = FALSE){
-
-   # Convert ts to vector
-
-  if (is.ts(x)){
-    d <- dim(x)
-    x <- as.vector(x)
-
-    if (is.null(d) == FALSE){
-      dim(x) <- d
-    }
-
+#'
+#' # Comparison with SpecMTM
+#'
+#' tsM <- replicate(2, SimPLS(1e03, 1, 0.1))
+#' spMk3 <- SpecACF(tsM, bin.width = 1, k = 3, nw = 2)
+#' spMk1 <- SpecACF(tsM, bin.width = 1, k = 1, nw = 0)
+#'
+#' spMTMa <- SpecMTM(tsM[,1], deltat = 1)
+#' spMTMb <- SpecMTM(tsM[,2], deltat = 1)
+#' spMTM <- spMTMa
+#' spMTM$spec <- (spMTMa$spec + spMTMb$spec)/2
+#'
+#' gg_spec(list(
+#'   `ACF k=1` = spMk1,
+#'   `ACF k=3` = spMk3,
+#'   `MTM k=3` = spMTM
+#' ), alpha.line = 0.75) +
+#'   ggplot2::facet_wrap(~spec_id)
+#'
+#' ## No gaps
+#'
+#' ts1 <- SimPLS(1000, 1, 0.1)
+#'
+#' sp_ACF1 <- SpecACF(ts1, 1, k = 1)
+#' sp_MTM7 <- SpecMTM(ts1, nw = 4, k = 7, deltat = 1)
+#' sp_ACF7 <- SpecACF(ts1, 1, k = 7, nw = 4)
+#'
+#' gg_spec(list(
+#'   `ACF k=1` = sp_ACF1, `ACF k=7` = sp_ACF7, `MTM k=7` = sp_MTM7
+#' ))
+#'
+#' # With Gaps
+#'
+#' gaps <- (arima.sim(list(ar = 0.5), n = length(ts1))) > 1
+#' table(gaps)
+#' ts1_g <- ts1
+#' ts1_g[gaps] <- NA
+#'
+#' sp_ACF1_g <- SpecACF(ts1_g, 1)
+#' sp_ACFMTM1_g <- SpecACF(ts1_g, bin.width = 1, nw = 4, k = 7)
+#'
+#' gg_spec(list(
+#'   ACF_g = sp_ACF1_g,
+#'   ACF_g_smoothed = FilterSpecLog(sp_ACF1_g),
+#'   ACF_g_tapered = sp_ACFMTM1_g
+#' ), conf = FALSE) +
+#'   ggplot2::geom_abline(intercept = log10(0.1), slope = -1, lty = 2)
+#'
+#'
+#'
+#' ## AR4
+#' arc_spring <- c(2.7607, -3.8106, 2.6535, -0.9238)
+#'
+#' tsAR4 <- arima.sim(list(ar = arc_spring), n = 1e03) + rnorm(1e03, 0, 10)
+#' plot(tsAR4)
+#' spAR4_ACF <- SpecACF(tsAR4, 1)
+#' spAR4_MTACF <- SpecACF(as.numeric(tsAR4), 1, k = 15, nw = 8)
+#'
+#' gg_spec(list(#'
+#'   `ACF k=1` = spAR4_ACF,
+#'   `ACF k=15` = spAR4_MTACF)
+#' )
+#'
+#' ## Add gaps to timeseries
+#'
+#' gaps <- (arima.sim(list(ar = 0.5), n = length(tsAR4))) > 2
+#' table(gaps)
+#' tsAR4_g <- tsAR4
+#' tsAR4_g[gaps] <- NA
+#'
+#' plot(tsAR4, col = "green")
+#' lines(tsAR4_g, col = "blue")
+#'
+#' table(tsAR4_g > 0, useNA = "always")
+#'
+#' spAR4_ACF_g <- SpecACF(as.numeric(tsAR4_g), 1)
+#' spAR4_MTACF_g <- SpecACF(as.numeric(tsAR4_g), 1, nw = 8, k = 15)
+#'
+#' table(spAR4_ACF_g$spec < 0)
+#' table(spAR4_MTACF_g$spec < 0)
+#'
+#' gg_spec(list(
+#'   `ACF gaps k=1` = spAR4_ACF_g,
+#'   `ACF gaps k = 15` = spAR4_MTACF_g,
+#'   `ACF full k = 15` = spAR4_MTACF
+#' )
+#' )
+SpecACF <- function(x,
+                      deltat = NULL, bin.width = NULL,
+                      k = 3, nw = 2,
+                      demean = TRUE, detrend = TRUE,
+                      TrimNA = TRUE,
+                      pos.f.only = TRUE,
+                      return.working = FALSE) {
+  if (is.null(deltat) & is.null(bin.width) & is.ts(x) == FALSE) {
+    stop("One of deltat or bin.width must be set")
   }
 
+  # Convert ts to vector
+  if (is.ts(x)) {
+    d <- dim(x)
+    dt_ts <- deltat(x)
+
+    x <- as.vector(x)
+
+    if (is.null(deltat) == FALSE) {
+      if (dt_ts != deltat) stop("timeseries deltat does not match argument deltat")
+    }
+
+    if (is.null(bin.width) == FALSE) {
+      if (dt_ts != bin.width) stop("timeseries deltat does not match argument bin.width")
+    }
+
+    if (is.null(deltat)) deltat <- dt_ts
+    if (is.null(bin.width)) bin.width <- dt_ts
+
+    if (is.null(d) == FALSE) {
+      dim(x) <- d
+    }
+  }
+
+  if (is.null(bin.width) & is.null(deltat) == FALSE) {
+    bin.width <- deltat
+  }
+
+  if (is.null(bin.width) == FALSE & is.null(deltat)) {
+    deltat <- bin.width
+  }
 
   # Convert vector to matrix
-  if (is.vector(x)){
+  if (is.vector(x)) {
     x <- matrix(x, ncol = 1)
   }
 
-
-
-  if (is.data.frame(x) == TRUE){
+  if (is.data.frame(x) == TRUE) {
     x <- as.matrix(x)
   }
 
-  if (TrimNA){
+  if (TrimNA) {
     x <- TrimNA(x)
   }
 
-  if (detrend){
-    i <- seq_along(x[,1])
+  if (detrend) {
+    i <- seq_along(x[, 1])
     x <- apply(x, 2, function(y) {
       stats::residuals(stats::lm(y ~ i, na.action = "na.exclude"))
     })
   }
 
   # remove mean from each record
-  if (demean){
+  if (demean) {
     x <- x - colMeans(x, na.rm = TRUE)
   }
 
-  lag = (0:(nrow(x)-1))
+  lag <- (0:(nrow(x) - 1))
 
-  if (return.working == TRUE){
-    working <- mean.ACF(x, return.working = TRUE)
+  ncolx <- ncol(x)
+
+  ## Tapering
+  if (k > 1) {
+    n <- nrow(x)
+
+    dpssIN <- multitaper:::dpss(n,
+                                k = k, nw = nw,
+                                returnEigenvalues = TRUE
+    )
+    dw <- dpssIN$v #* sqrt(bin.width)
+    ev <- dpssIN$eigen
+
+    x <- matrix(unlist(lapply(1:ncol(x), function(i) {
+      lapply(1:ncol(dw), function(j) {
+        x[, i] * dw[, j]
+      })
+    })), nrow = nrow(x), byrow = FALSE)
+  }
+
+  if (return.working == TRUE) {
+    working <- PaleoSpec:::mean.ACF(x, return.working = TRUE)
     acf <- working[["acf"]]
-  } else{
-    acf <- mean.ACF(x)
+  } else {
+    acf <- PaleoSpec:::mean.ACF(x)
   }
 
-  freq = (lag / (nrow(x))) / bin.width
-  spec = Re(stats::fft(acf)) * bin.width
+  freq <- (lag / (nrow(x))) / bin.width
 
-  rfreq <- (utils::tail(freq, 1) + freq[2])/2
-
-  if (pos.f.only){
-    spec <- spec[freq > 0 & freq <= 1/(2*bin.width)]
-    freq <- freq[freq > 0 & freq <= 1/(2*bin.width)]
+  if (k > 1){
+    spec <- Re(stats::fft(acf)) * bin.width * nrow(x)
+  } else {
+    spec <- Re(stats::fft(acf)) * bin.width
   }
 
-  out <- list(bin.width = bin.width,
-              rfreq = rfreq,
-              nrec = ncol(x),
-              lag = lag, acf = acf,
-              freq = freq, spec = spec, f.length = 1,
-              dof = rep(2*ncol(x), length(freq)))
 
-  class(out) <-  c("SpecACF", "spec")
 
-  if (return.working){
+
+  rfreq <- max(freq)
+
+  if (pos.f.only) {
+    spec <- spec[freq > 0 & freq <= 1 / (2 * bin.width)]
+    freq <- freq[freq > 0 & freq <= 1 / (2 * bin.width)]
+  }
+
+  out <- list(
+    bin.width = bin.width,
+    rfreq = rfreq,
+    nrec = ncolx,
+    lag = lag, acf = acf,
+    freq = freq, spec = spec, f.length = 1,
+    dof = rep(2 * ncolx * k, length(freq))
+  )
+
+  class(out) <- c("SpecACF", "spec")
+
+  if (return.working) {
     out <- list(working = working, spec = out)
   }
-
   return(out)
 }
 
