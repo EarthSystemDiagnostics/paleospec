@@ -13,6 +13,17 @@ test_that("SpecACF", {
   expect_length(sp1$spec, n/2)
   expect_length(sp1$dof, n/2)
 
+  # test deltat argument
+  ts2 <- ts(rnorm(n), deltat = 3)
+  sp1_bw <- SpecACF(ts2, bin.width = 3)
+  sp1_dt <- SpecACF(ts2, deltat = 3)
+  expect_s3_class(sp1_dt, "spec")
+  expect_equal(sp1_bw$freq, sp1_dt$freq)
+
+  # test using tapers
+  sp1_tap <- SpecACF(ts1, deltat = 1, k = 3, nw = 2)
+  expect_s3_class(sp1_tap, "spec")
+  expect_equal(sp1_tap$dof, rep(3*2, length(sp1_tap$freq)))
 
   # test for neg freq
   sp2 <- SpecACF(ts1, bin.width = 1, pos.f.only = FALSE)

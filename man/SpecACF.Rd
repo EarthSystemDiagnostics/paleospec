@@ -2,11 +2,15 @@
 % Please edit documentation in R/SpecACF.R
 \name{SpecACF}
 \alias{SpecACF}
-\title{Estimate Power Spectra via the Autocovariance Function}
+\title{Estimate Power Spectra via the Autocovariance Function With Optional Slepian
+Tapers}
 \usage{
 SpecACF(
   x,
-  bin.width,
+  deltat = NULL,
+  bin.width = NULL,
+  k = 1,
+  nw = 0,
   demean = TRUE,
   detrend = TRUE,
   TrimNA = TRUE,
@@ -17,7 +21,13 @@ SpecACF(
 \arguments{
 \item{x}{a vector or matrix of binned values, possibly with gaps}
 
-\item{bin.width}{the width of the bins, effectively delta_t}
+\item{deltat, bin.width}{the time-step of the timeseries, equivalently the
+width of the bins in a binned timeseries, set only one}
+
+\item{k}{a positive integer, the number of tapers, often 2*nw.}
+
+\item{nw}{a positive double precision number, the time-bandwidth
+parameter.}
 
 \item{demean}{remove the mean from each record (column) in x, defaults to
 TRUE. If detrend is TRUE, mean will be removed during detrending regardless
@@ -47,14 +57,93 @@ Estimates the power spectrum from a single time series, or the
 }
 \examples{
 set.seed(20230312)
-x <- cumsum(rgamma(200, shape = 1.5, rate = 1.5/10))
-y <- SimProxySeries(a = 0.1, b = 1, t.smpl = x, nt = 2000,
- smth.lab = list(type = "rect", tau = 1))
-y_binned <- BinTimeseries(x, y, bin.width = 15)
-sp1 <- SpecACF(y_binned$mean.value, bin.width = 15)
-sp2 <- LogSmooth(sp1)
-LPlot(sp1)
-LLines(sp2, col = "red")
+
+# Comparison with SpecMTM
+
+tsM <- replicate(2, SimPLS(1e03, 1, 0.1))
+spMk3 <- SpecACF(tsM, bin.width = 1, k = 3, nw = 2)
+spMk1 <- SpecACF(tsM, bin.width = 1, k = 1, nw = 0)
+
+spMTMa <- SpecMTM(tsM[,1], deltat = 1)
+spMTMb <- SpecMTM(tsM[,2], deltat = 1)
+spMTM <- spMTMa
+spMTM$spec <- (spMTMa$spec + spMTMb$spec)/2
+
+gg_spec(list(
+  `ACF k=1` = spMk1,
+  `ACF k=3` = spMk3,
+  `MTM k=3` = spMTM
+), alpha.line = 0.75) +
+  ggplot2::facet_wrap(~spec_id)
+
+## No gaps
+
+ts1 <- SimPLS(1000, 1, 0.1)
+
+sp_ACF1 <- SpecACF(ts1, 1, k = 1)
+sp_MTM7 <- SpecMTM(ts1, nw = 4, k = 7, deltat = 1)
+sp_ACF7 <- SpecACF(ts1, 1, k = 7, nw = 4)
+
+gg_spec(list(
+  `ACF k=1` = sp_ACF1, `ACF k=7` = sp_ACF7, `MTM k=7` = sp_MTM7
+))
+
+# With Gaps
+
+gaps <- (arima.sim(list(ar = 0.5), n = length(ts1))) > 1
+table(gaps)
+ts1_g <- ts1
+ts1_g[gaps] <- NA
+
+sp_ACF1_g <- SpecACF(ts1_g, 1)
+sp_ACFMTM1_g <- SpecACF(ts1_g, bin.width = 1, nw = 4, k = 7)
+
+gg_spec(list(
+  ACF_g = sp_ACF1_g,
+  ACF_g_smoothed = FilterSpecLog(sp_ACF1_g),
+  ACF_g_tapered = sp_ACFMTM1_g
+), conf = FALSE) +
+  ggplot2::geom_abline(intercept = log10(0.1), slope = -1, lty = 2)
+
+
+
+## AR4
+arc_spring <- c(2.7607, -3.8106, 2.6535, -0.9238)
+
+tsAR4 <- arima.sim(list(ar = arc_spring), n = 1e03) + rnorm(1e03, 0, 10)
+plot(tsAR4)
+spAR4_ACF <- SpecACF(tsAR4, 1)
+spAR4_MTACF <- SpecACF(as.numeric(tsAR4), 1, k = 15, nw = 8)
+
+gg_spec(list(#'
+  `ACF k=1` = spAR4_ACF,
+  `ACF k=15` = spAR4_MTACF)
+)
+
+## Add gaps to timeseries
+
+gaps <- (arima.sim(list(ar = 0.5), n = length(tsAR4))) > 2
+table(gaps)
+tsAR4_g <- tsAR4
+tsAR4_g[gaps] <- NA
+
+plot(tsAR4, col = "green")
+lines(tsAR4_g, col = "blue")
+
+table(tsAR4_g > 0, useNA = "always")
+
+spAR4_ACF_g <- SpecACF(as.numeric(tsAR4_g), 1)
+spAR4_MTACF_g <- SpecACF(as.numeric(tsAR4_g), 1, nw = 8, k = 15)
+
+table(spAR4_ACF_g$spec < 0)
+table(spAR4_MTACF_g$spec < 0)
+
+gg_spec(list(
+  `ACF gaps k=1` = spAR4_ACF_g,
+  `ACF gaps k = 15` = spAR4_MTACF_g,
+  `ACF full k = 15` = spAR4_MTACF
+)
+)
 }
 \seealso{
 Other functions to estimate power spectra: 

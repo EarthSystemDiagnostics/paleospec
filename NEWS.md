@@ -1,3 +1,10 @@
+# PaleoSpec 0.32
+
+* SpecACF can now use slepian tapers
+* Small fix to rfreq calculation in SpecACF
+* RemoveFirst and RemoveLast in gg_spec work on a per spectrum basis for list
+  and spec_df objects
+
 # PaleoSpec 0.31
 
 * Improve linking between function documentation using @family
