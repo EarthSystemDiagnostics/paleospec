@@ -72,7 +72,7 @@ gg_spec <- function(x, gg = NULL,
                     removeFirst = 0, removeLast = 0,
                     min.colours = 2,
                     force.lims = FALSE,
-                    force.CI = FALSE,
+                    force.CI = NULL,
                     quantiles = FALSE,
                     time_unit = NULL) {
   if (!missing("force.CI")) {
@@ -151,14 +151,16 @@ gg_spec <- function(x, gg = NULL,
   if (conf == TRUE & exists("lim.1", df)) {
     if (nrow(df) > 1e04 & force.lims == FALSE) {
       warning("geom_ribbon is very slow when the number of points > 1e04, skipping the confidence region")
-    }     }else {
-        ggplot2::geom_ribbon(
+    } else {
+    p <- p +
+      ggplot2::geom_ribbon(
           data = df, ggplot2::aes(
             x = Frequency, ymin = lim.2,
             ymax = lim.1, fill = {{ colour }}
           ),
           alpha = alpha.ribbon[1], colour = NA
         )
+    }
     }
 
 
@@ -170,8 +172,7 @@ gg_spec <- function(x, gg = NULL,
         ggplot2::geom_ribbon(
           data = df, ggplot2::aes(
             x = Frequency, ymin = `X2.5.`,
-            ymax = `X97.5.`, fill = {{ colour }}
-          ),
+            ymax = `X97.5.`, fill = {{ colour }}),
           alpha = alpha.ribbon[1], colour = NA
         ) +
         ggplot2::geom_ribbon(

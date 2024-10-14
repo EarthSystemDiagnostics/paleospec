@@ -18,7 +18,7 @@ gg_spec(
   removeLast = 0,
   min.colours = 2,
   force.lims = FALSE,
-  force.CI = FALSE,
+  force.CI = NULL,
   quantiles = FALSE,
   time_unit = NULL
 )
