@@ -10,12 +10,17 @@ gg_spec(
   conf = TRUE,
   spec_id = NULL,
   colour = spec_id,
+  group = spec_id,
+  linetype = NULL,
   alpha.line = 1,
-  alpha.ribbon = 0.3,
+  alpha.ribbon = c(0.166, 0.333),
   removeFirst = 0,
   removeLast = 0,
+  min.colours = 2,
+  force.lims = FALSE,
   force.CI = FALSE,
-  min.colours = 2
+  quantiles = FALSE,
+  time_unit = NULL
 )
 }
 \arguments{
@@ -27,22 +32,28 @@ gg_spec(
 
 \item{spec_id}{Name for this plot layer}
 
-\item{colour}{Colour or name of variable to which to map to colour}
+\item{colour}{Name of variable map to colour, unquoted}
+
+\item{group}{Name of variable to map to group, unquoted}
+
+\item{linetype}{Name of variable map to linetype, unquoted}
 
 \item{alpha.line}{Alpha level for the spectra line(s)}
 
 \item{alpha.ribbon}{Alpha level for the confidence region(s)}
 
-\item{removeFirst, removeLast}{remove first or last "n" values on the low or
-high frequency side respectively. Will be unpredictable when used with a
-list of spectra, or spec_df object with multiple spectra with different
-frequency axes.}
+\item{removeFirst, removeLast}{Remove first or last "n" values on the low or
+high frequency side respectively. Operates on a per group basis.}
 
-\item{force.CI}{Force the plotting of confidence regions when the total number
-of frequencies exceeds 10000. Defaults to FALSE}
-
-\item{min.colours}{minimum number of spectra before starting to colour them
+\item{min.colours}{Minimum number of spectra before starting to colour them
 separately}
+
+\item{force.lims, force.CI}{Force the plotting of confidence regions when the total number
+of frequencies exceeds 10000. force.CI is deprecated, use force.lims. Defaults to FALSE}
+
+\item{quantiles}{Plot uncertainty quantiles if they exist in the spec object}
+
+\item{time_unit}{Optional string giving the time unit for axes labels, e.g. "years"}
 }
 \value{
 a ggplot object
@@ -54,7 +65,7 @@ Plot One or More Spectra with ggplot2
 library(PaleoSpec)
 N <- 1e03
 beta <- 1
-alpha = 0.1
+alpha <- 0.1
 
 ts1 <- SimPLS(N = N, b = beta, a = alpha)
 ts2 <- SimPLS(N = N, b = beta, a = alpha)
