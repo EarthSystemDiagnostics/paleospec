@@ -65,13 +65,13 @@ Plot One or More Spectra with ggplot2
 library(PaleoSpec)
 N <- 1e03
 beta <- 1
-alpha = 0.1
+alpha <- 0.1
 
 ts1 <- SimPLS(N = N, b = beta, a = alpha)
 ts2 <- SimPLS(N = N, b = beta, a = alpha)
-sp1 <- SpecMTM(ts1)
+sp1 <- SpecMTM(ts1, deltat = 1)
 sp1 <- AddConfInterval(sp1)
-sp2 <- SpecMTM(ts2)
+sp2 <- SpecMTM(ts2, deltat = 1)
 
 # plot single spectrum
 p <- gg_spec(sp1, spec_id = "df1")

@@ -26,13 +26,13 @@
 #' library(PaleoSpec)
 #' N <- 1e03
 #' beta <- 1
-#' alpha = 0.1
+#' alpha <- 0.1
 #'
 #' ts1 <- SimPLS(N = N, b = beta, a = alpha)
 #' ts2 <- SimPLS(N = N, b = beta, a = alpha)
-#' sp1 <- SpecMTM(ts1)
+#' sp1 <- SpecMTM(ts1, deltat = 1)
 #' sp1 <- AddConfInterval(sp1)
-#' sp2 <- SpecMTM(ts2)
+#' sp2 <- SpecMTM(ts2, deltat = 1)
 #'
 #' # plot single spectrum
 #' p <- gg_spec(sp1, spec_id = "df1")
@@ -62,57 +62,40 @@
 #' p <- gg_spec(sp2, p)
 #' p
 gg_spec <- function(x, gg = NULL,
-                     conf = TRUE,
-                     spec_id = NULL,
-                     colour = spec_id,
-                     group = spec_id,
-                     linetype = NULL,
-                     alpha.line = 1,
-                     alpha.ribbon = c(0.166, 0.333),
-                     removeFirst = 0, removeLast = 0,
-                     min.colours = 2,
-                     force.lims = FALSE,
-                     force.CI = FALSE,
-                     quantiles = FALSE,
-                     time_unit = NULL) {
+                    conf = TRUE,
+                    spec_id = NULL,
+                    colour = spec_id,
+                    group = spec_id,
+                    linetype = NULL,
+                    alpha.line = 1,
+                    alpha.ribbon = c(0.166, 0.333),
+                    removeFirst = 0, removeLast = 0,
+                    min.colours = 2,
+                    force.lims = FALSE,
+                    force.CI = FALSE,
+                    quantiles = FALSE,
+                    time_unit = NULL) {
+  if (!missing("force.CI")) {
 
-  if (!missing("force.CI")){
     warning("the force.CI argument is deprecated please use force.lims")
     force.lims <- force.CI
   }
 
   gg_installed <- requireNamespace("ggplot2", quietly = TRUE)
 
-  if (gg_installed == FALSE){
+  if (gg_installed == FALSE) {
     stop("package ggplot2 is required to use gg_spec(). To install ggplot2, run install.packages(\"ggplot2\") from the console")
   }
 
-  if (class(x)[1] != "spec_df" & "list" %in% class(x) == FALSE){
+  if (class(x)[1] != "spec_df" & "list" %in% class(x) == FALSE) {
     x <- list(x)
     names(x) <- spec_id
   }
 
-  if (class(x)[1] != "spec_df"){
+  if (class(x)[1] != "spec_df") {
     df <- Spec2DF(x)
   } else {
     df <- x
-  }
-
-
-  if (removeFirst > 0) {
-    df <- df %>%
-      group_by({{group}}) %>%
-      filter(rank(df$freq) > removeFirst)
-
-    #[rank(df$freq) > removeFirst, ]
-  }
-
-  if (removeLast > 0) {
-    df <- df[rank(-df$freq) > removeLast,]
-  }
-
-  if (exists("spec_id", df) == FALSE){
-    df$spec_id <- 1
   }
 
 
@@ -120,7 +103,31 @@ gg_spec <- function(x, gg = NULL,
     df$spec_id <- as.character(df$spec_id)
   }
 
-  if (is.null(time_unit) == FALSE){
+
+  if (removeFirst > 0) {
+    # Convert 'df' to a data.table
+    data.table::setDT(df)
+
+    # Group by 'spec_id' and filter rows where 'rank(freq)' is greater than 'removeFirst'
+    df <- df[, .SD[rank(freq) > removeFirst], by = spec_id]
+
+    # return to data.frame
+    df <- as.data.frame(df)
+  }
+
+  if (removeLast > 0) {
+    # Convert 'df' to a data.table
+    data.table::setDT(df)
+
+    # Group by 'spec_id' and filter rows where 'rank(-freq)' is greater than 'removeLast'
+    df <- df[, .SD[rank(-freq) > removeLast], by = spec_id]
+
+    # return to data.frame
+    df <- as.data.frame(df)
+
+  }
+
+  if (is.null(time_unit) == FALSE) {
     lab_timescale <- paste0("Timescale [", time_unit, "]")
     lab_freq <- paste0("Frequency [1/", time_unit, "]")
   } else {
@@ -130,8 +137,8 @@ gg_spec <- function(x, gg = NULL,
 
 
   if (is.null(gg)) {
-    p <- ggplot2::ggplot(data = df, ggplot2::aes(group = {{group}}))
-  } else {
+    p <- ggplot2::ggplot(data = df, ggplot2::aes(group = {{ group }}))
+    } else {
     p <- gg
   }
 
@@ -141,49 +148,62 @@ gg_spec <- function(x, gg = NULL,
 
   df <- as.data.frame(df)
 
-  if (conf == TRUE & exists("lim.1", df)){
+  if (conf == TRUE & exists("lim.1", df)) {
+    if (nrow(df) > 1e04 & force.lims == FALSE) {
+      warning("geom_ribbon is very slow when the number of points > 1e04, skipping the confidence region")
+    }     }else {
+        ggplot2::geom_ribbon(
+          data = df, ggplot2::aes(
+            x = Frequency, ymin = lim.2,
+            ymax = lim.1, fill = {{ colour }}
+          ),
+          alpha = alpha.ribbon[1], colour = NA
+        )
+    }
 
-    if (nrow(df) > 1e04 & force.lims == FALSE){
+
+  if (quantiles == TRUE & exists("X2.5.", df)) {
+    if (nrow(df) > 1e04 & force.lims == FALSE) {
       warning("geom_ribbon is very slow when the number of points > 1e04, skipping the confidence region")
     } else {
-
       p <- p +
-        ggplot2::geom_ribbon(data = df, ggplot2::aes(x = Frequency, ymin = lim.2,
-                                                     ymax = lim.1, fill = {{ colour }}),
-                             alpha = alpha.ribbon[1], colour = NA)
+        ggplot2::geom_ribbon(
+          data = df, ggplot2::aes(
+            x = Frequency, ymin = `X2.5.`,
+            ymax = `X97.5.`, fill = {{ colour }}
+          ),
+          alpha = alpha.ribbon[1], colour = NA
+        ) +
+        ggplot2::geom_ribbon(
+          data = df, ggplot2::aes(
+            x = Frequency, ymin = `X15.9.`,
+            ymax = `X84.1.`, fill = {{ colour }}
+          ),
+          alpha = alpha.ribbon[2], colour = NA
+        )
     }
   }
 
-  if (quantiles == TRUE & exists("X2.5.", df)){
-
-    if (nrow(df) > 1e04 & force.lims == FALSE){
-      warning("geom_ribbon is very slow when the number of points > 1e04, skipping the confidence region")
-    } else {
-
-      p <- p +
-        ggplot2::geom_ribbon(data = df, ggplot2::aes(x = Frequency, ymin = `X2.5.`,
-                                                     ymax = `X97.5.`, fill = {{ colour }}),
-                             alpha = alpha.ribbon[1], colour = NA)+
-        ggplot2::geom_ribbon(data = df, ggplot2::aes(x = Frequency, ymin = `X15.9.`,
-                                                     ymax = `X84.1.`, fill = {{ colour }}),
-                             alpha = alpha.ribbon[2], colour = NA)
-    }
-  }
-
-  p <- p + ggplot2::geom_line(data = df, ggplot2::aes(x = Frequency, y = PSD,
-                                                      linetype = {{ linetype }},
-                                                      colour = {{ colour }}),
-                              alpha = alpha.line
+  p <- p + ggplot2::geom_line(
+    data = df, ggplot2::aes(
+      x = Frequency, y = PSD,
+      linetype = {{ linetype }},
+      colour = {{ colour }}
+    ),
+    alpha = alpha.line
   ) +
-    ggplot2::scale_x_continuous(name = lab_freq, trans = "log10",
-                                sec.axis = ggplot2::sec_axis(~ 1/., lab_timescale, labels = scales::comma)) +
+    ggplot2::scale_x_continuous(
+      name = lab_freq, trans = "log10",
+      sec.axis = ggplot2::sec_axis(~ 1 / ., lab_timescale, labels = scales::comma)
+    ) +
     ggplot2::scale_y_continuous(trans = "log10") +
     ggplot2::annotation_logticks(sides = "tlb") +
     ggplot2::theme_bw() +
     ggplot2::scale_colour_brewer("",
-                                 type = "qual",
-                                 palette = "Dark2",
-                                 aesthetics = c("colour", "fill")) +
+      type = "qual",
+      palette = "Dark2",
+      aesthetics = c("colour", "fill")
+    ) +
     ggplot2::theme(panel.grid.minor = ggplot2::element_blank()) +
     ggplot2::scale_alpha() +
     ggplot2::labs(linetype = "")
@@ -194,19 +214,16 @@ gg_spec <- function(x, gg = NULL,
   ncolrs <- length(colrs)
 
 
+  if (ncolrs <= min.colours) {
+    p <- p + ggplot2::scale_colour_manual("",
+      values = "black",
+      aesthetics = c("colour", "fill")
+    )
 
-  if (ncolrs <= min.colours){
-
-    p <- p + ggplot2::scale_colour_manual("", values = "black",
-                                          aesthetics = c("colour", "fill"))
-
-    if (is.null({{ colour }}) & is.null({{ linetype }})){
+    if (is.null({{ colour }}) & is.null({{ linetype }})) {
       p <- p + ggplot2::theme(legend.position = "none")
     }
-
   }
 
   p
 }
-
-
