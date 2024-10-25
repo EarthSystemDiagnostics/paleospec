@@ -44,12 +44,17 @@
 <span>  conf <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  spec_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  colour <span class="op">=</span> <span class="va">spec_id</span>,</span>
+<span>  group <span class="op">=</span> <span class="va">spec_id</span>,</span>
+<span>  linetype <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  alpha.line <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  alpha.ribbon <span class="op">=</span> <span class="fl">0.3</span>,</span>
+<span>  alpha.ribbon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.166</span>, <span class="fl">0.333</span><span class="op">)</span>,</span>
 <span>  removeFirst <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  removeLast <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  force.CI <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  min.colours <span class="op">=</span> <span class="fl">2</span></span>
+<span>  min.colours <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  force.lims <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  force.CI <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  quantiles <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  time_unit <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -74,7 +79,15 @@
 
 
 <dt id="arg-colour">colour<a class="anchor" aria-label="anchor" href="#arg-colour"></a></dt>
-<dd><p>Colour or name of variable to which to map to colour</p></dd>
+<dd><p>Name of variable map to colour, unquoted</p></dd>
+
+
+<dt id="arg-group">group<a class="anchor" aria-label="anchor" href="#arg-group"></a></dt>
+<dd><p>Name of variable to map to group, unquoted</p></dd>
+
+
+<dt id="arg-linetype">linetype<a class="anchor" aria-label="anchor" href="#arg-linetype"></a></dt>
+<dd><p>Name of variable map to linetype, unquoted</p></dd>
 
 
 <dt id="arg-alpha-line">alpha.line<a class="anchor" aria-label="anchor" href="#arg-alpha-line"></a></dt>
@@ -86,20 +99,26 @@
 
 
 <dt id="arg-removefirst-removelast">removeFirst, removeLast<a class="anchor" aria-label="anchor" href="#arg-removefirst-removelast"></a></dt>
-<dd><p>remove first or last "n" values on the low or
-high frequency side respectively. Will be unpredictable when used with a
-list of spectra, or spec_df object with multiple spectra with different
-frequency axes.</p></dd>
-
-
-<dt id="arg-force-ci">force.CI<a class="anchor" aria-label="anchor" href="#arg-force-ci"></a></dt>
-<dd><p>Force the plotting of confidence regions when the total number
-of frequencies exceeds 10000. Defaults to FALSE</p></dd>
+<dd><p>Remove first or last "n" values on the low or
+high frequency side respectively. Operates on a per group basis.</p></dd>
 
 
 <dt id="arg-min-colours">min.colours<a class="anchor" aria-label="anchor" href="#arg-min-colours"></a></dt>
-<dd><p>minimum number of spectra before starting to colour them
+<dd><p>Minimum number of spectra before starting to colour them
 separately</p></dd>
+
+
+<dt id="arg-force-lims-force-ci">force.lims, force.CI<a class="anchor" aria-label="anchor" href="#arg-force-lims-force-ci"></a></dt>
+<dd><p>Force the plotting of confidence regions when the total number
+of frequencies exceeds 10000. force.CI is deprecated, use force.lims. Defaults to FALSE</p></dd>
+
+
+<dt id="arg-quantiles">quantiles<a class="anchor" aria-label="anchor" href="#arg-quantiles"></a></dt>
+<dd><p>Plot uncertainty quantiles if they exist in the spec object</p></dd>
+
+
+<dt id="arg-time-unit">time_unit<a class="anchor" aria-label="anchor" href="#arg-time-unit"></a></dt>
+<dd><p>Optional string giving the time unit for axes labels, e.g. "years"</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -118,15 +137,13 @@ separately</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://earthsystemdiagnostics.github.io/paleospec/">PaleoSpec</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">1e03</span></span></span>
 <span class="r-in"><span><span class="va">beta</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></span>
-<span class="r-in"><span><span class="va">alpha</span> <span class="op">=</span> <span class="fl">0.1</span></span></span>
+<span class="r-in"><span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.1</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">ts1</span> <span class="op">&lt;-</span> <span class="fu"><a href="SimPLS.html">SimPLS</a></span><span class="op">(</span>N <span class="op">=</span> <span class="va">N</span>, b <span class="op">=</span> <span class="va">beta</span>, a <span class="op">=</span> <span class="va">alpha</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ts2</span> <span class="op">&lt;-</span> <span class="fu"><a href="SimPLS.html">SimPLS</a></span><span class="op">(</span>N <span class="op">=</span> <span class="va">N</span>, b <span class="op">=</span> <span class="va">beta</span>, a <span class="op">=</span> <span class="va">alpha</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sp1</span> <span class="op">&lt;-</span> <span class="fu"><a href="SpecMTM.html">SpecMTM</a></span><span class="op">(</span><span class="va">ts1</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Time series is not a ts object and deltat is not set. Frequency array and axes may be incorrect.</span>
+<span class="r-in"><span><span class="va">sp1</span> <span class="op">&lt;-</span> <span class="fu"><a href="SpecMTM.html">SpecMTM</a></span><span class="op">(</span><span class="va">ts1</span>, deltat <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">sp1</span> <span class="op">&lt;-</span> <span class="fu"><a href="AddConfInterval.html">AddConfInterval</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sp2</span> <span class="op">&lt;-</span> <span class="fu"><a href="SpecMTM.html">SpecMTM</a></span><span class="op">(</span><span class="va">ts2</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Time series is not a ts object and deltat is not set. Frequency array and axes may be incorrect.</span>
+<span class="r-in"><span><span class="va">sp2</span> <span class="op">&lt;-</span> <span class="fu"><a href="SpecMTM.html">SpecMTM</a></span><span class="op">(</span><span class="va">ts2</span>, deltat <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot single spectrum</span></span></span>
 <span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">gg_spec</span><span class="op">(</span><span class="va">sp1</span>, spec_id <span class="op">=</span> <span class="st">"df1"</span><span class="op">)</span></span></span>
