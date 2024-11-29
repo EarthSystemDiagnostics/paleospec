@@ -138,7 +138,7 @@ gg_spec <- function(x, gg = NULL,
 
   if (is.null(gg)) {
     p <- ggplot2::ggplot(data = df, ggplot2::aes(group = {{ group }}))
-    } else {
+  } else {
     p <- gg
   }
 
@@ -152,8 +152,8 @@ gg_spec <- function(x, gg = NULL,
     if (nrow(df) > 1e04 & force.lims == FALSE) {
       warning("geom_ribbon is very slow when the number of points > 1e04, skipping the confidence region")
     } else {
-    p <- p +
-      ggplot2::geom_ribbon(
+      p <- p +
+        ggplot2::geom_ribbon(
           data = df, ggplot2::aes(
             x = Frequency, ymin = lim.2,
             ymax = lim.1, fill = {{ colour }}
@@ -161,7 +161,7 @@ gg_spec <- function(x, gg = NULL,
           alpha = alpha.ribbon[1], colour = NA
         )
     }
-    }
+  }
 
 
   if (quantiles == TRUE & exists("X2.5.", df)) {
@@ -201,9 +201,9 @@ gg_spec <- function(x, gg = NULL,
     ggplot2::annotation_logticks(sides = "tlb") +
     ggplot2::theme_bw() +
     ggplot2::scale_colour_brewer("",
-      type = "qual",
-      palette = "Dark2",
-      aesthetics = c("colour", "fill")
+                                 type = "qual",
+                                 palette = "Dark2",
+                                 aesthetics = c("colour", "fill")
     ) +
     ggplot2::theme(panel.grid.minor = ggplot2::element_blank()) +
     ggplot2::scale_alpha() +
@@ -217,14 +217,17 @@ gg_spec <- function(x, gg = NULL,
 
   if (ncolrs <= min.colours) {
     p <- p + ggplot2::scale_colour_manual("",
-      values = "black",
-      aesthetics = c("colour", "fill")
+                                          values = "black",
+                                          aesthetics = c("colour", "fill")
     )
 
-    if (is.null({{ colour }}) & is.null({{ linetype }})) {
-      p <- p + ggplot2::theme(legend.position = "none")
+    # remove legend if only 1 spec and no name given
+    if (({{ deparse(substitute(colour)) }}) == "spec_id" &
+        ({{ deparse(substitute(linetype)) }}) == "NULL"){
+      if (is.null({{ colour }}) & is.null({{ linetype }})) {
+        p <- p + ggplot2::theme(legend.position = "none")
+      }
     }
   }
-
   p
 }
