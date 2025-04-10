@@ -222,8 +222,8 @@ gg_spec <- function(x, gg = NULL,
     )
 
     # remove legend if only 1 spec and no name given
-    if (({{ deparse(substitute(colour)) }}) == "spec_id" &
-        ({{ deparse(substitute(linetype)) }}) == "NULL"){
+    if (({{ deparse(substitute(colour))[[1]] }}) == "spec_id" &
+        ({{ deparse(substitute(linetype))[[1]] }}) == "NULL"){
       if (is.null({{ colour }}) & is.null({{ linetype }})) {
         p <- p + ggplot2::theme(legend.position = "none")
       }
