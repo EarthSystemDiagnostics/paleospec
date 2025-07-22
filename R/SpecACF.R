@@ -238,6 +238,7 @@ SpecACF <- function(x,
     nrec = ncolx,
     lag = lag, acf = acf,
     freq = freq, spec = spec, f.length = 1,
+    # for non-adaptive tapering DOF = 2*k
     dof = rep(2 * ncolx * k, length(freq))
   )
 
