@@ -1,11 +1,14 @@
 #' Filter a Power Spectrum Object
 #'
 #' @param spec A spec object
+#' @param method single integer for choosing an endpoint constraint method.
+#' Available choices are integers 0-4, see details of \code{\link{ApplyFilter}}
 #' @param keep_low_f Keep filtered (smoothed) low frequencies or replace with unfiltered
 #' @inheritParams stats::spec.pgram
 #' @inheritParams ApplyFilter
 #' @return A spec object (list)
 #' @family functions to filter / smooth spectra
+#' @author Andrew Dolman
 #' @export
 #'
 #' @examples
@@ -57,34 +60,47 @@ FilterSpec <- function(spec, spans, method = 3, keep_low_f = TRUE) {
   kernel <- stats::kernel("modified.daniell", spans %/% 2)
   filter <- kernel[-kernel$m:kernel$m]
 
-  spec_filt <- ApplyFilter(spec$spec, filter = filter, method = method)
+  spec_filt <- ApplyFilter(spec$spec, filter = filter,
+                           method = method)
 
   if (keep_low_f == FALSE) {
     # replace filtered spec with original in area where freqs have been reflected
     i <- 1:ceiling(length(filter) / 2)
     spec_filt[i] <- spec$spec[i]
-
     iend <- length(spec$freq) - (i-1)
-
     spec_filt[iend] <- spec$spec[iend]
-
   }
 
   spec$spec <- as.numeric(spec_filt)
 
-  # degrees of freedom of the kernel
-  df.kern <- stats::df.kernel(kernel)
 
-  spec$dof <- df.kern * spec$dof / 2
+  ## New degrees of freedom of the filtered spec
+  ## This can be estimated using the convolution of the new filter and an
+  ## approximate equivalent filter to the existing DOF
+
+  # Approximate an equivalent filter to the existing DOF
+  fl <- round(mean(spec$dof)/2)
+  if ((fl%%2) == 0) fl <- fl-1 #ensure that the filter length is odd
+
+  prior_filter <- rep(1/fl, fl)
+
+  combined_filter <- convolve(filter, prior_filter, type = "open")
+
+  m3 <- floor(length(combined_filter)/2)
+  kernel3 <- combined_filter[1:ceiling(length(combined_filter)/2)]
+  kernel3 <- kernel(coef = sort(kernel3, decreasing = TRUE), m = m3)
+
+  new.dof <- stats::df.kernel(kernel3)
+
+  spec$dof <- rep(new.dof, length(spec$freq))
+
 
   if (keep_low_f == FALSE) {
-
     i <- 1:ceiling(length(filter) / 2)
     spec$dof[i] <- dof0[i]
 
     iend <- length(spec$freq) - (i-1)
     spec$dof[iend] <- dof0[iend]
-
   }
 
   # Adjust DOF in reflected filter region
@@ -116,7 +132,6 @@ FilterSpec <- function(spec, spans, method = 3, keep_low_f = TRUE) {
 
   spec <- AddConfInterval(spec)
 
-
   return(spec)
 }
 
@@ -126,11 +141,12 @@ FilterSpec <- function(spec, spans, method = 3, keep_low_f = TRUE) {
 #'
 #' @param spec A spec object
 #' @inheritParams LogSmooth
-#' @inheritParams ApplyFilter
-#'
+#' @param method single integer for choosing an endpoint constraint method.
+#' Available choices are integers 0-4, see details of \code{\link{ApplyFilter}}
 #' @return A spec object (list)
 #' @family functions to filter / smooth spectra
 #' @export
+#' @author Andrew Dolman
 #' @examples
 #' library(PaleoSpec)
 #'
@@ -219,7 +235,7 @@ FilterSpecLog <- function(spec,
   dof0 <- spec$dof
 
   # Gets the difference in delta_f for the log and standard freq axis
-  NpF <- function(freq, fw, df){
+  NpF2 <- function(freq, fw, df){
 
     posdiff <- (exp(log(freq) + df) - freq)
     negdiff <- (freq - exp(log(freq) - df))
@@ -228,9 +244,12 @@ FilterSpecLog <- function(spec,
 
     2 * fw * (fdiff/df) * 1/(2*max(freq))
   }
-  df.logkern <- NpF(spec$freq, length(filter), df = diff(freq_logspace[1:2]))
 
-  spec$dof <- spec$dof + df.mod * df.logkern * spec$dof/2
+  deltaf.logkern <- NpF2(spec$freq, length(filter), df = diff(freq_logspace[1:2]))
+
+  # this would be more accurate as the dof of the convolution of the filter not sum of the old and new dofs
+  spec$dof <- df.mod * deltaf.logkern + spec$dof
+
   spec$shape <- spec$dof/2
   spec$spans <- paste(spans, collapse = ",")
 
@@ -243,8 +262,6 @@ FilterSpecLog <- function(spec,
   }
 
   spec <- AddConfInterval(spec)
-
-
 
   return(spec)
 }

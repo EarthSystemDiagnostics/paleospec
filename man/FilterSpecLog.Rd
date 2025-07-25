@@ -11,8 +11,8 @@ FilterSpecLog(spec, df.log = 0.05, spans = NULL, method = 3, f.res = 10)
 
 \item{df.log}{width of the smoother in log units}
 
-\item{method}{single integer for choosing an endpoint constraint method;
-available choices are integers 0-4, see details.}
+\item{method}{single integer for choosing an endpoint constraint method.
+Available choices are integers 0-4, see details of \code{\link{ApplyFilter}}}
 }
 \value{
 A spec object (list)
