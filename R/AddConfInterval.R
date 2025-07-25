@@ -14,11 +14,19 @@
 #' @return the input object including the new list elements \code{lim.1} and
 #'   \code{lim.2} giving the upper and lower bound of the confidence interval,
 #'   respectively.
+#' @description
+#' Calculated confidence intervals give the interval within which the true
+#' spectrum should lie with frequency 1-p. This behaviour changed with version
+#' 0.33.
+#'
+#' Previous versions returned the interval which, when applied to the 'true' spectrum, would contain new spectral estimates
+#' with frequency 1-p.
+#'
 #' @author Thomas Laepple
 #' @examples
 #'
 #' N.R <- 1000
-#' N.T <- 100
+#' N.T <- 1000
 #' save.spec <- matrix(NA, N.T / 2, N.R)
 #' for (i.R in 1 : N.R) {
 #'   save.spec[, i.R] <- SpecMTM(ts(SimPowerlaw(1, N.T)))$spec
@@ -39,8 +47,9 @@ AddConfInterval <- function(spec, pval = 0.05, MINVALUE = 1e-10) {
 
   is.spectrum(spec)
 
-  spec$lim.1 <- spec$spec * qchisq(c(1 - pval / 2), spec$dof) / (spec$dof)
-  spec$lim.2 <- spec$spec * qchisq(c(pval / 2), spec$dof) / (spec$dof)
+  spec$lim.1 <- spec$spec * 1 / (qchisq(c(pval / 2), spec$dof) / (spec$dof))
+  spec$lim.2 <- spec$spec * 1 / (qchisq(c(1 - pval / 2), spec$dof) / (spec$dof))
+
   spec$lim.1[spec$lim.1 < MINVALUE] <- MINVALUE
   spec$lim.2[spec$lim.2 < MINVALUE] <- MINVALUE
 

@@ -10,8 +10,10 @@ test_that("adding the confidence interval is correct.", {
 
   pval <- 0.05
 
-  lim1 <- spec * qchisq(1 - pval / 2, dof) / dof
-  lim2 <- spec * qchisq(pval / 2, dof) / dof
+  lim1 <- spec * 1 / (qchisq(c(pval / 2), dof) / (dof))
+  lim2 <- spec * 1 / (qchisq(c(1 - pval / 2), dof) / (dof))
+
+
   lim1[lim1 < MINVALUE] <- MINVALUE
   lim2[lim2 < MINVALUE] <- MINVALUE
 
@@ -23,8 +25,9 @@ test_that("adding the confidence interval is correct.", {
   MINVALUE <- 1.
   pval <- 0.1
 
-  lim1 <- spec * qchisq(1 - pval / 2, dof) / dof
-  lim2 <- spec * qchisq(pval / 2, dof) / dof
+  lim1 <- spec * 1 / (qchisq(c(pval / 2), dof) / (dof))
+  lim2 <- spec * 1 / (qchisq(c(1 - pval / 2), dof) / (dof))
+
   lim1[lim1 < MINVALUE] <- MINVALUE
   lim2[lim2 < MINVALUE] <- MINVALUE
 

@@ -23,6 +23,14 @@ the input object including the new list elements \code{lim.1} and
   respectively.
 }
 \description{
+Calculated confidence intervals give the interval within which the true
+spectrum should lie with frequency 1-p. This behaviour changed with version
+0.33.
+
+Previous versions returned the interval which, when applied to the 'true' spectrum, would contain new spectral estimates
+with frequency 1-p.
+}
+\details{
 Add a confidence interval to a spectral estimate assuming the uncertainty of
 the spectral estimates follows a chi-squared distribution with the degrees of
 the freedom from the spectral estimates.
@@ -30,7 +38,7 @@ the freedom from the spectral estimates.
 \examples{
 
 N.R <- 1000
-N.T <- 100
+N.T <- 1000
 save.spec <- matrix(NA, N.T / 2, N.R)
 for (i.R in 1 : N.R) {
   save.spec[, i.R] <- SpecMTM(ts(SimPowerlaw(1, N.T)))$spec
