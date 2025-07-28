@@ -11,7 +11,7 @@ sp1 <- SpecMTM(ts1)
 sp2 <- SpecMTM(ts2)
 
 # 1 as spec_df
-sp1_df <- as.data.frame(sp1)
+sp1_df <- Spec2DF(sp1)
 
 # list of spectra, 1 is a spec_df
 sp_lst <- list(sp2 = sp2, sp1_df = sp1_df)
@@ -64,3 +64,4 @@ test_that("removeFirst and removeLast operate on a per spec_id basis", {
   expect_that(nrow(g0$data) - nrow(gl3$data), equals(6))
 
 })
+

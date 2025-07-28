@@ -64,4 +64,7 @@ Other functions to filter / smooth spectra:
 \code{\link{FilterSpecLog}()},
 \code{\link{LogSmooth}()}
 }
+\author{
+Andrew Dolman
+}
 \concept{functions to filter / smooth spectra}
