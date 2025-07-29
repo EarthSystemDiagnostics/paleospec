@@ -23,30 +23,58 @@ the input object including the new list elements \code{lim.1} and
   respectively.
 }
 \description{
+Calculated confidence intervals give the interval within which the true
+spectrum should lie with frequency 1-p. This behaviour changed with version
+0.33.
+
+Previous versions returned the interval which, when applied to the 'true' spectrum, would contain new spectral estimates
+with frequency 1-p.
+}
+\details{
 Add a confidence interval to a spectral estimate assuming the uncertainty of
 the spectral estimates follows a chi-squared distribution with the degrees of
 the freedom from the spectral estimates.
 }
 \examples{
 
-N.R <- 1000
-N.T <- 100
-save.spec <- matrix(NA, N.T / 2, N.R)
-for (i.R in 1 : N.R) {
-  save.spec[, i.R] <- SpecMTM(ts(SimPowerlaw(1, N.T)))$spec
+alpha <- 0.1
+beta <- 1
+
+spec_sim <- SpecMTM(ts(SimPLS(N = 1e03, beta = beta, alpha = alpha)))
+
+# Using a large nominal p value of 0.25 to reduce variation between random
+# timeseries
+
+# The true spec should be p/2 times above the lower CI, and p/2 below the upper CI
+
+nominal_p <- 0.25
+spec_sim <- AddConfInterval(spec_sim, pval = nominal_p)
+true_spec <- alpha * spec_sim$freq^-beta
+
+LPlot(spec_sim)
+abline(a = log10(alpha), b = -beta, lty = 2, col = "red")
+
+SpecCoverage <- function(spec, true_spec){
+
+  stopifnot("lim.1" \%in\% names(spec))
+
+  n <- length(spec$freq)
+  below <- sum(spec$lim.1 < true_spec)
+  above <- sum(spec$lim.2 > true_spec)
+
+  total <- below + above
+
+  count <- list(n = n, above = above, below = below, total = total,
+                p_above = above / n, p_below = below / n,
+                p_total = total / n,
+                nominal_pval = spec$pval)
+
+  as.data.frame(count)
 }
 
-q.empirical <- apply(save.spec, 1, quantile, c(0.025, 0.975))
-testspec <- SpecMTM(ts(SimPowerlaw(1, N.T)))
-
-LPlot(AddConfInterval(testspec), ylim = c(0.05, 10))
-lines(testspec$freq, q.empirical[1, ], col = "red")
-lines(testspec$freq, q.empirical[2, ],col = "red")
-legend("bottomleft", lwd = 2, col = c("black", "red"),
-       legend = c("one realization with chisq conf intervals",
-                  "MC confidence intervals"))
+SpecCoverage(spec_sim, true_spec)
 
 }
 \author{
-Thomas Laepple
+Thomas Laepple, Andrew Dolman
 }

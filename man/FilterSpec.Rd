@@ -12,8 +12,8 @@ FilterSpec(spec, spans, method = 3, keep_low_f = TRUE)
 \item{spans}{vector of odd integers giving the widths of modified
     Daniell smoothers to be used to smooth the periodogram.}
 
-\item{method}{single integer for choosing an endpoint constraint method;
-available choices are integers 0-4, see details.}
+\item{method}{single integer for choosing an endpoint constraint method.
+Available choices are integers 0-4, see details of \code{\link{ApplyFilter}}}
 
 \item{keep_low_f}{Keep filtered (smoothed) low frequencies or replace with unfiltered}
 }
@@ -63,5 +63,8 @@ LLines(sp1_f3_2T, col = "red")
 Other functions to filter / smooth spectra: 
 \code{\link{FilterSpecLog}()},
 \code{\link{LogSmooth}()}
+}
+\author{
+Andrew Dolman
 }
 \concept{functions to filter / smooth spectra}

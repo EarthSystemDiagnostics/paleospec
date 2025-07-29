@@ -1,3 +1,14 @@
+# PaleoSpec 0.33
+
+* AddConfInterval calculation changed calculated confidence intervals give the 
+  interval within which the true spectrum should lie with frequency 1-p. 
+  Previous versions returned the interval which, when applied to the 'true' 
+  spectrum, would contain new spectral estimates with frequency 1-p.
+  
+* Improvements to calculation of DOF in FilterSpec and FilterSpecLog. DOF 
+  calculation now accounts for non independence of ordinates from existing 
+  filter or tapering.
+
 # PaleoSpec 0.32
 
 * SpecACF can now use slepian tapers
