@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">PaleoSpec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.32</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.33</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,6 +31,11 @@
 
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.33" id="paleospec-033">PaleoSpec 0.33<a class="anchor" aria-label="anchor" href="#paleospec-033"></a></h2>
+<ul><li><p>AddConfInterval calculation changed calculated confidence intervals give the interval within which the true spectrum should lie with frequency 1-p.  Previous versions returned the interval which, when applied to the ‘true’ spectrum, would contain new spectral estimates with frequency 1-p.</p></li>
+<li><p>Improvements to calculation of DOF in FilterSpec and FilterSpecLog. DOF calculation now accounts for non independence of ordinates from existing filter or tapering.</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.32" id="paleospec-032">PaleoSpec 0.32<a class="anchor" aria-label="anchor" href="#paleospec-032"></a></h2>
 <ul><li>SpecACF can now use slepian tapers</li>
