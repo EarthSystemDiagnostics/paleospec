@@ -17,6 +17,7 @@ SimProxySeries(
   t.smpl = NULL,
   var.noise = 0,
   val = 0,
+  PSD.format = c("torb", "spec"),
   rseeds = c(NA, NA, NA),
   nser = 1
 )
@@ -32,6 +33,7 @@ sim.proxy.series(
   t.smpl = NULL,
   var.noise = 0,
   val = 0,
+  PSD.format = c("torb", "spec"),
   rseeds = c(NA, NA, NA),
   nser = 1
 )
@@ -118,6 +120,10 @@ represent, for example, measurement noise).}
   internally sets val <- val + 1, because t.smpl might specify unequally
   spaced sampling times such that the PSD of the sample white noise might not
   be defined.}
+
+\item{PSD.format}{When val > 0; if PSD.format = "torb", the returned PSD is
+in the format list(fax, psd); if PSD.format = "spec", a PSD in the standard
+PaleoSpec format is returned.}
 
 \item{rseeds}{vector of length 3, integer or NA. Random seeds to fix the
 realisation of specific random processes. There are three random processes:
@@ -224,6 +230,22 @@ plot(ts1, col = "grey")
 lines(ts2, col = "blue")
 lines(time, ts3_sub, col = "Orange", pch = 16)
 points(time, ts3_sub, col = "Orange", pch = 16)
+
+# Return a PaleoSpec standard spec object or Torben Kunz format
+
+expected_spec_torb <- SimProxySeries(a = 0.1, b = 1, nt = n, t.smpl = time,
+                                    smth.arch = list(type = "bioturbation", tau = tau_b),
+                                    var.noise = 0.1^2,
+                                    val = 1)
+
+expected_spec_std <- SimProxySeries(a = 0.1, b = 1, nt = n, t.smpl = time,
+                                     smth.arch = list(type = "bioturbation", tau = tau_b),
+                                    var.noise = 0.1^2,
+                                    val = 1,
+                                    PSD.format = "spec")
+
+gg_spec(expected_spec_std)
+plot(expected_spec_torb$fax, expected_spec_torb$psd, log = "xy", type = "l")
 
 }
 \seealso{
