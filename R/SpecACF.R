@@ -22,6 +22,7 @@
 #'   indicates that the estimates are unbiased such that smoothing across
 #'   frequencies to remove negative estimates results in an unbiased power
 #'   spectrum.
+#'
 #' @inheritParams SpecMTM
 #' @importFrom multitaper spec.mtm
 #' @author Torben Kunz and Andrew Dolman <andrew.dolman@awi.de>
@@ -47,8 +48,8 @@
 #'   `ACF k=1` = spMk1,
 #'   `ACF k=3` = spMk3,
 #'   `MTM k=3` = spMTM
-#' ), alpha.line = 0.75) +
-#'   ggplot2::facet_wrap(~spec_id)
+#' ), alpha.line = 0.75) #+
+#'   #ggplot2::facet_wrap(~spec_id)
 #'
 #' ## No gaps
 #'
@@ -86,12 +87,12 @@
 #'
 #' tsAR4 <- arima.sim(list(ar = arc_spring), n = 1e03) + rnorm(1e03, 0, 10)
 #' plot(tsAR4)
-#' spAR4_ACF <- SpecACF(tsAR4, 1)
+#' spAR4_ACF <- SpecACF(tsAR4, 1, k = 0, nw = 0)
 #' spAR4_MTACF <- SpecACF(as.numeric(tsAR4), 1, k = 15, nw = 8)
 #'
 #' gg_spec(list(#'
-#'   `ACF k=1` = spAR4_ACF,
-#'   `ACF k=15` = spAR4_MTACF)
+#'   `ACF k = 0` = spAR4_ACF,
+#'   `ACF k = 15` = spAR4_MTACF)
 #' )
 #'
 #' ## Add gaps to timeseries
@@ -106,18 +107,76 @@
 #'
 #' table(tsAR4_g > 0, useNA = "always")
 #'
-#' spAR4_ACF_g <- SpecACF(as.numeric(tsAR4_g), 1)
+#' spAR4_ACF_g <- SpecACF(as.numeric(tsAR4_g), 1, k = 0, nw = 0)
 #' spAR4_MTACF_g <- SpecACF(as.numeric(tsAR4_g), 1, nw = 8, k = 15)
 #'
 #' table(spAR4_ACF_g$spec < 0)
 #' table(spAR4_MTACF_g$spec < 0)
 #'
 #' gg_spec(list(
-#'   `ACF gaps k=1` = spAR4_ACF_g,
+#'   `ACF gaps k = 0` = spAR4_ACF_g,
 #'   `ACF gaps k = 15` = spAR4_MTACF_g,
 #'   `ACF full k = 15` = spAR4_MTACF
 #' )
 #' )
+#'
+#' #There are small numerical differences between SpecMTM and SpecACF, even when
+#' #using the same number of tapers, because SpecMTM used adaptive tapering while
+#' #SpecACF only implements non-adaptive tapering. This difference is only large
+#' #for purely periodic non-stochastic signals.
+#'
+#' ## Simulate a periodic signal with three frequencies to illustrate effect of
+#' ## adaptive tapering.
+#'
+#' f1 <- 1/10
+#' f2 <- 1/100
+#' f3 <- 1/1000
+#'
+#' tau <- 1e04
+#'
+#' time <- seq(0, tau, by = 1)
+#'
+#' y_pure = cos(2*pi*f1*time) + cos(2*pi*f2*time) + cos(2*pi*f3*time)
+#'
+#' plot(time, y_pure, type = "l")
+#'
+#' sp_y_pure_nonAdaptive <- SpecMTM(y_pure, deltat = 1, k = 9, nw = 5, adaptiveWeighting=FALSE)
+#' sp_y_pure_adaptive <- SpecMTM(y_pure, deltat = 1, k = 9, nw = 5)
+#' sp_y_pure_nonAdaptiveACF <- SpecACF(y_pure, deltat = 1, k = 9, nw = 5)
+#'
+#' ## Adaptive tapering further reduces the leaked spectral power. For purely deterministic
+#' ## signals, the relative difference is very large.
+#'
+#' gg_spec(
+#'   list(
+#'     MTM_nonAdaptive = sp_y_pure_nonAdaptive,
+#'     MTM_adaptive = sp_y_pure_adaptive,
+#'     ACF_nonAdaptive = sp_y_pure_nonAdaptiveACF
+#'   )
+#' )
+#'
+#' ## With a tiny amount of white noise this difference becomes less important.
+#'
+#' y_noise = y_pure + rnorm(length(time), 0, 0.1)
+#'
+#' ## Showing just the first 100 timepoints
+#' plot(time[1:100], y_pure[1:100], type = "l")
+#' lines(time[1:100], y_noise[1:100], col = "green")
+#'
+#'
+#' sp_y_noise_nonAdaptive <- SpecMTM(y_noise, deltat = 1, k = 9, nw = 5, adaptiveWeighting=FALSE)
+#' sp_y_noise_adaptive <- SpecMTM(y_noise, deltat = 1, k = 9, nw = 5)
+#' sp_y_noise_nonAdaptiveACF <- SpecACF(y_noise, deltat = 1, k = 9, nw = 5)
+#'
+#' gg_spec(
+#'   list(
+#'     MTM_nonAdaptive = sp_y_noise_nonAdaptive,
+#'     MTM_adaptive = sp_y_noise_adaptive,
+#'     ACF_nonAdaptive = sp_y_noise_nonAdaptiveACF
+#'   )
+#' )
+#'
+#'
 SpecACF <- function(x,
                       deltat = NULL, bin.width = NULL,
                       k = 3, nw = 2,
