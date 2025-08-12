@@ -23,6 +23,13 @@
 #'   frequencies to remove negative estimates results in an unbiased power
 #'   spectrum.
 #'
+#'  The main method is documented in appendix B of Kunz and Laepple (2024).
+#'
+#'  Kunz, T., & Laepple, T. (2024). Effective Spatial Degrees of Freedom of
+#'  Natural Temperature Variability as a Function of Frequency. Journal of
+#'  Climate, 37(8), 2505–2518. https://doi.org/10.1175/JCLI-D-23-0040.1
+#'
+#'
 #' @inheritParams SpecMTM
 #' @importFrom multitaper spec.mtm
 #' @author Torben Kunz and Andrew Dolman <andrew.dolman@awi.de>
