@@ -211,7 +211,8 @@ gg_spec(
 }
 \seealso{
 Other functions to estimate power spectra: 
-\code{\link{SpecMTM}()}
+\code{\link{SpecMTM}()},
+\code{\link{SpecMTMJulia}()}
 }
 \author{
 Torben Kunz and Andrew Dolman <andrew.dolman@awi.de>
