@@ -25,6 +25,9 @@ Suggests:
     ggplot2,
     tibble,
     knitr,
-    rmarkdown
+    rmarkdown,
+    JuliaConnectoR
+SystemRequirements: Julia (>= 1.6, https://julialang.org) and the Julia
+    Multitaper package are required for SpecMTMJulia().
 URL: https://earthsystemdiagnostics.github.io/paleospec/
 VignetteBuilder: knitr
