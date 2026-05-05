@@ -82,6 +82,9 @@
 #'   internally sets val <- val + 1, because t.smpl might specify unequally
 #'   spaced sampling times such that the PSD of the sample white noise might not
 #'   be defined.
+#' @param PSD.format When val > 0; if PSD.format = "torb", the returned PSD is
+#' in the format list(fax, psd); if PSD.format = "spec", a PSD in the standard
+#' PaleoSpec format is returned.
 #' @param rseeds vector of length 3, integer or NA. Random seeds to fix the
 #' realisation of specific random processes. There are three random processes:
 #'
@@ -178,6 +181,22 @@
 #' lines(time, ts3_sub, col = "Orange", pch = 16)
 #' points(time, ts3_sub, col = "Orange", pch = 16)
 #'
+#' # Return a PaleoSpec standard spec object or Torben Kunz format
+#'
+#' expected_spec_torb <- SimProxySeries(a = 0.1, b = 1, nt = n, t.smpl = time,
+#'                                     smth.arch = list(type = "bioturbation", tau = tau_b),
+#'                                     var.noise = 0.1^2,
+#'                                     val = 1)
+#'
+#' expected_spec_std <- SimProxySeries(a = 0.1, b = 1, nt = n, t.smpl = time,
+#'                                      smth.arch = list(type = "bioturbation", tau = tau_b),
+#'                                     var.noise = 0.1^2,
+#'                                     val = 1,
+#'                                     PSD.format = "spec")
+#'
+#' gg_spec(expected_spec_std)
+#' plot(expected_spec_torb$fax, expected_spec_torb$psd, log = "xy", type = "l")
+#'
 SimProxySeries <- function(a = -1, b = 1,
                            nt = 100, f.scl = 1,
                            smth.arch = list(type = "n", tau = 0),
@@ -186,6 +205,7 @@ SimProxySeries <- function(a = -1, b = 1,
                            t.smpl = NULL,
                            var.noise = 0,
                            val = 0,
+                           PSD.format = c("torb", "spec"),
                            rseeds = c(NA, NA, NA),
                            nser = 1) {
 
@@ -197,6 +217,7 @@ SimProxySeries <- function(a = -1, b = 1,
   smth.arch$type <- match.arg(smth.arch$type, c("n", "bioturbation", "diffusion"))
   smth.lab$type <- match.arg(smth.lab$type, c("n", "rect"))
 
+  PSD.format <- match.arg(PSD.format)
 
   if (is.null(t.smpl)) {
     f.scl <- 1
@@ -245,17 +266,24 @@ SimProxySeries <- function(a = -1, b = 1,
     x <- Re(x) * sqrt(f.scl)
     if (var.noise > 0) x <- x + sqrt(var.noise) * gen.ran.seq(dim(x)[1], nser, rseeds[3])
     if (var.noise.N > 0) x <- x + sqrt(var.noise.N) * gen.ran.seq(dim(x)[1], nser, rseeds[2])
-    if (nser == 1) as.vector(x) else x
+    if (nser == 1) x <- as.vector(x) else x <- x
   } else if (val == 1) {
-    list(fax = fax[fax > 0], psd = P[fax > 0] + var.noise + var.noise.N)
+    x <- list(fax = fax[fax > 0], psd = P[fax > 0] + var.noise + var.noise.N)
   } else if (val == 2) {
-    list(fax = fax[fax > 0], psd = P[fax > 0], var = var.noise + var.noise.N)
+    x <- list(fax = fax[fax > 0], psd = P[fax > 0], var = var.noise + var.noise.N)
   } else if (val == 3) {
-    list(fax = fax, psd = P + var.noise + var.noise.N)
+    x <- list(fax = fax, psd = P + var.noise + var.noise.N)
   } else if (val == 4) {
-    list(fax = fax, psd = P, var = var.noise + var.noise.N)
+    x <- list(fax = fax, psd = P, var = var.noise + var.noise.N)
   }
-}
+
+  if (val > 0) {
+    if(PSD.format == "spec") {
+      x <- Torb2Spec(x)
+    }
+  }
+    return(x)
+  }
 
 #' @rdname SimProxySeries
 #' @export
@@ -282,3 +310,16 @@ gen.ran.seq <- function(n, nser, s) {
   }
   x
 }
+
+
+#' Convert Torben Kunz' spec output to standard PaleoSpec spec object
+#'
+#' @param x
+#'
+#' @return spec object
+#' @keywords internal
+Torb2Spec <- function(x){
+  as.spec(list(freq = x$fax, spec = x$psd))
+}
+
+
