@@ -1,3 +1,9 @@
+# PaleoSpec 0.34
+
+* Adds posibility to return PSD from SimProxySeries in standard PaleoSpec format
+* Document that SpecACF uses non-adaptive tapering and the difference to adaptive tapering in SpecMTM
+
+
 # PaleoSpec 0.33
 
 * AddConfInterval calculation changed calculated confidence intervals give the 
