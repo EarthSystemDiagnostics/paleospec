@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">PaleoSpec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.33</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.34</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,6 +70,7 @@
 <span>  t.smpl <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  var.noise <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  val <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  PSD.format <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"torb"</span>, <span class="st">"spec"</span><span class="op">)</span>,</span>
 <span>  rseeds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
 <span>  nser <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span>
@@ -85,6 +86,7 @@
 <span>  t.smpl <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  var.noise <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  val <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  PSD.format <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"torb"</span>, <span class="st">"spec"</span><span class="op">)</span>,</span>
 <span>  rseeds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
 <span>  nser <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -183,6 +185,12 @@ represent, for example, measurement noise).</p></dd>
   be defined.</p></dd>
 
 
+<dt id="arg-psd-format">PSD.format<a class="anchor" aria-label="anchor" href="#arg-psd-format"></a></dt>
+<dd><p>When val &gt; 0; if PSD.format = "torb", the returned PSD is
+in the format list(fax, psd); if PSD.format = "spec", a PSD in the standard
+PaleoSpec format is returned.</p></dd>
+
+
 <dt id="arg-rseeds">rseeds<a class="anchor" aria-label="anchor" href="#arg-rseeds"></a></dt>
 <dd><p>vector of length 3, integer or NA. Random seeds to fix the
 realisation of specific random processes. There are three random processes:</p>
@@ -212,9 +220,9 @@ with the same parameters). If val &gt; 0: nser has no effect.</p></dd>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other functions to generate timeseries with powerlaw like spectra:
-<code><a href="SimFromEmpiricalSpec.html">SimFromEmpiricalSpec</a>()</code>,
-<code><a href="SimPLS.html">SimPLS</a>()</code>,
-<code><a href="SimPowerlaw.html">SimPowerlaw</a>()</code></p></div>
+<code><a href="SimFromEmpiricalSpec.html">SimFromEmpiricalSpec()</a></code>,
+<code><a href="SimPLS.html">SimPLS()</a></code>,
+<code><a href="SimPowerlaw.html">SimPowerlaw()</a></code></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -300,6 +308,26 @@ with the same parameters). If val &gt; 0: nser has no effect.</p></dd>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">ts3_sub</span>, col <span class="op">=</span> <span class="st">"Orange"</span>, pch <span class="op">=</span> <span class="fl">16</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="SimProxySeries-6.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Return a PaleoSpec standard spec object or Torben Kunz format</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">expected_spec_torb</span> <span class="op">&lt;-</span> <span class="fu">SimProxySeries</span><span class="op">(</span>a <span class="op">=</span> <span class="fl">0.1</span>, b <span class="op">=</span> <span class="fl">1</span>, nt <span class="op">=</span> <span class="va">n</span>, t.smpl <span class="op">=</span> <span class="va">time</span>,</span></span>
+<span class="r-in"><span>                                    smth.arch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"bioturbation"</span>, tau <span class="op">=</span> <span class="va">tau_b</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                    var.noise <span class="op">=</span> <span class="fl">0.1</span><span class="op">^</span><span class="fl">2</span>,</span></span>
+<span class="r-in"><span>                                    val <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">expected_spec_std</span> <span class="op">&lt;-</span> <span class="fu">SimProxySeries</span><span class="op">(</span>a <span class="op">=</span> <span class="fl">0.1</span>, b <span class="op">=</span> <span class="fl">1</span>, nt <span class="op">=</span> <span class="va">n</span>, t.smpl <span class="op">=</span> <span class="va">time</span>,</span></span>
+<span class="r-in"><span>                                     smth.arch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"bioturbation"</span>, tau <span class="op">=</span> <span class="va">tau_b</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                    var.noise <span class="op">=</span> <span class="fl">0.1</span><span class="op">^</span><span class="fl">2</span>,</span></span>
+<span class="r-in"><span>                                    val <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>                                    PSD.format <span class="op">=</span> <span class="st">"spec"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="gg_spec.html">gg_spec</a></span><span class="op">(</span><span class="va">expected_spec_std</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">colour</span> is already present.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding another scale for <span style="color: #00BB00;">colour</span>, which will replace the existing scale.</span>
+<span class="r-plt img"><img src="SimProxySeries-7.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">expected_spec_torb</span><span class="op">$</span><span class="va">fax</span>, <span class="va">expected_spec_torb</span><span class="op">$</span><span class="va">psd</span>, log <span class="op">=</span> <span class="st">"xy"</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="SimProxySeries-8.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -311,7 +339,7 @@ with the same parameters). If val &gt; 0: nser has no effect.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

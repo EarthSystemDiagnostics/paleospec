@@ -1,0 +1,145 @@
+# MTM spectral estimator
+
+calls [`spec.mtm`](https://rdrr.io/pkg/multitaper/man/spec.mtm.html)
+from library multitaper
+
+## Usage
+
+``` r
+SpecMTM(
+  timeSeries,
+  k = 3,
+  nw = 2,
+  nFFT = "default",
+  centre = c("Slepian"),
+  dpssIN = NULL,
+  returnZeroFreq = FALSE,
+  Ftest = FALSE,
+  jackknife = FALSE,
+  jkCIProb = 0.95,
+  maxAdaptiveIterations = 100,
+  plot = FALSE,
+  na.action = na.fail,
+  returnInternals = FALSE,
+  detrend = TRUE,
+  bPad = FALSE,
+  ...
+)
+```
+
+## Arguments
+
+- timeSeries:
+
+  A time series of equally spaced data, this can be created by the ts()
+  function where deltat is specified.
+
+- k:
+
+  a positive integer, the number of tapers, often 2\*nw.
+
+- nw:
+
+  a positive double precision number, the time-bandwidth parameter.
+
+- nFFT:
+
+  This function pads the data before computing the fft. nFFT indicates
+  the total length of the data after padding.
+
+- centre:
+
+  The time series is centred using one of three methods: expansion onto
+  discrete prolate spheroidal sequences ('Slepian'), arithmetic mean
+  ('arithMean'), trimmed mean ('trimMean'), or not at all ('none').
+
+- dpssIN:
+
+  Allows the user to enter a dpss object which has already been created.
+  This can save computation time when Slepians with the same bandwidth
+  parameter and same number of tapers are used repeatedly.
+
+- returnZeroFreq:
+
+  Boolean variable indicating if the zeroth frequency (DC component)
+  should be returned for all applicable arrays.
+
+- Ftest:
+
+  Boolean variable indicating if the Ftest result should be computed and
+  returned.
+
+- jackknife:
+
+  Boolean variable indicating if jackknifed confidence intervals should
+  be computed and returned.
+
+- jkCIProb:
+
+  Decimal value indicating the jackknife probability for calculating
+  jackknife confidence intervals. The default returns a 95% confidence
+  interval.
+
+- maxAdaptiveIterations:
+
+  Maximum number of iterations in the adaptive multitaper calculation.
+  Generally convergence is quick, and should require less than 100
+  iterations.
+
+- plot:
+
+  Boolean variable indicating if the spectrum should be plotted.
+
+- na.action:
+
+  Action to take if NAs exist in the data, the default is to fail.
+
+- returnInternals:
+
+  Return the weighted eigencoefficients, complex mean values, and so on.
+  These are necessary for extensions to the multitaper, including
+  magnitude-squared coherence (function mtm.coh in this package). Note:
+  The internal (\$mtm) variables eigenCoefs and eigenCoefWt correspond
+  to the multitaper eigencoefficients. The eigencoefficients correspond
+  to equation (3.4) and weights, eigenCoefWt, correspond to
+  sqrt(\|d_k(f)\|^2) from equation (5.4) in Thomson's 1982 paper. This
+  is because the square root values contained in eigenCoefWt are
+  commonly used in additional calculations (example: eigenCoefWt \*
+  eigenCoefs). The values returned in mtm\$cmv correspond to the the
+  estimate of the coefficients hat(mu)(f) in equation (13.5) in Thomson
+  (1982), or to the estimate of hat(C)\_1 at frequency 1 in
+  equation (499) form Percival and Walden (1993)
+
+- detrend:
+
+  logical, detrend timeseries before estimating the spectrum
+
+- bPad:
+
+  if FALSE (the default) nFFT is set to the length of the timeseries
+
+- ...:
+
+  additional arguments to multitaper::spec.mtm
+
+## Value
+
+spectra object list(freq, spec, dof)
+
+## See also
+
+Other functions to estimate power spectra:
+[`SpecACF()`](https://earthsystemdiagnostics.github.io/paleospec/reference/SpecACF.md)
+
+## Author
+
+Thomas Laepple
+
+## Examples
+
+``` r
+x <- ts(arima.sim(list(ar = 0.9), 1000))
+spec <- SpecMTM(x)
+LPlot(spec, col='grey')
+LLines(LogSmooth(spec), lwd=2)
+```

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">PaleoSpec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.33</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.34</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,10 +56,10 @@
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other TidySpec:
-<code><a href="Spec2DF.html">Spec2DF</a>()</code>,
-<code><a href="as.data.frame.spec.html">as.data.frame.spec</a>()</code>,
-<code><a href="as.spec.html">as.spec</a>()</code>,
-<code><a href="as_spec_df.html">as_spec_df</a>()</code></p></div>
+<code><a href="Spec2DF.html">Spec2DF()</a></code>,
+<code><a href="as.data.frame.spec.html">as.data.frame.spec()</a></code>,
+<code><a href="as.spec.html">as.spec()</a></code>,
+<code><a href="as_spec_df.html">as_spec_df()</a></code></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -79,29 +79,29 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,000 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    spec_id  freq  spec   dof</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> sp1     0.001 13.6   5.99</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> sp1     0.002 20.2   5.99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> sp1     0.001 13.9   5.99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> sp1     0.002 20.3   5.99</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> sp1     0.003 10.2   5.99</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> sp1     0.004 11.5   5.99</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> sp1     0.005  8.41  5.97</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> sp1     0.006  2.68  5.95</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> sp1     0.007  2.55  5.88</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> sp1     0.008  6.24  5.96</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> sp1     0.009  9.54  5.99</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> sp1     0.01   8.86  5.98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> sp1     0.005  8.47  5.97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> sp1     0.006  2.67  5.95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> sp1     0.007  2.56  5.94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> sp1     0.008  6.25  5.96</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> sp1     0.009  9.67  5.99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> sp1     0.01   8.85  5.98</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 990 more rows</span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">DF2Spec</span><span class="op">(</span><span class="va">sp_df</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ sp1:List of 4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ spec_id: chr [1:500] "sp1" "sp1" "sp1" "sp1" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ freq   : num [1:500] 0.001 0.002 0.003 0.004 0.005 0.006 0.007 0.008 0.009 0.01 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ spec   : num [1:500] 13.57 20.19 10.18 11.52 8.41 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ spec   : num [1:500] 13.85 20.33 10.16 11.49 8.47 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ dof    : num [1:500] 5.99 5.99 5.99 5.99 5.97 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, "class")= chr [1:2] "spec" "list"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ sp2:List of 4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ spec_id: chr [1:500] "sp2" "sp2" "sp2" "sp2" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ freq   : num [1:500] 0.001 0.002 0.003 0.004 0.005 0.006 0.007 0.008 0.009 0.01 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ spec   : num [1:500] 0.69 1.148 1.694 0.862 1.273 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ spec   : num [1:500] 0.694 1.142 1.687 0.872 1.309 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ dof    : num [1:500] 5.75 5.84 5.9 5.79 5.86 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, "class")= chr [1:2] "spec" "list"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "class")= chr [1:2] "list" "spec_list"</span>
@@ -116,7 +116,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

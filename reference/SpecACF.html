@@ -8,7 +8,11 @@
   full understanding of this estimation uncertainty, but simulation testing
   indicates that the estimates are unbiased such that smoothing across
   frequencies to remove negative estimates results in an unbiased power
-  spectrum."><meta property="og:description" content="Estimates the power spectrum from a single time series, or the
+  spectrum.
+The main method is documented in appendix B of Kunz and Laepple (2024).
+Kunz, T., &amp;amp; Laepple, T. (2024). Effective Spatial Degrees of Freedom of
+ Natural Temperature Variability as a Function of Frequency. Journal of
+ Climate, 37(8), 2505–2518. https://doi.org/10.1175/JCLI-D-23-0040.1"><meta property="og:description" content="Estimates the power spectrum from a single time series, or the
   mean spectrum of a set of timeseries stored as the columns of a matrix.
   Timeseries can contain (some) gaps coded as NA values. Gaps results in
   additional estimation error so that the power estimates are no longer
@@ -17,7 +21,11 @@
   full understanding of this estimation uncertainty, but simulation testing
   indicates that the estimates are unbiased such that smoothing across
   frequencies to remove negative estimates results in an unbiased power
-  spectrum."></head><body>
+  spectrum.
+The main method is documented in appendix B of Kunz and Laepple (2024).
+Kunz, T., &amp;amp; Laepple, T. (2024). Effective Spatial Degrees of Freedom of
+ Natural Temperature Variability as a Function of Frequency. Journal of
+ Climate, 37(8), 2505–2518. https://doi.org/10.1175/JCLI-D-23-0040.1"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -25,7 +33,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">PaleoSpec</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.33</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.34</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,6 +69,10 @@
   indicates that the estimates are unbiased such that smoothing across
   frequencies to remove negative estimates results in an unbiased power
   spectrum.</p>
+<p>The main method is documented in appendix B of Kunz and Laepple (2024).</p>
+<p>Kunz, T., &amp; Laepple, T. (2024). Effective Spatial Degrees of Freedom of
+ Natural Temperature Variability as a Function of Frequency. Journal of
+ Climate, 37(8), 2505–2518. https://doi.org/10.1175/JCLI-D-23-0040.1</p>
     </div>
 
     <div class="section level2">
@@ -125,7 +137,7 @@ the negative frequencies are removed</p></dd>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other functions to estimate power spectra:
-<code><a href="SpecMTM.html">SpecMTM</a>()</code></p></div>
+<code><a href="SpecMTM.html">SpecMTM()</a></code></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -151,9 +163,9 @@ the negative frequencies are removed</p></dd>
 <span class="r-in"><span>  `ACF k=1` <span class="op">=</span> <span class="va">spMk1</span>,</span></span>
 <span class="r-in"><span>  `ACF k=3` <span class="op">=</span> <span class="va">spMk3</span>,</span></span>
 <span class="r-in"><span>  `MTM k=3` <span class="op">=</span> <span class="va">spMTM</span></span></span>
-<span class="r-in"><span><span class="op">)</span>, alpha.line <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span></span>
-<span class="r-in"><span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">spec_id</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span>, alpha.line <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="co">#+</span></span></span>
 <span class="r-plt img"><img src="SpecACF-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span>  <span class="co">#ggplot2::facet_wrap(~spec_id)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## No gaps</span></span></span>
 <span class="r-in"><span></span></span>
@@ -203,12 +215,12 @@ the negative frequencies are removed</p></dd>
 <span class="r-in"><span><span class="va">tsAR4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/arima.sim.html" class="external-link">arima.sim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ar <span class="op">=</span> <span class="va">arc_spring</span><span class="op">)</span>, n <span class="op">=</span> <span class="fl">1e03</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1e03</span>, <span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tsAR4</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="SpecACF-4.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="va">spAR4_ACF</span> <span class="op">&lt;-</span> <span class="fu">SpecACF</span><span class="op">(</span><span class="va">tsAR4</span>, <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">spAR4_ACF</span> <span class="op">&lt;-</span> <span class="fu">SpecACF</span><span class="op">(</span><span class="va">tsAR4</span>, <span class="fl">1</span>, k <span class="op">=</span> <span class="fl">0</span>, nw <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">spAR4_MTACF</span> <span class="op">&lt;-</span> <span class="fu">SpecACF</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">tsAR4</span><span class="op">)</span>, <span class="fl">1</span>, k <span class="op">=</span> <span class="fl">15</span>, nw <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="gg_spec.html">gg_spec</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="co">#'</span></span></span>
-<span class="r-in"><span>  `ACF k=1` <span class="op">=</span> <span class="va">spAR4_ACF</span>,</span></span>
-<span class="r-in"><span>  `ACF k=15` <span class="op">=</span> <span class="va">spAR4_MTACF</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  `ACF k = 0` <span class="op">=</span> <span class="va">spAR4_ACF</span>,</span></span>
+<span class="r-in"><span>  `ACF k = 15` <span class="op">=</span> <span class="va">spAR4_MTACF</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="SpecACF-5.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
@@ -231,20 +243,20 @@ the negative frequencies are removed</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> FALSE  TRUE  &lt;NA&gt; </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   486   483    31 </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">spAR4_ACF_g</span> <span class="op">&lt;-</span> <span class="fu">SpecACF</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">tsAR4_g</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">spAR4_ACF_g</span> <span class="op">&lt;-</span> <span class="fu">SpecACF</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">tsAR4_g</span><span class="op">)</span>, <span class="fl">1</span>, k <span class="op">=</span> <span class="fl">0</span>, nw <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">spAR4_MTACF_g</span> <span class="op">&lt;-</span> <span class="fu">SpecACF</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">tsAR4_g</span><span class="op">)</span>, <span class="fl">1</span>, nw <span class="op">=</span> <span class="fl">8</span>, k <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">spAR4_ACF_g</span><span class="op">$</span><span class="va">spec</span> <span class="op">&lt;</span> <span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> FALSE  TRUE </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   485    15 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   402    98 </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">spAR4_MTACF_g</span><span class="op">$</span><span class="va">spec</span> <span class="op">&lt;</span> <span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> FALSE </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   500 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="gg_spec.html">gg_spec</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  `ACF gaps k=1` <span class="op">=</span> <span class="va">spAR4_ACF_g</span>,</span></span>
+<span class="r-in"><span>  `ACF gaps k = 0` <span class="op">=</span> <span class="va">spAR4_ACF_g</span>,</span></span>
 <span class="r-in"><span>  `ACF gaps k = 15` <span class="op">=</span> <span class="va">spAR4_MTACF_g</span>,</span></span>
 <span class="r-in"><span>  `ACF full k = 15` <span class="op">=</span> <span class="va">spAR4_MTACF</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
@@ -253,7 +265,71 @@ the negative frequencies are removed</p></dd>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span><span style="color: #00BB00;">log-10</span> transformation introduced infinite values.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>NaNs produced</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span><span style="color: #00BB00;">log-10</span> transformation introduced infinite values.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_line()`).</span>
 <span class="r-plt img"><img src="SpecACF-7.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#There are small numerical differences between SpecMTM and SpecACF, even when</span></span></span>
+<span class="r-in"><span><span class="co">#using the same number of tapers, because SpecMTM used adaptive tapering while</span></span></span>
+<span class="r-in"><span><span class="co">#SpecACF only implements non-adaptive tapering. This difference is only large</span></span></span>
+<span class="r-in"><span><span class="co">#for purely periodic non-stochastic signals.</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Simulate a periodic signal with three frequencies to illustrate effect of</span></span></span>
+<span class="r-in"><span><span class="co">## adaptive tapering.</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">f1</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">/</span><span class="fl">10</span></span></span>
+<span class="r-in"><span><span class="va">f2</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">/</span><span class="fl">100</span></span></span>
+<span class="r-in"><span><span class="va">f3</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">/</span><span class="fl">1000</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">tau</span> <span class="op">&lt;-</span> <span class="fl">1e04</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">tau</span>, by <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">y_pure</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">cos</a></span><span class="op">(</span><span class="fl">2</span><span class="op">*</span><span class="va">pi</span><span class="op">*</span><span class="va">f1</span><span class="op">*</span><span class="va">time</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">cos</a></span><span class="op">(</span><span class="fl">2</span><span class="op">*</span><span class="va">pi</span><span class="op">*</span><span class="va">f2</span><span class="op">*</span><span class="va">time</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">cos</a></span><span class="op">(</span><span class="fl">2</span><span class="op">*</span><span class="va">pi</span><span class="op">*</span><span class="va">f3</span><span class="op">*</span><span class="va">time</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">y_pure</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="SpecACF-8.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">sp_y_pure_nonAdaptive</span> <span class="op">&lt;-</span> <span class="fu"><a href="SpecMTM.html">SpecMTM</a></span><span class="op">(</span><span class="va">y_pure</span>, deltat <span class="op">=</span> <span class="fl">1</span>, k <span class="op">=</span> <span class="fl">9</span>, nw <span class="op">=</span> <span class="fl">5</span>, adaptiveWeighting<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sp_y_pure_adaptive</span> <span class="op">&lt;-</span> <span class="fu"><a href="SpecMTM.html">SpecMTM</a></span><span class="op">(</span><span class="va">y_pure</span>, deltat <span class="op">=</span> <span class="fl">1</span>, k <span class="op">=</span> <span class="fl">9</span>, nw <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sp_y_pure_nonAdaptiveACF</span> <span class="op">&lt;-</span> <span class="fu">SpecACF</span><span class="op">(</span><span class="va">y_pure</span>, deltat <span class="op">=</span> <span class="fl">1</span>, k <span class="op">=</span> <span class="fl">9</span>, nw <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Adaptive tapering further reduces the leaked spectral power. For purely deterministic</span></span></span>
+<span class="r-in"><span><span class="co">## signals, the relative difference is very large.</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="gg_spec.html">gg_spec</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    MTM_nonAdaptive <span class="op">=</span> <span class="va">sp_y_pure_nonAdaptive</span>,</span></span>
+<span class="r-in"><span>    MTM_adaptive <span class="op">=</span> <span class="va">sp_y_pure_adaptive</span>,</span></span>
+<span class="r-in"><span>    ACF_nonAdaptive <span class="op">=</span> <span class="va">sp_y_pure_nonAdaptiveACF</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="SpecACF-9.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## With a tiny amount of white noise this difference becomes less important.</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">y_noise</span> <span class="op">=</span> <span class="va">y_pure</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span>, <span class="fl">0</span>, <span class="fl">0.1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Showing just the first 100 timepoints</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">time</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span>, <span class="va">y_pure</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">time</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span>, <span class="va">y_noise</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span>, col <span class="op">=</span> <span class="st">"green"</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="SpecACF-10.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">sp_y_noise_nonAdaptive</span> <span class="op">&lt;-</span> <span class="fu"><a href="SpecMTM.html">SpecMTM</a></span><span class="op">(</span><span class="va">y_noise</span>, deltat <span class="op">=</span> <span class="fl">1</span>, k <span class="op">=</span> <span class="fl">9</span>, nw <span class="op">=</span> <span class="fl">5</span>, adaptiveWeighting<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sp_y_noise_adaptive</span> <span class="op">&lt;-</span> <span class="fu"><a href="SpecMTM.html">SpecMTM</a></span><span class="op">(</span><span class="va">y_noise</span>, deltat <span class="op">=</span> <span class="fl">1</span>, k <span class="op">=</span> <span class="fl">9</span>, nw <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sp_y_noise_nonAdaptiveACF</span> <span class="op">&lt;-</span> <span class="fu">SpecACF</span><span class="op">(</span><span class="va">y_noise</span>, deltat <span class="op">=</span> <span class="fl">1</span>, k <span class="op">=</span> <span class="fl">9</span>, nw <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="gg_spec.html">gg_spec</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    MTM_nonAdaptive <span class="op">=</span> <span class="va">sp_y_noise_nonAdaptive</span>,</span></span>
+<span class="r-in"><span>    MTM_adaptive <span class="op">=</span> <span class="va">sp_y_noise_adaptive</span>,</span></span>
+<span class="r-in"><span>    ACF_nonAdaptive <span class="op">=</span> <span class="va">sp_y_noise_nonAdaptiveACF</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="SpecACF-11.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -265,7 +341,7 @@ the negative frequencies are removed</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

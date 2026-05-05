@@ -1,0 +1,4 @@
+# License
+
+    YEAR: 2019
+    COPYRIGHT HOLDER: Earth System Diagnostics group of the Alfred Wegener Institute
