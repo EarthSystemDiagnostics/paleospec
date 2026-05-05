@@ -12,25 +12,34 @@
 #'
 #' Calls \code{mdmultispec} from the Julia \code{Multitaper} package via
 #' \code{JuliaConnectoR}. Returns the same structure as \code{\link{SpecMTM}}.
-#' Unlike \code{\link{SpecMTM}}, this function handles time series with missing
-#' values (gaps), which are passed to Julia as a non-uniform time axis so that
-#' the non-uniform FFT can be used for spectral estimation.
+#' Unlike \code{\link{SpecMTM}}, this function can handle time series with
+#' missing values (gaps) or truly irregularly sampled data, both via the
+#' non-uniform FFT.
 #'
-#' @inheritParams SpecMTM
-#' @param timeSeries A time series of equally spaced observations, possibly
-#'   containing \code{NA} values representing gaps. Can be a \code{ts} object
-#'   (in which case \code{deltat} is extracted automatically) or a plain numeric
-#'   vector (in which case a sampling interval of 1 is assumed).
+#' @param timeSeries A time series of observations. Can be a \code{ts} object
+#'   (in which case the sampling interval is extracted from its attributes), or
+#'   a plain numeric vector (sampling interval assumed to be 1 unless overridden
+#'   by \code{deltat}). For regularly spaced but gappy data, encode gaps as
+#'   \code{NA}. For truly irregularly sampled data supply the observation times
+#'   via \code{times}.
 #' @param nw a positive double, the time-bandwidth product (default 2).
 #'   Converted to Julia's \code{bw} parameter as \code{nw / length(timeSeries)}.
 #' @param k a positive integer, the number of Slepian tapers (default 3).
 #' @param detrend logical; remove the mean and linear trend before estimating
 #'   the spectrum (default \code{TRUE}).
+#' @param deltat optional numeric; sampling interval, overriding the value
+#'   extracted from a \code{ts} object or the default of 1 for plain vectors.
+#' @param times optional numeric vector of observation times, the same length
+#'   as \code{timeSeries}. Supply this for truly irregularly sampled data where
+#'   the time axis is not a regular grid. When supplied, \code{deltat} defaults
+#'   to \code{mean(diff(times))} unless explicitly set. Detrending uses the
+#'   actual times as the predictor.
 #'
 #' @return A \code{spec} object: a list with at minimum \code{freq}, \code{spec},
 #'   and \code{dof} vectors of equal length, plus \code{dt} and \code{n}.
 #'   Degrees of freedom are estimated adaptively by Julia and will be lower at
-#'   frequencies where gaps reduce the effective number of observations.
+#'   frequencies where gaps or irregular sampling reduce the effective number of
+#'   observations.
 #'
 #' @details
 #' Requires Julia to be installed and the Julia \code{Multitaper} package to be
@@ -69,9 +78,21 @@
 #' sp_gap <- SpecMTMJulia(x_gap)
 #'
 #' gg_spec(list(`full series` = sp_full, `20% gaps` = sp_gap))
+#'
+#' # Override deltat for a plain vector
+#' x_vec <- as.numeric(x_full)
+#' sp_dt100 <- SpecMTMJulia(x_vec, deltat = 100)
+#'
+#' # Truly irregular sampling: supply observation times explicitly
+#' set.seed(42)
+#' irreg_times <- cumsum(rgamma(N, shape = 4, rate = 4))
+#' x_irreg <- SimPLS(N, beta = 1, alpha = 1)
+#' sp_irreg <- SpecMTMJulia(x_irreg, times = irreg_times)
+#' LPlot(sp_irreg)
 #' }
 #' @export
-SpecMTMJulia <- function(timeSeries, nw = 2, k = 3, detrend = TRUE) {
+SpecMTMJulia <- function(timeSeries, nw = 2, k = 3, detrend = TRUE,
+                         deltat = NULL, times = NULL) {
 
   if (!requireNamespace("JuliaConnectoR", quietly = TRUE)) {
     stop(
@@ -86,21 +107,32 @@ SpecMTMJulia <- function(timeSeries, nw = 2, k = 3, detrend = TRUE) {
     )
   }
 
-  dt <- if (is.ts(timeSeries)) deltat(timeSeries) else 1
-  x  <- as.numeric(timeSeries)
-  N  <- length(x)
+  x <- as.numeric(timeSeries)
+  N <- length(x)
 
-  if (detrend)
-    x <- residuals(lm(x ~ seq_along(x), na.action = na.exclude))
+  if (!is.null(times)) {
+    if (length(times) != N)
+      stop("'times' must be the same length as 'timeSeries'.", call. = FALSE)
+    t_axis <- as.numeric(times)
+    dt     <- if (!is.null(deltat)) deltat else mean(diff(t_axis))
+    if (detrend)
+      x <- residuals(lm(x ~ t_axis, na.action = na.exclude))
+  } else {
+    dt_from_ts <- if (is.ts(timeSeries)) stats::deltat(timeSeries) else 1
+    dt         <- if (!is.null(deltat)) deltat else dt_from_ts
+    t_axis     <- as.numeric(seq_len(N))
+    if (detrend)
+      x <- residuals(lm(x ~ t_axis, na.action = na.exclude))
+  }
 
-  bw     <- nw / N
-  t_axis <- as.numeric(seq_len(N))
-  obs    <- !is.na(x)
+  bw  <- nw / N
+  obs <- !is.na(x)
 
   mtj <- .get_julia_multitaper()
   # dof=TRUE makes mdmultispec return a 2-tuple: (MTSpectrum, Vector{Float64})
   raw <- JuliaConnectoR::juliaGet(
-    mtj$mdmultispec(t_axis[obs], x[obs], dt = dt, bw = bw, k = as.integer(k), dof = TRUE)
+    mtj$mdmultispec(t_axis[obs], x[obs], dt = dt, bw = bw, k = as.integer(k),
+                    dof = TRUE)
   )
 
   freq <- JuliaConnectoR::juliaCall("collect", raw[[1]]$f)

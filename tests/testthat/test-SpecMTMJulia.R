@@ -23,6 +23,10 @@ if (.julia_available) {
   n_obs  <- sum(!is.na(x_gap))
 
   sp_mtm <- SpecMTM(x_full, nw = 2, k = 3)
+
+  irreg_times <- cumsum(rgamma(N, shape = 4, rate = 4))
+  x_irreg     <- as.numeric(SimPLS(N, beta = 1, alpha = 1))
+  sp_irreg    <- SpecMTMJulia(x_irreg, times = irreg_times)
 }
 
 
@@ -83,6 +87,25 @@ test_that("SpecMTMJulia handles gaps (NA values)", {
 
   # All DOF still positive
   expect_true(all(sp_gap$dof > 0))
+})
+
+
+test_that("SpecMTMJulia handles irregular sampling via times argument", {
+  skip_if_not(.julia_available, "Julia is not available")
+
+  expect_s3_class(sp_irreg, "spec")
+  expect_true(all(sp_irreg$freq > 0))
+  expect_true(all(sp_irreg$dof > 0))
+
+  # dt should be mean(diff(times)), not 1
+  expect_equal(sp_irreg$dt, mean(diff(irreg_times)))
+  expect_false(sp_irreg$dt == 1)
+
+  # length mismatch should error
+  expect_error(
+    SpecMTMJulia(x_irreg, times = 1:10),
+    "'times' must be the same length as 'timeSeries'."
+  )
 })
 
 

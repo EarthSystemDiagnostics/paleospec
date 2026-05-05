@@ -4,13 +4,22 @@
 \alias{SpecMTMJulia}
 \title{MTM Spectral Estimator via Julia}
 \usage{
-SpecMTMJulia(timeSeries, nw = 2, k = 3, detrend = TRUE)
+SpecMTMJulia(
+  timeSeries,
+  nw = 2,
+  k = 3,
+  detrend = TRUE,
+  deltat = NULL,
+  times = NULL
+)
 }
 \arguments{
-\item{timeSeries}{A time series of equally spaced observations, possibly
-containing \code{NA} values representing gaps. Can be a \code{ts} object
-(in which case \code{deltat} is extracted automatically) or a plain numeric
-vector (in which case a sampling interval of 1 is assumed).}
+\item{timeSeries}{A time series of observations. Can be a \code{ts} object
+(in which case the sampling interval is extracted from its attributes), or
+a plain numeric vector (sampling interval assumed to be 1 unless overridden
+by \code{deltat}). For regularly spaced but gappy data, encode gaps as
+\code{NA}. For truly irregularly sampled data supply the observation times
+via \code{times}.}
 
 \item{nw}{a positive double, the time-bandwidth product (default 2).
 Converted to Julia's \code{bw} parameter as \code{nw / length(timeSeries)}.}
@@ -19,19 +28,29 @@ Converted to Julia's \code{bw} parameter as \code{nw / length(timeSeries)}.}
 
 \item{detrend}{logical; remove the mean and linear trend before estimating
 the spectrum (default \code{TRUE}).}
+
+\item{deltat}{optional numeric; sampling interval, overriding the value
+extracted from a \code{ts} object or the default of 1 for plain vectors.}
+
+\item{times}{optional numeric vector of observation times, the same length
+as \code{timeSeries}. Supply this for truly irregularly sampled data where
+the time axis is not a regular grid. When supplied, \code{deltat} defaults
+to \code{mean(diff(times))} unless explicitly set. Detrending uses the
+actual times as the predictor.}
 }
 \value{
 A \code{spec} object: a list with at minimum \code{freq}, \code{spec},
   and \code{dof} vectors of equal length, plus \code{dt} and \code{n}.
   Degrees of freedom are estimated adaptively by Julia and will be lower at
-  frequencies where gaps reduce the effective number of observations.
+  frequencies where gaps or irregular sampling reduce the effective number of
+  observations.
 }
 \description{
 Calls \code{mdmultispec} from the Julia \code{Multitaper} package via
 \code{JuliaConnectoR}. Returns the same structure as \code{\link{SpecMTM}}.
-Unlike \code{\link{SpecMTM}}, this function handles time series with missing
-values (gaps), which are passed to Julia as a non-uniform time axis so that
-the non-uniform FFT can be used for spectral estimation.
+Unlike \code{\link{SpecMTM}}, this function can handle time series with
+missing values (gaps) or truly irregularly sampled data, both via the
+non-uniform FFT.
 }
 \details{
 Requires Julia to be installed and the Julia \code{Multitaper} package to be
@@ -67,6 +86,17 @@ x_gap[sample(N, size = 0.2 * N)] <- NA
 sp_gap <- SpecMTMJulia(x_gap)
 
 gg_spec(list(`full series` = sp_full, `20\% gaps` = sp_gap))
+
+# Override deltat for a plain vector
+x_vec <- as.numeric(x_full)
+sp_dt100 <- SpecMTMJulia(x_vec, deltat = 100)
+
+# Truly irregular sampling: supply observation times explicitly
+set.seed(42)
+irreg_times <- cumsum(rgamma(N, shape = 4, rate = 4))
+x_irreg <- SimPLS(N, beta = 1, alpha = 1)
+sp_irreg <- SpecMTMJulia(x_irreg, times = irreg_times)
+LPlot(sp_irreg)
 }
 }
 \seealso{
