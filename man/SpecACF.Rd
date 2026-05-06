@@ -211,6 +211,7 @@ gg_spec(
 }
 \seealso{
 Other functions to estimate power spectra: 
+\code{\link{SpecACFBiasFree}()},
 \code{\link{SpecMTM}()},
 \code{\link{SpecMTMJulia}()}
 }

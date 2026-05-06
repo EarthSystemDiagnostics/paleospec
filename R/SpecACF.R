@@ -458,3 +458,353 @@ TrimNA <- function(m, trim = c("all", "any")) {
 }
 
 
+#' Bias-Free Power Spectrum from the Autocovariance Function
+#'
+#' @description Implements the bias-free recipe of Damaschke, Kuhn & Nobach
+#'   (2024) for estimating the power spectral density from regularly sampled
+#'   timeseries with missing data. Compared to [SpecACF()] this function:
+#'   \itemize{
+#'     \item uses linear (zero-padded) rather than circular FFT, eliminating
+#'       wrap-around contamination of the autocovariance estimator at large
+#'       lags;
+#'     \item supports optional restriction of the autocovariance domain to lag
+#'       \eqn{K \ll N}, which reduces spectral variance (Damaschke section 2.2);
+#'     \item supports optional Bessel's correction (Damaschke Eqs. 7-13) for
+#'       the bias introduced by subtracting the empirical (rather than the
+#'       true) mean from gappy data.
+#'   }
+#'   When `k > 1`, Slepian (DPSS) tapers are applied following the same
+#'   expansion approach as [SpecACF()]: the data matrix is widened to
+#'   \eqn{N \times (n_{\text{rec}} \cdot k)} tapered columns and the gap
+#'   indicator remains binary. The resulting spectrum is scaled by \eqn{N}
+#'   to match the tapered-periodogram convention. This tapering is not
+#'   derived from either source paper and is provided as an experimental
+#'   extension for reducing spectral variance; the bias-free property holds
+#'   only approximately under tapering.
+#'
+#' @details The estimator is bias-free under the following assumptions:
+#'   \itemize{
+#'     \item the underlying process is *stationary* in mean and covariance.
+#'       Non-stationarity beyond a linear trend (e.g. unremoved seasonality
+#'       or amplitude variation) introduces a bias proportional to the
+#'       gap-pattern weighted average of the non-stationary covariance
+#'       component (Kunz & Laepple 2024, Eq. B6).
+#'     \item gaps occur *independently* of the values of the process;
+#'     \item if `lag.max < N - 1`, the true autocovariance is *negligible at
+#'       lags > lag.max* (otherwise truncation introduces a leakage bias).
+#'   }
+#'
+#'   Even with an unbiased autocovariance estimator the resulting spectrum
+#'   may contain negative values at individual frequencies because the
+#'   gap-pair-count normalisation breaks the non-negative-definiteness of the
+#'   autocovariance (Damaschke section 3.1; Kunz & Laepple 2024 Appendix B).
+#'   Negative values average out across realisations and can be removed by
+#'   frequency-band smoothing downstream (e.g. [FilterSpecLog()]).
+#'
+#'   Bessel's correction requires `demean = TRUE` and `lag.max < N - 1`
+#'   (otherwise the correction matrix is rank-deficient). It is applied
+#'   per-record, treating columns of `x` as independent realisations of the
+#'   same stationary process. The pooled autocovariance is then the mean
+#'   across per-record corrected ACFs, slightly different from the
+#'   ratio-of-pooled-sums estimator used by [SpecACF()].
+#'
+#' @param x a vector or matrix of binned values, possibly with gaps.
+#' @param deltat,bin.width the time-step of the timeseries, equivalently the
+#'   width of the bins in a binned timeseries. Set only one.
+#' @param lag.max integer, the maximum lag at which to evaluate the
+#'   autocovariance function. Must be in `[1, nrow(x) - 1]`. Defaults to
+#'   `NULL`, equivalent to `nrow(x) - 1` (no truncation, no Bessel
+#'   correction). Smaller values reduce spectral resolution but reduce
+#'   variance and enable Bessel's correction.
+#' @param demean,detrend remove the column-wise mean (and linear trend) from
+#'   each record. See [SpecACF()].
+#' @param bessel.correct logical. If `TRUE`, applies Bessel's correction
+#'   (Damaschke et al. 2024, Eqs. 7-13). Requires `lag.max < nrow(x) - 1` and
+#'   `demean = TRUE`; otherwise a message is emitted and the correction is
+#'   skipped.
+#' @param k integer. Number of Slepian tapers (default 1, i.e. no tapering).
+#'   When `k > 1`, DPSS tapers with bandwidth parameter `nw` are applied;
+#'   `bessel.correct` is silently disabled.
+#' @param nw numeric. Time-half-bandwidth product for the DPSS tapers
+#'   (default 0, ignored when `k = 1`). See [multitaper::spec.mtm()].
+#' @param TrimNA logical. If `TRUE`, leading and trailing all-NA rows are
+#'   removed before estimation (mirrors [SpecACF()]). Defaults to `FALSE`
+#'   because the linear ACF already treats end-NAs as gaps (the gap indicator
+#'   `w` is 0 for those positions and they contribute nothing to either the
+#'   numerator or denominator), so trimming is unnecessary and can shorten
+#'   series by different amounts across replicates.
+#' @param pos.f.only,return.working see [SpecACF()].
+#'
+#' @references Damaschke, N., Kuhn, V., & Nobach, H. (2024). Bias-free
+#'   estimation of the covariance function and the power spectral density
+#'   from data with missing samples including extended data gaps. EURASIP
+#'   Journal on Advances in Signal Processing, 2024:17.
+#'   https://doi.org/10.1186/s13634-024-01108-4
+#'
+#'   Kunz, T., & Laepple, T. (2024). Effective Spatial Degrees of Freedom of
+#'   Natural Temperature Variability as a Function of Frequency. Journal of
+#'   Climate, 37(8), 2505-2518. https://doi.org/10.1175/JCLI-D-23-0040.1
+#'
+#' @return a spec object (list)
+#' @family functions to estimate power spectra
+#' @author Andrew Dolman <andrew.dolman@awi.de>
+#' @export
+SpecACFBiasFree <- function(x,
+                            deltat = NULL, bin.width = NULL,
+                            lag.max = NULL,
+                            k = 1, nw = 0,
+                            demean = TRUE, detrend = TRUE,
+                            bessel.correct = FALSE,
+                            TrimNA = FALSE,
+                            pos.f.only = TRUE,
+                            return.working = FALSE) {
+
+  # === argument handling (mirrors SpecACF) ===
+  if (is.null(deltat) & is.null(bin.width) & is.ts(x) == FALSE) {
+    stop("One of deltat or bin.width must be set")
+  }
+
+  if (is.ts(x)) {
+    d <- dim(x)
+    dt_ts <- stats::deltat(x)
+    x <- as.vector(x)
+    if (!is.null(deltat) && dt_ts != deltat) {
+      stop("timeseries deltat does not match argument deltat")
+    }
+    if (!is.null(bin.width) && dt_ts != bin.width) {
+      stop("timeseries deltat does not match argument bin.width")
+    }
+    if (is.null(deltat)) deltat <- dt_ts
+    if (is.null(bin.width)) bin.width <- dt_ts
+    if (!is.null(d)) dim(x) <- d
+  }
+
+  if (is.null(bin.width) && !is.null(deltat)) bin.width <- deltat
+  if (!is.null(bin.width) && is.null(deltat)) deltat <- bin.width
+
+  if (is.vector(x)) x <- matrix(x, ncol = 1)
+  if (is.data.frame(x)) x <- as.matrix(x)
+
+  if (TrimNA) x <- TrimNA(x)
+
+  if (detrend) {
+    i <- seq_along(x[, 1])
+    x <- apply(x, 2, function(y) {
+      stats::residuals(stats::lm(y ~ i, na.action = "na.exclude"))
+    })
+  }
+
+  if (demean) {
+    x <- x - colMeans(x, na.rm = TRUE)
+  }
+
+  N <- nrow(x)
+  ncolx <- ncol(x)
+
+  if (is.null(lag.max)) {
+    K <- N - 1L
+  } else {
+    K <- as.integer(lag.max)
+    if (K < 1L || K >= N) {
+      stop("lag.max must be in [1, nrow(x) - 1]")
+    }
+  }
+
+  if (k > 1 && isTRUE(bessel.correct)) {
+    message("bessel.correct = TRUE ignored when k > 1")
+    bessel.correct <- FALSE
+  }
+
+  bessel_will_apply <- isTRUE(bessel.correct) && demean && K < (N - 1L)
+  if (isTRUE(bessel.correct) && !bessel_will_apply) {
+    if (!demean) {
+      message("bessel.correct = TRUE ignored: requires demean = TRUE")
+    } else {
+      message("bessel.correct = TRUE ignored: requires lag.max < nrow(x) - 1 ",
+              "(matrix is rank-deficient at K = N - 1)")
+    }
+  }
+  if (bessel_will_apply && detrend) {
+    warning("Bessel's correction applied with detrend = TRUE: Damaschke's ",
+            "correction is derived for empirical-mean removal only; with OLS ",
+            "detrending the bias structure is different and the correction ",
+            "is approximate.")
+  }
+
+  ## Tapering: expand x to N × (ncolx * k), matching SpecACF's approach.
+  tapered <- k > 1L
+  ncolx_orig <- ncolx
+  if (tapered) {
+    dpssIN <- multitaper:::dpss(N, k = k, nw = nw, returnEigenvalues = TRUE)
+    dw <- dpssIN$v
+    x <- matrix(unlist(lapply(seq_len(ncolx), function(i) {
+      lapply(seq_len(k), function(j) x[, i] * dw[, j])
+    })), nrow = N, byrow = FALSE)
+    ncolx <- ncolx * k
+  }
+
+  # === per-record ACF + optional Bessel correction ===
+  acfs <- matrix(NA_real_, nrow = K + 1L, ncol = ncolx)
+  for (rec in seq_len(ncolx)) {
+    xi <- x[, rec]
+    wi <- as.numeric(!is.na(xi))
+    xi[is.na(xi)] <- 0
+
+    num_i <- linear_acf_via_fft(xi, K)
+    den_i <- linear_acf_via_fft(wi, K)
+    # FFT introduces ~1e-15 noise; for binary indicators the true pair count
+    # is an integer >= 0, so anything below 0.5 means no observed pairs.
+    den_i[den_i < 0.5] <- NA_real_
+    acf_i <- num_i / den_i
+    acf_i[!is.finite(acf_i)] <- NA_real_
+
+    if (bessel_will_apply) {
+      A_i <- bessel_A_matrix(wi, K)
+      acf_two <- c(rev(acf_i[-1L]), acf_i)
+      acf_two_corr <- tryCatch(
+        as.numeric(solve(A_i, acf_two)),
+        error = function(e) {
+          warning("Bessel correction failed for record ", rec, ": ",
+                  conditionMessage(e))
+          acf_two
+        }
+      )
+      acf_i <- (acf_two_corr[(K + 1L):(2L * K + 1L)] +
+                  rev(acf_two_corr[1L:(K + 1L)])) / 2
+    }
+
+    acfs[, rec] <- acf_i
+  }
+
+  if (any(is.na(acfs))) {
+    warning("Some autocovariance values could not be computed (likely lags ",
+            "with no observed pairs in some records).")
+  }
+
+  acf <- rowMeans(acfs, na.rm = TRUE)
+
+  # === spectrum: FFT of two-sided ACF arranged circularly on length 2K+1 ===
+  L <- 2L * K + 1L
+  acf_circ <- c(acf, rev(acf[-1L]))
+  spec_two <- Re(stats::fft(acf_circ)) * bin.width
+  if (tapered) spec_two <- spec_two * N
+  freq <- seq(0L, L - 1L) / (L * bin.width)
+  rfreq <- 1 / (2 * bin.width)
+
+  if (pos.f.only) {
+    keep <- freq > 0 & freq <= rfreq
+    spec <- spec_two[keep]
+    freq <- freq[keep]
+  } else {
+    spec <- spec_two
+  }
+
+  if (tapered) {
+    dof_per_freq <- 2 * ncolx   # ncolx is now ncolx_orig * k
+  } else {
+    # Approximate effective DOF: lag truncation to K introduces frequency
+    # smoothing roughly equivalent to Bartlett-style averaging by N / (K + 1).
+    # With gaps, scale by the fraction of valid samples. Floor at 2.
+    p_valid <- mean(!is.na(x))
+    dof_per_freq <- max(2, 2 * ncolx * p_valid * N / (K + 1L))
+  }
+  dof <- rep(dof_per_freq, length(freq))
+
+  out <- list(
+    bin.width = bin.width,
+    rfreq = rfreq,
+    nrec = ncolx_orig,
+    lag = 0:K,
+    acf = acf,
+    freq = freq,
+    spec = spec,
+    f.length = 1,
+    dof = dof,
+    K = K,
+    bessel.applied = bessel_will_apply
+  )
+
+  class(out) <- c("SpecACF", "spec")
+
+  if (return.working) {
+    out <- list(working = list(acfs = acfs), spec = out)
+  }
+  return(out)
+}
+
+
+#' Linear (zero-padded) autocorrelation via FFT
+#'
+#' Returns the unnormalised linear sums \eqn{\sum_t x_t x_{t+h}} for
+#' \eqn{h = 0, 1, \dots, K}, computed via FFT with zero-padding to length
+#' \eqn{2N} so that wrap-around products are eliminated.
+#'
+#' @param x numeric vector
+#' @param K maximum non-negative lag
+#' @keywords internal
+linear_acf_via_fft <- function(x, K) {
+  N <- length(x)
+  M <- 2L * N
+  x_pad <- c(x, rep(0, M - N))
+  X <- stats::fft(x_pad)
+  acf_full <- Re(stats::fft(X * Conj(X), inverse = TRUE)) / M
+  return(acf_full[1L:(K + 1L)])
+}
+
+
+#' Bessel's correction matrix per Damaschke et al. 2024 Eqs. 7-12
+#'
+#' Returns the matrix \eqn{A} such that \eqn{\langle C \rangle = A \gamma},
+#' where \eqn{C} is the two-sided biased autocovariance estimate after
+#' empirical-mean removal (lags \eqn{-K, \dots, K}) and \eqn{\gamma} is the
+#' true autocovariance. Apply \eqn{A^{-1}} to the biased estimate to obtain
+#' an (asymptotically) bias-free estimate.
+#'
+#' @param w numeric vector of length \eqn{N} with weights (typically a 0/1
+#'   gap indicator, but continuous weights are admissible).
+#' @param K maximum lag.
+#' @keywords internal
+bessel_A_matrix <- function(w, K) {
+  N <- length(w)
+  D <- sum(w)
+
+  # W_j = sum_{i=1}^{N-|j|} w_i w_{i+|j|},  j = -K..K  (symmetric in j)
+  W <- numeric(2L * K + 1L)
+  for (j in seq(-K, K)) {
+    aj <- abs(j)
+    if (aj < N) {
+      W[j + K + 1L] <- sum(w[1:(N - aj)] * w[(aj + 1L):N])
+    }
+  }
+
+  A <- matrix(0, nrow = 2L * K + 1L, ncol = 2L * K + 1L)
+  for (k_idx in seq(-K, K)) {
+    Wk <- W[k_idx + K + 1L]
+    for (j_idx in seq(-K, K)) {
+      delta_kj <- as.numeric(k_idx == j_idx)
+
+      i_lo <- max(1L, 1L - j_idx, 1L - k_idx)
+      i_hi <- min(N, N - j_idx, N - k_idx)
+      Gkj <- if (i_hi >= i_lo) {
+        ii <- i_lo:i_hi
+        sum(w[ii] * w[ii + j_idx] * w[ii + k_idx])
+      } else 0
+
+      i_lo <- max(1L, 1L - j_idx, 1L + k_idx - j_idx)
+      i_hi <- min(N, N - j_idx, N + k_idx - j_idx)
+      Hkj <- if (i_hi >= i_lo) {
+        ii <- i_lo:i_hi
+        sum(w[ii] * w[ii + j_idx] * w[ii + j_idx - k_idx])
+      } else 0
+
+      Wj <- W[j_idx + K + 1L]
+
+      A[k_idx + K + 1L, j_idx + K + 1L] <- if (Wk == 0) {
+        NA_real_
+      } else {
+        delta_kj + Wj / D^2 - (Gkj + Hkj) / (D * Wk)
+      }
+    }
+  }
+  return(A)
+}

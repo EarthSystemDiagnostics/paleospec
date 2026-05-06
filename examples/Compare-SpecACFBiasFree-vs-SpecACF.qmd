@@ -1,0 +1,242 @@
+---
+title: "Comparison of SpecACFBiasFree vs SpecACF"
+format:
+  html:
+    toc: true
+    code-fold: true
+    fig-width: 10
+    fig-height: 7
+execute:
+  cache: false
+---
+
+Three scenarios × three estimators evaluated by Monte Carlo:
+
+**Scenarios**
+
+| Label | Description |
+|-------|-------------|
+| none | No gaps (sanity check) |
+| random | 25% independent random gaps (Damaschke "outliers" case) |
+| extended | 25% in runs (mean run = 8 tu; Damaschke "extended gaps") |
+
+**Estimators**
+
+| Label | Description |
+|-------|-------------|
+| `SpecACF` | k = 1, untapered comparison point |
+| `SpecACFBiasFree_trunc` | Linear ACF, K = N/4 (Damaschke-recommended truncation) |
+| `SpecACFBF_trunc_k5` | As above, plus k = 5 DPSS tapers (nw = 3) |
+
+**Diagnostics**
+
+1. **Bias** — mean spectrum vs the true PSD, log-binned
+2. **Scatter** — IQR / median across realisations
+3. **% negatives** — fraction of frequencies with negative power
+
+## Setup
+
+```{r setup}
+#| cache: false
+suppressMessages({
+  if (requireNamespace("devtools", quietly = TRUE) &&
+      file.exists("DESCRIPTION")) {
+    devtools::load_all("..", quiet = TRUE)
+  } else {
+    library(PaleoSpec)
+  }
+})
+
+set.seed(20240505)
+library(ggplot2)
+```
+
+## Simulation parameters
+
+```{r params}
+N        <- 1000      # series length
+beta     <- 0         # power-law slope of true spectrum
+alpha    <- 0.1       # power-law amplitude  S(f) = alpha * f^-beta
+n_reps   <- 100       # Monte Carlo replications per scenario
+gap_frac <- 0.25
+gap_run  <- 8         # mean length of extended-gap runs
+```
+
+## Gap generators
+
+```{r gap-generators}
+gap_none      <- function(n) rep(FALSE, n)
+gap_random    <- function(n) runif(n) < gap_frac
+gap_extended  <- function(n) {
+  # Two-state Markov chain: p(invalid) = gap_frac, mean run = gap_run.
+  p_stay_inv   <- 1 - 1 / gap_run
+  p_become_inv <- gap_frac * (1 - p_stay_inv) / (1 - gap_frac)
+  s <- logical(n); s[1] <- runif(1) < gap_frac
+  for (i in 2:n)
+    s[i] <- if (s[i - 1]) runif(1) < p_stay_inv else runif(1) < p_become_inv
+  s
+}
+
+scenarios <- list(
+  none     = gap_none,
+  random   = gap_random,
+  extended = gap_extended
+)
+```
+
+## Estimators
+
+```{r estimators}
+estimators <- list(
+  SpecACF               = function(x) SpecACF(x, bin.width = 1, k = 5, nw = 3,
+                                              TrimNA = FALSE),
+  SpecACFBiasFree_trunc = function(x) SpecACFBiasFree(x, bin.width = 1,
+                                                       lag.max = N %/% 4),
+  SpecACFBF_trunc_k5    = function(x) SpecACFBiasFree(x, bin.width = 1,
+                                                       lag.max = N %/% 4,
+                                                       k = 5, nw = 3)
+)
+```
+
+## Monte Carlo run
+
+```{r monte-carlo}
+run_one <- function(gap_fn, est_fn) {
+  x <- SimPLS(N, beta, alpha)
+  x[gap_fn(N)] <- NA
+  est_fn(x)
+}
+
+mc <- list()
+for (s_name in names(scenarios)) {
+  for (e_name in names(estimators)) {
+    message("running ", s_name, " / ", e_name, " ...")
+    mc[[paste(s_name, e_name, sep = "::")]] <-
+      replicate(n_reps, run_one(scenarios[[s_name]], estimators[[e_name]]),
+                simplify = FALSE)
+  }
+}
+```
+
+## Helper functions
+
+```{r helpers}
+summarise_one <- function(reps) {
+  freqs <- reps[[1]]$freq
+  Smat  <- vapply(reps, function(r) r$spec, numeric(length(freqs)))
+
+  Smean   <- rowMeans(Smat, na.rm = TRUE)
+  Smedian <- apply(Smat, 1, median,   na.rm = TRUE)
+  Slo     <- apply(Smat, 1, quantile, probs = 0.25, na.rm = TRUE)
+  Shi     <- apply(Smat, 1, quantile, probs = 0.75, na.rm = TRUE)
+
+  p_neg_per <- vapply(reps, function(r) mean(r$spec < 0, na.rm = TRUE),
+                      numeric(1))
+
+  list(f = freqs, Smean = Smean, Smedian = Smedian,
+       Slo = Slo, Shi = Shi, p_neg = mean(p_neg_per))
+}
+
+true_at      <- function(f) alpha * f^-beta
+
+rel_lin_bias <- function(s, est) {
+  vals <- (s[[est]] - true_at(s$f)) / true_at(s$f)
+  mean(vals[is.finite(vals)])
+}
+```
+
+## Summarise replicates
+
+```{r summarise}
+summary_table <- list()
+for (key in names(mc)) {
+  parts <- strsplit(key, "::", fixed = TRUE)[[1]]
+  summary_table[[key]] <- c(scenario  = parts[1],
+                             estimator = parts[2],
+                             summarise_one(mc[[key]]))
+}
+```
+
+## Summary table
+
+Relative bias close to 0 = unbiased. Scatter = mean (Q3 − Q1) / median across
+frequencies. % neg = mean fraction of frequencies with negative power.
+
+```{r summary-table}
+rows <- lapply(names(summary_table), function(key) {
+  s       <- summary_table[[key]]
+  scatter <- mean((s$Shi - s$Slo) / abs(s$Smedian), na.rm = TRUE)
+  data.frame(scenario  = s$scenario,
+             estimator = s$estimator,
+             rel.bias  = rel_lin_bias(s, "Smean"),
+             scatter   = scatter,
+             pct.neg   = round(100 * s$p_neg, 1))
+})
+tbl <- do.call(rbind, rows)
+knitr::kable(tbl, digits = 3,
+             col.names = c("Scenario", "Estimator", "Rel. bias", "Scatter", "% neg"))
+```
+
+## Plots
+
+```{r plot-prep}
+#| include: false
+cols <- c(SpecACF               = "red",
+          SpecACFBiasFree_trunc = "darkgreen",
+          SpecACFBF_trunc_k5    = "purple")
+
+make_df <- function(key, extra_cols) {
+  s     <- summary_table[[key]]
+  parts <- strsplit(key, "::", fixed = TRUE)[[1]]
+  cbind(
+    data.frame(scenario  = factor(parts[1], levels = names(scenarios)),
+               estimator = factor(parts[2], levels = names(estimators)),
+               f         = as.numeric(s$f)),
+    extra_cols(s)
+  )
+}
+
+df_spec <- do.call(rbind, lapply(names(summary_table), make_df,
+  extra_cols = function(s) data.frame(Smean = as.numeric(s$Smean))))
+
+df_scatter <- do.call(rbind, lapply(names(summary_table), make_df,
+  extra_cols = function(s) data.frame(
+    spread = as.numeric(s$Shi) / as.numeric(s$Slo))))
+df_scatter <- subset(df_scatter, is.finite(spread) & spread > 0)
+
+ftrue   <- exp(seq(log(min(df_spec$f)), log(0.5), length.out = 200))
+df_true <- data.frame(f = ftrue, S = true_at(ftrue))
+```
+
+### Mean spectrum vs truth
+
+```{r plot-mean-spec}
+#| fig-cap: "Mean spectrum across realisations (solid) vs true power law (dashed). Log–log axes."
+ggplot(df_spec, aes(f, Smean, colour = estimator)) +
+  geom_line(data = df_true, aes(f, S), inherit.aes = FALSE,
+            colour = "black", linetype = "dashed", linewidth = 0.8) +
+  geom_line(linewidth = 0.8) +
+  scale_x_log10() +
+  scale_y_log10() +
+  scale_colour_manual(values = cols) +
+  facet_grid(estimator~scenario, labeller = label_both) +
+  labs(x = "frequency", y = "S(f)", colour = NULL) +
+  theme_bw() +
+  theme(legend.position = "bottom")
+```
+
+### Spectral scatter (IQR)
+
+```{r plot-scatter}
+#| fig-cap: "Q3 / Q1 ratio across realisations. Closer to 1 = less scatter."
+ggplot(df_scatter, aes(f, spread, colour = estimator)) +
+  geom_hline(yintercept = 1, linetype = "dotted") +
+  geom_line(linewidth = 0.8) +
+  scale_x_log10() +
+  scale_y_log10() +
+  scale_colour_manual(values = cols) +
+  facet_wrap(~scenario, labeller = label_both) +
+  labs(x = "frequency", y = "Q3 / Q1 (spread)", colour = NULL) +
+  theme_bw() +
+  theme(legend.position = "bottom")
+```

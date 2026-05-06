@@ -104,6 +104,7 @@ LPlot(sp_irreg)
 
 Other functions to estimate power spectra: 
 \code{\link{SpecACF}()},
+\code{\link{SpecACFBiasFree}()},
 \code{\link{SpecMTM}()}
 }
 \author{

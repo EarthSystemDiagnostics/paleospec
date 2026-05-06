@@ -95,6 +95,7 @@ LLines(LogSmooth(spec), lwd=2)
 \seealso{
 Other functions to estimate power spectra: 
 \code{\link{SpecACF}()},
+\code{\link{SpecACFBiasFree}()},
 \code{\link{SpecMTMJulia}()}
 }
 \author{
