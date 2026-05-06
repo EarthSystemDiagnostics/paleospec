@@ -88,7 +88,7 @@ scenarios <- list(
 
 ```{r estimators}
 estimators <- list(
-  SpecACF               = function(x) SpecACF(x, bin.width = 1, k = 5, nw = 3,
+  SpecACF               = function(x) SpecACF(x, bin.width = 1, k = 1, nw = 0,
                                               TrimNA = FALSE),
   SpecACFBiasFree_trunc = function(x) SpecACFBiasFree(x, bin.width = 1,
                                                        lag.max = N %/% 4),

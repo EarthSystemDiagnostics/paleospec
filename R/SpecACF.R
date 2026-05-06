@@ -524,7 +524,7 @@ TrimNA <- function(m, trim = c("all", "any")) {
 #'   skipped.
 #' @param k integer. Number of Slepian tapers (default 1, i.e. no tapering).
 #'   When `k > 1`, DPSS tapers with bandwidth parameter `nw` are applied;
-#'   `bessel.correct` is silently disabled.
+#'   `bessel.correct = TRUE` is ignored with a message.
 #' @param nw numeric. Time-half-bandwidth product for the DPSS tapers
 #'   (default 0, ignored when `k = 1`). See [multitaper::spec.mtm()].
 #' @param TrimNA logical. If `TRUE`, leading and trailing all-NA rows are
