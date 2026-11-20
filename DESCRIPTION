@@ -1,6 +1,6 @@
 Package: PaleoSpec
 Title: Spectral tools for the ECUS group
-Version: 0.34
+Version: 0.35
 Authors@R: c(
   person("Thomas", "Laepple", email = "tlaepple@awi.de", role = c("aut", "cre")),
   person("Thomas", "Muench", email = "tmuench@awi.de", role = c("aut")),
@@ -25,6 +25,10 @@ Suggests:
     ggplot2,
     tibble,
     knitr,
-    rmarkdown
+    rmarkdown,
+    JuliaConnectoR
+SystemRequirements: Julia (>= 1.6, https://julialang.org) and the Julia
+    Multitaper package (Haley and Geoga 2020, doi:10.21105/joss.02463)
+    are required for SpecMTMChave() and SpecMTMChaveMat().
 URL: https://earthsystemdiagnostics.github.io/paleospec/
 VignetteBuilder: knitr

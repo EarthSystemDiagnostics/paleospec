@@ -93,8 +93,10 @@ LPlot(spec, col='grey')
 LLines(LogSmooth(spec), lwd=2)
 }
 \seealso{
-Other functions to estimate power spectra: 
-\code{\link{SpecACF}()}
+Other functions to estimate power spectra:
+\code{\link[=SpecACF]{SpecACF()}},
+\code{\link[=SpecMTMChave]{SpecMTMChave()}},
+\code{\link[=SpecMTMChaveMat]{SpecMTMChaveMat()}}
 }
 \author{
 Thomas Laepple
