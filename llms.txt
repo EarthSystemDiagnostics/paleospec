@@ -233,6 +233,11 @@ LLines(sp1_f, col = "green")
   : Interpolate spectrum
 - [`SpecMTM()`](https://earthsystemdiagnostics.github.io/paleospec/reference/SpecMTM.md)
   : MTM spectral estimator
+- [`SpecMTMChave()`](https://earthsystemdiagnostics.github.io/paleospec/reference/SpecMTMChave.md)
+  : Multitaper Spectrum for Irregularly Sampled or Gappy Series (Chave
+  2019)
+- [`SpecMTMChaveMat()`](https://earthsystemdiagnostics.github.io/paleospec/reference/SpecMTMChaveMat.md)
+  : Mean Multitaper Spectrum of Several Binned Records (Chave 2019)
 - [`SubsampleTimeseriesBlock()`](https://earthsystemdiagnostics.github.io/paleospec/reference/SubsampleTimeseriesBlock.md)
   : Subsample (downsample) timeseries using block averaging#'
 - [`TrimNA()`](https://earthsystemdiagnostics.github.io/paleospec/reference/TrimNA.md)

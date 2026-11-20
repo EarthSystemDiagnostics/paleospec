@@ -129,7 +129,9 @@ spectra object list(freq, spec, dof)
 ## See also
 
 Other functions to estimate power spectra:
-[`SpecACF()`](https://earthsystemdiagnostics.github.io/paleospec/reference/SpecACF.md)
+[`SpecACF()`](https://earthsystemdiagnostics.github.io/paleospec/reference/SpecACF.md),
+[`SpecMTMChave()`](https://earthsystemdiagnostics.github.io/paleospec/reference/SpecMTMChave.md),
+[`SpecMTMChaveMat()`](https://earthsystemdiagnostics.github.io/paleospec/reference/SpecMTMChaveMat.md)
 
 ## Author
 

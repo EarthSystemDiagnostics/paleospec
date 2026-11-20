@@ -77,7 +77,9 @@ a spec object (list)
 ## See also
 
 Other functions to estimate power spectra:
-[`SpecMTM()`](https://earthsystemdiagnostics.github.io/paleospec/reference/SpecMTM.md)
+[`SpecMTM()`](https://earthsystemdiagnostics.github.io/paleospec/reference/SpecMTM.md),
+[`SpecMTMChave()`](https://earthsystemdiagnostics.github.io/paleospec/reference/SpecMTMChave.md),
+[`SpecMTMChaveMat()`](https://earthsystemdiagnostics.github.io/paleospec/reference/SpecMTMChaveMat.md)
 
 ## Author
 

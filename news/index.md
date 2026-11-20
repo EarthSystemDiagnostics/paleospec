@@ -1,5 +1,11 @@
 # Changelog
 
+## PaleoSpec 0.35
+
+- Adds wrapper functions for mdmultispec from the Julia package
+  Multitaper to implement multitaper spectrum estimation for irregular,
+  gappy, missing-data timeseries as described in Chave (2019)
+
 ## PaleoSpec 0.34
 
 - Adds posibility to return PSD from SimProxySeries in standard

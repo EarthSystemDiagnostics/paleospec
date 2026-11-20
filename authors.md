@@ -15,13 +15,13 @@
 ## Citation
 
 Laepple T, Muench T, Dolman A (2026). *PaleoSpec: Spectral tools for the
-ECUS group*. R package version 0.34,
+ECUS group*. R package version 0.35,
 <https://earthsystemdiagnostics.github.io/paleospec/>.
 
     @Manual{,
       title = {PaleoSpec: Spectral tools for the ECUS group},
       author = {Thomas Laepple and Thomas Muench and Andrew Dolman},
       year = {2026},
-      note = {R package version 0.34},
+      note = {R package version 0.35},
       url = {https://earthsystemdiagnostics.github.io/paleospec/},
     }
