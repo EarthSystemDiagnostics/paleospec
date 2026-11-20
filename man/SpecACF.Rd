@@ -210,9 +210,10 @@ gg_spec(
 
 }
 \seealso{
-Other functions to estimate power spectra: 
-\code{\link{SpecMTM}()},
-\code{\link{SpecMTMJulia}()}
+Other functions to estimate power spectra:
+\code{\link[=SpecMTM]{SpecMTM()}},
+\code{\link[=SpecMTMChave]{SpecMTMChave()}},
+\code{\link[=SpecMTMChaveMat]{SpecMTMChaveMat()}}
 }
 \author{
 Torben Kunz and Andrew Dolman <andrew.dolman@awi.de>
