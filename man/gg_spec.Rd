@@ -51,7 +51,10 @@ separately}
 \item{force.lims, force.CI}{Force the plotting of confidence regions when the total number
 of frequencies exceeds 10000. force.CI is deprecated, use force.lims. Defaults to FALSE}
 
-\item{quantiles}{Plot uncertainty quantiles if they exist in the spec object}
+\item{quantiles}{Plot uncertainty quantiles if they exist in the spec object.
+Only one of confidence limits or quantiles is plotted; if both are
+available and `quantiles = TRUE`, the quantiles are plotted instead of the
+confidence limits.}
 
 \item{time_unit}{Optional string giving the time unit for axes labels, e.g. "years"}
 }
@@ -102,8 +105,8 @@ p <- gg_spec(sp2, p)
 p
 }
 \seealso{
-Other functions to plot power spectra: 
-\code{\link{LLines}()},
-\code{\link{LPlot}()}
+Other functions to plot power spectra:
+\code{\link[=LLines]{LLines()}},
+\code{\link[=LPlot]{LPlot()}}
 }
 \concept{functions to plot power spectra}

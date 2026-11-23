@@ -15,7 +15,10 @@
 #'   high frequency side respectively. Operates on a per group basis.
 #' @param force.lims,force.CI Force the plotting of confidence regions when the total number
 #' of frequencies exceeds 10000. force.CI is deprecated, use force.lims. Defaults to FALSE
-#' @param quantiles Plot uncertainty quantiles if they exist in the spec object
+#' @param quantiles Plot uncertainty quantiles if they exist in the spec object.
+#'   Only one of confidence limits or quantiles is plotted; if both are
+#'   available and `quantiles = TRUE`, the quantiles are plotted instead of the
+#'   confidence limits.
 #' @param time_unit Optional string giving the time unit for axes labels, e.g. "years"
 #'
 #' @return a ggplot object
@@ -148,7 +151,11 @@ gg_spec <- function(x, gg = NULL,
 
   df <- as.data.frame(df)
 
-  if (conf == TRUE & exists("lim.1", df)) {
+  has_quantiles <- quantiles == TRUE & exists("X2.5.", df)
+
+  # only ever plot one of lims or quantiles; quantiles take precedence when
+  # explicitly requested and available
+  if (conf == TRUE & exists("lim.1", df) & !has_quantiles) {
     if (nrow(df) > 1e04 & force.lims == FALSE) {
       warning("geom_ribbon is very slow when the number of points > 1e04, skipping the confidence region")
     } else {
@@ -164,7 +171,7 @@ gg_spec <- function(x, gg = NULL,
   }
 
 
-  if (quantiles == TRUE & exists("X2.5.", df)) {
+  if (has_quantiles) {
     if (nrow(df) > 1e04 & force.lims == FALSE) {
       warning("geom_ribbon is very slow when the number of points > 1e04, skipping the confidence region")
     } else {
